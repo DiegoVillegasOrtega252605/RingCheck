@@ -22,18 +22,17 @@
       --border2: #2a2a2a;
       --text: #e8e8e8;
       --muted: #556;
-      --blue: #4a90b0;
-      --blue-bg: #0f1a20;
-      --blue-border: #1a3040;
+      --teal: #2ab89a;
+      --teal-bg: #0a1a18;
+      --teal-border: #163028;
+      --teal-dim: rgba(42,184,154,0.08);
       --red: #e63946;
       --green: #2dc653;
       --sidebar-w: 260px;
     }
 
     html, body { height: 100%; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow: hidden; }
-
     #layout { display: flex; height: 100%; }
-
     #overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 10; }
     #overlay.open { display: block; }
 
@@ -57,21 +56,18 @@
       border-bottom: 1px solid var(--border);
       display: flex; align-items: center; gap: 10px;
     }
-    .sidebar-logo span { color: var(--red); }
+    .sidebar-logo span { color: var(--teal); }
 
     nav { flex: 1; padding: 16px 0; display: flex; flex-direction: column; gap: 2px; }
-
     .nav-item {
       display: flex; align-items: center; gap: 12px;
       padding: 13px 24px; cursor: pointer;
-      font-size: 0.9rem; font-weight: 500;
-      color: #556; border-left: 3px solid transparent;
-      transition: all 0.15s;
-      -webkit-tap-highlight-color: transparent;
+      font-size: 0.9rem; font-weight: 500; color: #556;
+      border-left: 3px solid transparent;
+      transition: all 0.15s; -webkit-tap-highlight-color: transparent;
     }
     .nav-item:hover { color: var(--text); background: #111; }
-    .nav-item.active { color: var(--text); border-left-color: var(--red); background: #111; }
-
+    .nav-item.active { color: var(--text); border-left-color: var(--teal); background: #111; }
     .sidebar-footer { padding: 16px 24px 0; border-top: 1px solid var(--border); font-size: 0.7rem; color: #334; line-height: 1.6; }
 
     #main { flex: 1; display: flex; flex-direction: column; height: 100%; overflow: hidden; }
@@ -82,17 +78,14 @@
       border-bottom: 1px solid var(--border);
       flex-shrink: 0;
     }
-
     #hamburger { background: none; border: none; cursor: pointer; color: var(--text); padding: 4px; display: flex; -webkit-tap-highlight-color: transparent; }
-
-    .topbar-logo-icon { flex-shrink: 0; }
 
     .topbar-text { display: flex; flex-direction: column; }
     .topbar-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.35rem; letter-spacing: 0.08em; line-height: 1; }
-    .topbar-title span { color: var(--red); }
-    #topbar-subtitle { font-size: 0.65rem; color: #445566; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; transition: color 0.3s; }
+    .topbar-title span { color: var(--teal); }
+    #topbar-subtitle { font-size: 0.65rem; color: #334; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; transition: color 0.3s; }
     #topbar-subtitle.positive { color: var(--red); }
-    #topbar-subtitle.negative { color: var(--green); }
+    #topbar-subtitle.negative { color: var(--teal); }
 
     .page { display: none; flex: 1; overflow-y: auto; padding: 18px 18px 32px; }
     .page.active { display: flex; flex-direction: column; }
@@ -102,16 +95,16 @@
 
     .tip-box {
       width: 100%; max-width: 320px;
-      background: var(--blue-bg);
-      border: 1px solid var(--blue-border);
-      border-left: 2px solid var(--blue);
+      background: var(--teal-bg);
+      border: 1px solid var(--teal-border);
+      border-left: 2px solid var(--teal);
       border-radius: 10px;
       padding: 10px 13px;
-      font-size: 0.77rem; color: #b8d4e0;
+      font-size: 0.77rem; color: #8ad4c4;
       line-height: 1.55;
       display: flex; gap: 9px; align-items: flex-start;
     }
-    .tip-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--blue); flex-shrink: 0; margin-top: 4px; }
+    .tip-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--teal); flex-shrink: 0; margin-top: 4px; }
 
     .scanner-block {
       width: 100%; max-width: 320px;
@@ -122,7 +115,9 @@
       display: flex; flex-direction: column; align-items: center; gap: 12px;
     }
 
-    .scanner-wrap { position: relative; width: 260px; height: 260px; flex-shrink: 0; }
+    .scanner-wrap {
+      position: relative; width: 260px; height: 260px; flex-shrink: 0;
+    }
 
     .preview-wrap {
       width: 260px; height: 260px;
@@ -134,20 +129,17 @@
       position: relative;
       transition: border-color 0.4s, box-shadow 0.4s;
     }
-    .preview-wrap.has-image { border-color: #333; }
-    .preview-wrap.result-positive { border-color: var(--red); box-shadow: 0 0 28px rgba(230,57,70,0.3); }
-    .preview-wrap.result-negative { border-color: var(--green); box-shadow: 0 0 28px rgba(45,198,83,0.25); }
+    .preview-wrap.has-image { border-color: #2a2a2a; }
+    .preview-wrap.result-positive { border-color: var(--red); box-shadow: 0 0 28px rgba(230,57,70,0.25); }
+    .preview-wrap.result-negative { border-color: var(--teal); box-shadow: 0 0 28px rgba(42,184,154,0.2); }
 
+    /* Soft rounded corners - not tactical */
     .corner { position: absolute; width: 18px; height: 18px; z-index: 2; pointer-events: none; }
-    .corner.tl { top: 6px; left: 6px; border-top: 2px solid var(--red); border-left: 2px solid var(--red); border-radius: 3px 0 0 0; }
-    .corner.tr { top: 6px; right: 6px; border-top: 2px solid var(--red); border-right: 2px solid var(--red); border-radius: 0 3px 0 0; }
-    .corner.bl { bottom: 6px; left: 6px; border-bottom: 2px solid var(--red); border-left: 2px solid var(--red); border-radius: 0 0 0 3px; }
-    .corner.br { bottom: 6px; right: 6px; border-bottom: 2px solid var(--red); border-right: 2px solid var(--red); border-radius: 0 0 3px 0; }
-    .scanner-wrap.result-negative .corner { border-color: var(--green) !important; }
-
-    .crosshair-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
-    .preview-placeholder { display: flex; flex-direction: column; align-items: center; gap: 10px; color: #334; z-index: 1; }
-    .preview-placeholder p { font-size: 0.75rem; letter-spacing: 0.04em; }
+    .corner.tl { top: 6px; left: 6px; border-top: 2px solid var(--teal); border-left: 2px solid var(--teal); border-radius: 6px 0 0 0; }
+    .corner.tr { top: 6px; right: 6px; border-top: 2px solid var(--teal); border-right: 2px solid var(--teal); border-radius: 0 6px 0 0; }
+    .corner.bl { bottom: 6px; left: 6px; border-bottom: 2px solid var(--teal); border-left: 2px solid var(--teal); border-radius: 0 0 0 6px; }
+    .corner.br { bottom: 6px; right: 6px; border-bottom: 2px solid var(--teal); border-right: 2px solid var(--teal); border-radius: 0 0 6px 0; }
+    .scanner-wrap.result-positive .corner { border-color: var(--red); }
 
     #preview-img { width: 100%; height: 100%; object-fit: cover; display: none; z-index: 0; position: absolute; inset: 0; }
 
@@ -157,22 +149,35 @@
       font-size: 0.82rem; font-weight: 600; text-align: center; z-index: 4;
     }
     .result-badge.positive { background: rgba(230,57,70,0.92); color: #fff; }
-    .result-badge.negative { background: rgba(45,198,83,0.9); color: #fff; }
+    .result-badge.negative { background: rgba(42,184,154,0.9); color: #fff; }
 
     .scan-line {
       display: none; position: absolute; left: 0; right: 0; height: 2px;
-      background: linear-gradient(90deg, transparent, var(--red), transparent);
+      background: linear-gradient(90deg, transparent, var(--teal), transparent);
       animation: scanMove 1.4s ease-in-out infinite; z-index: 3; pointer-events: none;
     }
     .scan-line.active { display: block; }
+
     @keyframes scanMove { 0% { top: 0; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
     @keyframes rotateRing { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-    @keyframes pulseRing { 0%,100% { opacity: 0.2; } 50% { opacity: 0.55; } }
-    @keyframes scanlineIdle { 0% { opacity: 0; transform: translateY(-110px); } 15% { opacity: 0.7; } 85% { opacity: 0.7; } 100% { opacity: 0; transform: translateY(110px); } }
+    @keyframes waveOut1 { 0%,100%{opacity:0.15; transform:scale(0.92);} 50%{opacity:0.45; transform:scale(1);} }
+    @keyframes waveOut2 { 0%,100%{opacity:0.1; transform:scale(0.95);} 50%{opacity:0.3; transform:scale(1.02);} }
+    @keyframes waveOut3 { 0%,100%{opacity:0.06; transform:scale(0.98);} 50%{opacity:0.18; transform:scale(1.04);} }
+    @keyframes dotPulse { 0%,100%{opacity:0.3;} 50%{opacity:0.8;} }
+    @keyframes centerGlow { 0%,100%{opacity:0.5;} 50%{opacity:1;} }
 
-    .ring-rotate { transform-origin: 130px 130px; animation: rotateRing 10s linear infinite; }
-    .ring-pulse { animation: pulseRing 2.8s ease-in-out infinite; }
-    .idle-scanline { animation: scanlineIdle 3.5s ease-in-out infinite; }
+    .ring-rotate { transform-origin: 130px 130px; animation: rotateRing 12s linear infinite; }
+    .wave1 { transform-origin: 130px 130px; animation: waveOut1 2.8s ease-in-out infinite; }
+    .wave2 { transform-origin: 130px 130px; animation: waveOut2 2.8s ease-in-out 0.9s infinite; }
+    .wave3 { transform-origin: 130px 130px; animation: waveOut3 2.8s ease-in-out 1.8s infinite; }
+    .dot1 { animation: dotPulse 2.4s ease-in-out infinite; }
+    .dot2 { animation: dotPulse 2.4s ease-in-out 0.6s infinite; }
+    .dot3 { animation: dotPulse 2.4s ease-in-out 1.2s infinite; }
+    .dot4 { animation: dotPulse 2.4s ease-in-out 1.8s infinite; }
+    .center-glow { animation: centerGlow 2.5s ease-in-out infinite; }
+
+    .visor-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+    .preview-placeholder { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; z-index: 1; }
 
     .btn-row { display: flex; gap: 8px; width: 100%; }
     .btn-secondary {
@@ -184,7 +189,7 @@
       transition: background 0.2s, color 0.2s, border-color 0.2s;
       -webkit-tap-highlight-color: transparent;
     }
-    .btn-secondary.selected { border-color: var(--red); color: var(--text); background: rgba(230,57,70,0.07); }
+    .btn-secondary.selected { border-color: var(--teal); color: var(--text); background: var(--teal-dim); }
     .btn-secondary:active { background: #1a1a1a; }
 
     .confidence-wrap { width: 100%; max-width: 320px; display: none; flex-direction: column; gap: 6px; }
@@ -201,7 +206,7 @@
       transition: background 0.2s, color 0.2s, border-color 0.2s;
       -webkit-tap-highlight-color: transparent;
     }
-    .btn-analyze.ready { background: var(--red); color: #fff; border-color: var(--red); cursor: pointer; }
+    .btn-analyze.ready { background: var(--teal); color: #fff; border-color: var(--teal); cursor: pointer; }
     .btn-analyze.ready:active { opacity: 0.88; transform: scale(0.99); }
 
     .spinner { display: none; width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
@@ -220,7 +225,7 @@
     .history-info { flex: 1; min-width: 0; }
     .history-result { font-weight: 600; font-size: 0.88rem; margin-bottom: 3px; }
     .history-result.positive { color: var(--red); }
-    .history-result.negative { color: var(--green); }
+    .history-result.negative { color: var(--teal); }
     .history-meta { font-size: 0.75rem; color: #445; }
     .history-confidence { font-size: 0.82rem; font-weight: 600; color: #445; }
     .btn-clear { align-self: flex-start; padding: 7px 13px; border-radius: 8px; border: 1px solid var(--border2); background: none; color: #445; font-size: 0.78rem; cursor: pointer; -webkit-tap-highlight-color: transparent; }
@@ -232,9 +237,9 @@
     .info-section p { font-size: 0.83rem; color: #556; line-height: 1.65; }
     .info-list { list-style: none; display: flex; flex-direction: column; gap: 7px; }
     .info-list li { font-size: 0.83rem; color: #556; line-height: 1.5; padding-left: 14px; position: relative; }
-    .info-list li::before { content: '·'; position: absolute; left: 0; color: var(--red); font-size: 1.1rem; line-height: 1.3; }
-    .alert-box { background: rgba(230,57,70,0.07); border: 1px solid rgba(230,57,70,0.2); border-radius: 12px; padding: 14px 16px; font-size: 0.83rem; color: #c08088; line-height: 1.65; }
-    .alert-box strong { color: #d0a0a5; }
+    .info-list li::before { content: '·'; position: absolute; left: 0; color: var(--teal); font-size: 1.1rem; line-height: 1.3; }
+    .alert-box { background: rgba(42,184,154,0.06); border: 1px solid rgba(42,184,154,0.18); border-radius: 12px; padding: 14px 16px; font-size: 0.83rem; color: #7abfb3; line-height: 1.65; }
+    .alert-box strong { color: #9ad4cb; }
 
     /* MODEL */
     #page-model { gap: 16px; }
@@ -244,7 +249,7 @@
     .model-stat:last-child { border-bottom: none; padding-bottom: 0; }
     .model-stat-label { font-size: 0.83rem; color: #556; }
     .model-stat-value { font-size: 0.95rem; font-weight: 600; }
-    .model-stat-value.accent { color: var(--red); font-size: 1.25rem; }
+    .model-stat-value.accent { color: var(--teal); font-size: 1.25rem; }
 
     #file-input, #camera-input { display: none; }
   </style>
@@ -255,15 +260,15 @@
 
   <aside id="sidebar">
     <div class="sidebar-logo">
-      <svg width="22" height="22" viewBox="0 0 148 148">
-        <circle cx="74" cy="74" r="62" fill="none" stroke="#e63946" stroke-width="3" stroke-dasharray="10 6" opacity="0.5"/>
-        <circle cx="74" cy="74" r="42" fill="none" stroke="#e63946" stroke-width="1.5" opacity="0.4"/>
-        <line x1="74" y1="12" x2="74" y2="46" stroke="#e63946" stroke-width="2"/>
-        <line x1="74" y1="102" x2="74" y2="136" stroke="#e63946" stroke-width="2"/>
-        <line x1="12" y1="74" x2="46" y2="74" stroke="#e63946" stroke-width="2"/>
-        <line x1="102" y1="74" x2="136" y2="74" stroke="#e63946" stroke-width="2"/>
-        <circle cx="74" cy="74" r="10" fill="#e63946"/>
-        <polyline points="68,74 72,80 82,66" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <svg width="22" height="22" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="48" cy="48" r="34" fill="none" stroke="#2ab89a" stroke-width="2" opacity="0.35"/>
+        <circle cx="48" cy="48" r="42" fill="none" stroke="#2ab89a" stroke-width="4" opacity="0.9"/>
+        <line x1="48" y1="4" x2="48" y2="30" stroke="#2ab89a" stroke-width="3" opacity="0.4" stroke-linecap="round"/>
+        <line x1="48" y1="66" x2="48" y2="92" stroke="#2ab89a" stroke-width="3" opacity="0.4" stroke-linecap="round"/>
+        <line x1="4" y1="48" x2="18" y2="48" stroke="#2ab89a" stroke-width="3" opacity="0.4" stroke-linecap="round"/>
+        <line x1="78" y1="48" x2="92" y2="48" stroke="#2ab89a" stroke-width="3" opacity="0.4" stroke-linecap="round"/>
+        <text x="48" y="56" text-anchor="middle" font-family="Georgia, serif" font-weight="700" font-size="28" fill="#ffffff" letter-spacing="1">RC</text>
+        <rect x="32" y="60" width="32" height="4" rx="2" fill="#2ab89a"/>
       </svg>
       Ring<span>Check</span>
     </div>
@@ -293,15 +298,15 @@
       <button id="hamburger">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       </button>
-      <svg width="22" height="22" viewBox="0 0 148 148" class="topbar-logo-icon">
-        <circle cx="74" cy="74" r="62" fill="none" stroke="#e63946" stroke-width="3" stroke-dasharray="10 6" opacity="0.4"/>
-        <circle cx="74" cy="74" r="42" fill="none" stroke="#e63946" stroke-width="1.5" opacity="0.35"/>
-        <line x1="74" y1="12" x2="74" y2="46" stroke="#e63946" stroke-width="2.5"/>
-        <line x1="74" y1="102" x2="74" y2="136" stroke="#e63946" stroke-width="2.5"/>
-        <line x1="12" y1="74" x2="46" y2="74" stroke="#e63946" stroke-width="2.5"/>
-        <line x1="102" y1="74" x2="136" y2="74" stroke="#e63946" stroke-width="2.5"/>
-        <circle cx="74" cy="74" r="10" fill="#e63946"/>
-        <polyline points="68,74 72,80 82,66" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <svg width="22" height="22" viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
+        <circle cx="48" cy="48" r="34" fill="none" stroke="#2ab89a" stroke-width="2" opacity="0.35"/>
+        <circle cx="48" cy="48" r="42" fill="none" stroke="#2ab89a" stroke-width="4" opacity="0.9"/>
+        <line x1="48" y1="4" x2="48" y2="30" stroke="#2ab89a" stroke-width="3" opacity="0.4" stroke-linecap="round"/>
+        <line x1="48" y1="66" x2="48" y2="92" stroke="#2ab89a" stroke-width="3" opacity="0.4" stroke-linecap="round"/>
+        <line x1="4" y1="48" x2="18" y2="48" stroke="#2ab89a" stroke-width="3" opacity="0.4" stroke-linecap="round"/>
+        <line x1="78" y1="48" x2="92" y2="48" stroke="#2ab89a" stroke-width="3" opacity="0.4" stroke-linecap="round"/>
+        <text x="48" y="56" text-anchor="middle" font-family="Georgia, serif" font-weight="700" font-size="28" fill="#ffffff" letter-spacing="1">RC</text>
+        <rect x="32" y="60" width="32" height="4" rx="2" fill="#2ab89a"/>
       </svg>
       <div class="topbar-text">
         <div class="topbar-title">Ring<span>Check</span></div>
@@ -325,30 +330,39 @@
             <img id="preview-img" alt="Selected image" />
             <div class="result-badge" id="result-badge"></div>
             <div class="preview-placeholder" id="placeholder">
-              <svg class="crosshair-svg" viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg">
-                <g class="ring-rotate">
-                  <circle cx="130" cy="130" r="80" fill="none" stroke="#e63946" stroke-width="1" stroke-dasharray="10 7" opacity="0.3"/>
+              <svg class="visor-svg" viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg">
+                <!-- subtle grid -->
+                <g opacity="0.04" stroke="#2ab89a" stroke-width="0.6">
+                  <line x1="86" y1="0" x2="86" y2="260"/>
+                  <line x1="130" y1="0" x2="130" y2="260"/>
+                  <line x1="174" y1="0" x2="174" y2="260"/>
+                  <line x1="0" y1="86" x2="260" y2="86"/>
+                  <line x1="0" y1="130" x2="260" y2="130"/>
+                  <line x1="0" y1="174" x2="260" y2="174"/>
                 </g>
-                <circle cx="130" cy="130" r="56" fill="none" stroke="#e63946" stroke-width="0.8" class="ring-pulse"/>
-                <circle cx="130" cy="130" r="30" fill="#e63946" opacity="0.05"/>
-                <line x1="130" y1="50" x2="130" y2="88" stroke="#e63946" stroke-width="1.2" opacity="0.45"/>
-                <line x1="130" y1="172" x2="130" y2="210" stroke="#e63946" stroke-width="1.2" opacity="0.45"/>
-                <line x1="50" y1="130" x2="88" y2="130" stroke="#e63946" stroke-width="1.2" opacity="0.45"/>
-                <line x1="172" y1="130" x2="210" y2="130" stroke="#e63946" stroke-width="1.2" opacity="0.45"/>
-                <line x1="130" y1="108" x2="130" y2="118" stroke="#e63946" stroke-width="0.8" opacity="0.25"/>
-                <line x1="130" y1="142" x2="130" y2="152" stroke="#e63946" stroke-width="0.8" opacity="0.25"/>
-                <line x1="108" y1="130" x2="118" y2="130" stroke="#e63946" stroke-width="0.8" opacity="0.25"/>
-                <line x1="142" y1="130" x2="152" y2="130" stroke="#e63946" stroke-width="0.8" opacity="0.25"/>
-                <line x1="130" y1="20" x2="130" y2="30" stroke="#e63946" stroke-width="1.2" opacity="0.2"/>
-                <line x1="130" y1="230" x2="130" y2="240" stroke="#e63946" stroke-width="1.2" opacity="0.2"/>
-                <line x1="20" y1="130" x2="30" y2="130" stroke="#e63946" stroke-width="1.2" opacity="0.2"/>
-                <line x1="230" y1="130" x2="240" y2="130" stroke="#e63946" stroke-width="1.2" opacity="0.2"/>
-                <line x1="50" y1="130" x2="210" y2="130" stroke="#e63946" stroke-width="1" opacity="0.5" class="idle-scanline"/>
-                <circle cx="130" cy="130" r="5" fill="#e63946" opacity="0.6"/>
-                <circle cx="168" cy="92" r="2" fill="#e63946" opacity="0.18"/>
-                <circle cx="92" cy="92" r="2" fill="#e63946" opacity="0.18"/>
-                <circle cx="168" cy="168" r="2" fill="#e63946" opacity="0.18"/>
-                <circle cx="92" cy="168" r="2" fill="#e63946" opacity="0.18"/>
+                <!-- outer glow -->
+                <circle cx="130" cy="130" r="100" fill="none" stroke="#2ab89a" stroke-width="1" opacity="0.07"/>
+                <!-- segmented rotating ring -->
+                <g class="ring-rotate">
+                  <circle cx="130" cy="130" r="88" fill="none" stroke="#2ab89a" stroke-width="2" stroke-dasharray="22 12" opacity="0.3"/>
+                </g>
+                <!-- wave rings -->
+                <circle cx="130" cy="130" r="68" fill="none" stroke="#2ab89a" stroke-width="1.2" class="wave1"/>
+                <circle cx="130" cy="130" r="50" fill="none" stroke="#2ab89a" stroke-width="1" class="wave2"/>
+                <circle cx="130" cy="130" r="32" fill="none" stroke="#2ab89a" stroke-width="0.8" class="wave3"/>
+                <!-- compass dots -->
+                <circle cx="130" cy="36" r="2.5" fill="#2ab89a" class="dot1"/>
+                <circle cx="224" cy="130" r="2.5" fill="#2ab89a" class="dot2"/>
+                <circle cx="130" cy="224" r="2.5" fill="#2ab89a" class="dot3"/>
+                <circle cx="36" cy="130" r="2.5" fill="#2ab89a" class="dot4"/>
+                <!-- skin center -->
+                <circle cx="130" cy="130" r="18" fill="#c8a080" opacity="0.08"/>
+                <circle cx="130" cy="130" r="18" fill="none" stroke="#c8a080" stroke-width="1" opacity="0.2"/>
+                <!-- AI arc highlight -->
+                <path d="M 130 112 A 18 18 0 0 1 148 130" fill="none" stroke="#2ab89a" stroke-width="1.5" opacity="0.5" stroke-linecap="round"/>
+                <!-- center -->
+                <circle cx="130" cy="130" r="5" fill="#2ab89a" class="center-glow"/>
+                <circle cx="130" cy="130" r="2.5" fill="#fff" opacity="0.7"/>
               </svg>
             </div>
           </div>
@@ -391,11 +405,11 @@
       <div class="page-title">Ringworm Info</div>
       <div class="alert-box"><strong>If your scan comes back positive, do not train.</strong> Ringworm spreads easily through skin-to-skin contact on the mat. Stay off the mats until the infection is fully cleared.</div>
       <div class="info-section">
-        <div class="info-section-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>What is ringworm?</div>
+        <div class="info-section-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>What is ringworm?</div>
         <p>Ringworm (tinea corporis) is a fungal skin infection, not an actual worm. It is extremely common in contact sports like BJJ, wrestling, and MMA due to close skin contact and shared mats.</p>
       </div>
       <div class="info-section">
-        <div class="info-section-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Symptoms</div>
+        <div class="info-section-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Symptoms</div>
         <ul class="info-list">
           <li>Ring-shaped rash with raised, scaly edges</li>
           <li>Red or pink coloring, sometimes darker in the center</li>
@@ -405,7 +419,7 @@
         </ul>
       </div>
       <div class="info-section">
-        <div class="info-section-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>What to do if positive</div>
+        <div class="info-section-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>What to do if positive</div>
         <ul class="info-list">
           <li>Stop training immediately</li>
           <li>Apply an antifungal cream (clotrimazole or terbinafine)</li>
@@ -416,7 +430,7 @@
         </ul>
       </div>
       <div class="info-section">
-        <div class="info-section-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Prevention</div>
+        <div class="info-section-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Prevention</div>
         <ul class="info-list">
           <li>Shower immediately after training</li>
           <li>Wear clean gear every session</li>
@@ -531,14 +545,14 @@
       const res = await fetch(API_URL, { method: 'POST', body: formData });
       const data = await res.json();
       const pct = Math.round(data.confidence * 100);
-      const color = data.ringworm ? 'var(--red)' : 'var(--green)';
+      const color = data.ringworm ? 'var(--red)' : 'var(--teal)';
       scanLine.classList.remove('active');
       if (data.ringworm) {
         previewWrap.classList.add('result-positive');
+        scannerWrap.classList.add('result-positive');
         setSubtitle('Ringworm detected', 'positive');
       } else {
         previewWrap.classList.add('result-negative');
-        scannerWrap.classList.add('result-negative');
         setSubtitle('No ringworm detected', 'negative');
       }
       resultBadge.textContent = data.ringworm ? `Ringworm detected — ${pct}% confidence` : `No ringworm detected — ${pct}% confidence`;
@@ -589,9 +603,7 @@
   }
 
   document.getElementById('btn-clear').addEventListener('click', () => { localStorage.removeItem(HISTORY_KEY); renderHistory(); });
-
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
 </script>
 </body>
 </html>
- 
