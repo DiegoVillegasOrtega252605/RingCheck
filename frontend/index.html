@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0d0d0d" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="apple-mobile-web-app-title" content="RingCheck" />
+  <title>RingCheck</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d0d0d;
+      --surface: #1a1a1a;
+      --border: #2a2a2a;
+      --text: #f0f0f0;
+      --muted: #888;
+      --red: #e63946;
+      --green: #2dc653;
+      --accent: #e63946;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      overflow: hidden;
+    }
+
+    #app {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 48px 24px 40px;
+      position: relative;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+    }
+
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.8rem;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      line-height: 1;
+    }
+
+    .logo span {
+      color: var(--accent);
+    }
+
+    .tagline {
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-top: 6px;
+    }
+
+    /* Scanner area */
+    .scanner {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      width: 100%;
+    }
+
+    .preview-wrap {
+      width: 260px;
+      height: 260px;
+      border-radius: 20px;
+      border: 2px solid var(--border);
+      overflow: hidden;
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: border-color 0.3s;
+    }
+
+    .preview-wrap.has-image {
+      border-color: var(--accent);
+    }
+
+    .preview-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      color: var(--muted);
+    }
+
+    .preview-placeholder svg {
+      opacity: 0.4;
+    }
+
+    .preview-placeholder p {
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+    }
+
+    #preview-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    /* Result overlay */
+    .result-badge {
+      display: none;
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      right: 12px;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-align: center;
+      letter-spacing: 0.03em;
+    }
+
+    .result-badge.positive {
+      background: rgba(230, 57, 70, 0.9);
+      color: #fff;
+    }
+
+    .result-badge.negative {
+      background: rgba(45, 198, 83, 0.9);
+      color: #fff;
+    }
+
+    /* Confidence bar */
+    .confidence-wrap {
+      width: 260px;
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .confidence-label {
+      font-size: 0.72rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .confidence-bar {
+      height: 4px;
+      border-radius: 2px;
+      background: var(--border);
+      overflow: hidden;
+    }
+
+    .confidence-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 0.6s ease;
+    }
+
+    /* Buttons */
+    .actions {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .btn-scan {
+      width: 100%;
+      padding: 18px;
+      border-radius: 14px;
+      border: none;
+      background: var(--accent);
+      color: #fff;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: opacity 0.2s, transform 0.1s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn-scan:active {
+      opacity: 0.85;
+      transform: scale(0.98);
+    }
+
+    .btn-scan:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-secondary {
+      flex: 1;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn-secondary:active {
+      background: var(--border);
+    }
+
+    /* Loading spinner */
+    .spinner {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Disclaimer */
+    .disclaimer {
+      font-size: 0.68rem;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.5;
+      margin-top: 4px;
+    }
+
+    #file-input { display: none; }
+  </style>
+</head>
+<body>
+  <div id="app">
+
+    <header>
+      <div class="logo">Ring<span>Check</span></div>
+      <p class="tagline">Ringworm scanner for combat sports</p>
+    </header>
+
+    <div class="scanner">
+      <div class="preview-wrap" id="preview-wrap">
+        <div class="preview-placeholder" id="placeholder">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
+          <p>No image selected</p>
+        </div>
+        <img id="preview-img" alt="Selected image" />
+        <div class="result-badge" id="result-badge"></div>
+      </div>
+
+      <div class="confidence-wrap" id="confidence-wrap">
+        <div class="confidence-label">
+          <span>Confidence</span>
+          <span id="confidence-pct">—</span>
+        </div>
+        <div class="confidence-bar">
+          <div class="confidence-fill" id="confidence-fill"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn-scan" id="btn-analyze" disabled>
+        <span id="btn-label">Select an image first</span>
+        <div class="spinner" id="spinner"></div>
+      </button>
+
+      <div class="btn-row">
+        <button class="btn-secondary" id="btn-camera">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
+          Camera
+        </button>
+        <button class="btn-secondary" id="btn-gallery">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+            <polyline points="21 15 16 10 5 21"/>
+          </svg>
+          Gallery
+        </button>
+      </div>
+
+      <p class="disclaimer">Not medical advice. If unsure, consult a doctor before training.</p>
+    </div>
+
+  </div>
+
+  <input type="file" id="file-input" accept="image/*" />
+  <input type="file" id="camera-input" accept="image/*" capture="environment" />
+
+  <script>
+    const API_URL = 'http://127.0.0.1:8000/predict';
+
+    const fileInput = document.getElementById('file-input');
+    const cameraInput = document.getElementById('camera-input');
+    const previewImg = document.getElementById('preview-img');
+    const placeholder = document.getElementById('placeholder');
+    const previewWrap = document.getElementById('preview-wrap');
+    const btnAnalyze = document.getElementById('btn-analyze');
+    const btnLabel = document.getElementById('btn-label');
+    const spinner = document.getElementById('spinner');
+    const resultBadge = document.getElementById('result-badge');
+    const confidenceWrap = document.getElementById('confidence-wrap');
+    const confidencePct = document.getElementById('confidence-pct');
+    const confidenceFill = document.getElementById('confidence-fill');
+
+    let selectedFile = null;
+
+    function showPreview(file) {
+      selectedFile = file;
+      const url = URL.createObjectURL(file);
+      previewImg.src = url;
+      previewImg.style.display = 'block';
+      placeholder.style.display = 'none';
+      previewWrap.classList.add('has-image');
+      resultBadge.style.display = 'none';
+      confidenceWrap.style.display = 'none';
+      btnAnalyze.disabled = false;
+      btnLabel.textContent = 'Analyze';
+    }
+
+    document.getElementById('btn-camera').addEventListener('click', () => cameraInput.click());
+    document.getElementById('btn-gallery').addEventListener('click', () => fileInput.click());
+
+    fileInput.addEventListener('change', e => { if (e.target.files[0]) showPreview(e.target.files[0]); });
+    cameraInput.addEventListener('change', e => { if (e.target.files[0]) showPreview(e.target.files[0]); });
+
+    btnAnalyze.addEventListener('click', async () => {
+      if (!selectedFile) return;
+
+      btnAnalyze.disabled = true;
+      btnLabel.textContent = 'Analyzing...';
+      spinner.style.display = 'block';
+      resultBadge.style.display = 'none';
+      confidenceWrap.style.display = 'none';
+
+      try {
+        const formData = new FormData();
+        formData.append('file', selectedFile);
+
+        const res = await fetch(API_URL, { method: 'POST', body: formData });
+        const data = await res.json();
+
+        const pct = Math.round(data.confidence * 100);
+        const color = data.ringworm ? 'var(--red)' : 'var(--green)';
+
+        resultBadge.textContent = data.ringworm
+          ? `⚠️ Ringworm detected — ${pct}% confidence`
+          : `✅ No ringworm detected — ${pct}% confidence`;
+        resultBadge.className = 'result-badge ' + (data.ringworm ? 'positive' : 'negative');
+        resultBadge.style.display = 'block';
+
+        confidenceWrap.style.display = 'flex';
+        confidencePct.textContent = pct + '%';
+        confidenceFill.style.width = pct + '%';
+        confidenceFill.style.background = color;
+
+        btnLabel.textContent = 'Analyze again';
+
+      } catch (err) {
+        resultBadge.textContent = '⚠️ Could not connect to server';
+        resultBadge.className = 'result-badge positive';
+        resultBadge.style.display = 'block';
+        btnLabel.textContent = 'Retry';
+      }
+
+      spinner.style.display = 'none';
+      btnAnalyze.disabled = false;
+    });
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+  </script>
+</body>
+</html>
