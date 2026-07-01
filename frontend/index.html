@@ -17,12 +17,13 @@
     :root {
       --bg: #0d0d0d;
       --surface: #1a1a1a;
+      --surface2: #222;
       --border: #2a2a2a;
       --text: #f0f0f0;
       --muted: #888;
       --red: #e63946;
       --green: #2dc653;
-      --accent: #e63946;
+      --sidebar-w: 260px;
     }
 
     html, body {
@@ -33,56 +34,155 @@
       overflow: hidden;
     }
 
-    #app {
-      height: 100%;
+    #layout { display: flex; height: 100%; }
+
+    #overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 10;
+    }
+    #overlay.open { display: block; }
+
+    /* Sidebar */
+    #sidebar {
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      width: var(--sidebar-w);
+      background: var(--surface);
+      border-right: 1px solid var(--border);
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: space-between;
-      padding: 48px 24px 40px;
-      position: relative;
+      padding: 32px 0 24px;
+      z-index: 20;
+      transform: translateX(-100%);
+      transition: transform 0.28s ease;
     }
+    #sidebar.open { transform: translateX(0); }
 
-    /* Header */
-    header {
-      text-align: center;
-    }
-
-    .logo {
+    .sidebar-logo {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 2.8rem;
+      font-size: 1.8rem;
       letter-spacing: 0.08em;
+      padding: 0 24px 24px;
+      border-bottom: 1px solid var(--border);
+    }
+    .sidebar-logo span { color: var(--red); }
+
+    nav {
+      flex: 1;
+      padding: 16px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 24px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--muted);
+      border-left: 3px solid transparent;
+      transition: all 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .nav-item:hover { color: var(--text); background: var(--surface2); }
+    .nav-item.active {
       color: var(--text);
+      border-left-color: var(--red);
+      background: var(--surface2);
+    }
+
+    .sidebar-footer {
+      padding: 16px 24px 0;
+      border-top: 1px solid var(--border);
+      font-size: 0.7rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* Main */
+    #main { flex: 1; display: flex; flex-direction: column; height: 100%; overflow: hidden; }
+
+    /* Topbar */
+    #topbar {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    #hamburger {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text);
+      padding: 4px;
+      display: flex;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .topbar-text { display: flex; flex-direction: column; }
+    .topbar-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 0.08em;
       line-height: 1;
     }
-
-    .logo span {
-      color: var(--accent);
-    }
-
-    .tagline {
-      font-size: 0.75rem;
+    .topbar-title span { color: var(--red); }
+    #topbar-subtitle {
+      font-size: 0.68rem;
       color: var(--muted);
-      letter-spacing: 0.12em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      margin-top: 6px;
+      margin-top: 2px;
+      transition: color 0.3s;
     }
+    #topbar-subtitle.positive { color: var(--red); }
+    #topbar-subtitle.negative { color: var(--green); }
 
-    /* Scanner area */
-    .scanner {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 24px;
+    /* Pages */
+    .page { display: none; flex: 1; overflow-y: auto; padding: 20px 20px 32px; }
+    .page.active { display: flex; flex-direction: column; }
+
+    /* ════ SCAN PAGE ════ */
+    #page-scan { gap: 18px; align-items: center; }
+
+    .tip-box {
       width: 100%;
+      max-width: 320px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 11px 14px;
+      font-size: 0.77rem;
+      color: var(--muted);
+      line-height: 1.55;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .tip-box svg { flex-shrink: 0; margin-top: 1px; }
+
+    /* Scanner visor */
+    .scanner-wrap {
+      position: relative;
+      width: 270px;
+      height: 270px;
+      flex-shrink: 0;
     }
 
     .preview-wrap {
-      width: 260px;
-      height: 260px;
-      border-radius: 20px;
+      width: 270px;
+      height: 270px;
+      border-radius: 16px;
       border: 2px solid var(--border);
       overflow: hidden;
       background: var(--surface);
@@ -90,12 +190,33 @@
       align-items: center;
       justify-content: center;
       position: relative;
-      transition: border-color 0.3s;
+      transition: border-color 0.4s, box-shadow 0.4s;
+    }
+    .preview-wrap.has-image { border-color: #444; }
+    .preview-wrap.result-positive {
+      border-color: var(--red);
+      box-shadow: 0 0 28px rgba(230, 57, 70, 0.35);
+    }
+    .preview-wrap.result-negative {
+      border-color: var(--green);
+      box-shadow: 0 0 28px rgba(45, 198, 83, 0.3);
     }
 
-    .preview-wrap.has-image {
-      border-color: var(--accent);
+    /* Corner markers */
+    .corner {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      z-index: 2;
+      pointer-events: none;
+      transition: border-color 0.4s;
     }
+    .corner.tl { top: 6px; left: 6px; border-top: 2px solid var(--red); border-left: 2px solid var(--red); border-radius: 3px 0 0 0; }
+    .corner.tr { top: 6px; right: 6px; border-top: 2px solid var(--red); border-right: 2px solid var(--red); border-radius: 0 3px 0 0; }
+    .corner.bl { bottom: 6px; left: 6px; border-bottom: 2px solid var(--red); border-left: 2px solid var(--red); border-radius: 0 0 0 3px; }
+    .corner.br { bottom: 6px; right: 6px; border-bottom: 2px solid var(--red); border-right: 2px solid var(--red); border-radius: 0 0 3px 0; }
+
+    .scanner-wrap.result-negative .corner { border-color: var(--green) !important; }
 
     .preview-placeholder {
       display: flex;
@@ -104,15 +225,8 @@
       gap: 12px;
       color: var(--muted);
     }
-
-    .preview-placeholder svg {
-      opacity: 0.4;
-    }
-
-    .preview-placeholder p {
-      font-size: 0.8rem;
-      letter-spacing: 0.05em;
-    }
+    .preview-placeholder svg { opacity: 0.3; }
+    .preview-placeholder p { font-size: 0.78rem; letter-spacing: 0.04em; }
 
     #preview-img {
       width: 100%;
@@ -121,75 +235,65 @@
       display: none;
     }
 
-    /* Result overlay */
+    /* Scan line animation */
+    .scan-line {
+      display: none;
+      position: absolute;
+      left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--red), transparent);
+      animation: scanMove 1.4s ease-in-out infinite;
+      z-index: 3;
+      pointer-events: none;
+    }
+    .scan-line.active { display: block; }
+    @keyframes scanMove {
+      0% { top: 0; opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { top: 100%; opacity: 0; }
+    }
+
     .result-badge {
       display: none;
       position: absolute;
-      bottom: 12px;
-      left: 12px;
-      right: 12px;
+      bottom: 10px; left: 10px; right: 10px;
       border-radius: 10px;
       padding: 10px 14px;
-      font-size: 0.85rem;
+      font-size: 0.83rem;
       font-weight: 600;
       text-align: center;
-      letter-spacing: 0.03em;
+      z-index: 4;
     }
+    .result-badge.positive { background: rgba(230,57,70,0.92); color: #fff; }
+    .result-badge.negative { background: rgba(45,198,83,0.9); color: #fff; }
 
-    .result-badge.positive {
-      background: rgba(230, 57, 70, 0.9);
-      color: #fff;
-    }
-
-    .result-badge.negative {
-      background: rgba(45, 198, 83, 0.9);
-      color: #fff;
-    }
-
-    /* Confidence bar */
     .confidence-wrap {
-      width: 260px;
+      width: 270px;
       display: none;
       flex-direction: column;
       gap: 6px;
     }
-
     .confidence-label {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       color: var(--muted);
       text-transform: uppercase;
       letter-spacing: 0.1em;
       display: flex;
       justify-content: space-between;
     }
-
-    .confidence-bar {
-      height: 4px;
-      border-radius: 2px;
-      background: var(--border);
-      overflow: hidden;
-    }
-
-    .confidence-fill {
-      height: 100%;
-      border-radius: 2px;
-      transition: width 0.6s ease;
-    }
+    .confidence-bar { height: 4px; border-radius: 2px; background: var(--border); overflow: hidden; }
+    .confidence-fill { height: 100%; border-radius: 2px; transition: width 0.6s ease; }
 
     /* Buttons */
-    .actions {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
+    .scan-actions { width: 100%; max-width: 320px; display: flex; flex-direction: column; gap: 10px; }
 
     .btn-scan {
       width: 100%;
-      padding: 18px;
+      padding: 17px;
       border-radius: 14px;
       border: none;
-      background: var(--accent);
+      background: var(--red);
       color: #fff;
       font-family: 'Bebas Neue', sans-serif;
       font-size: 1.3rem;
@@ -202,29 +306,18 @@
       transition: opacity 0.2s, transform 0.1s;
       -webkit-tap-highlight-color: transparent;
     }
+    .btn-scan:active { opacity: 0.85; transform: scale(0.98); }
+    .btn-scan:disabled { opacity: 0.4; cursor: not-allowed; }
 
-    .btn-scan:active {
-      opacity: 0.85;
-      transform: scale(0.98);
-    }
-
-    .btn-scan:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .btn-row {
-      display: flex;
-      gap: 10px;
-    }
+    .btn-row { display: flex; gap: 10px; }
 
     .btn-secondary {
       flex: 1;
-      padding: 14px;
+      padding: 13px;
       border-radius: 12px;
       border: 1px solid var(--border);
       background: var(--surface);
-      color: var(--text);
+      color: var(--muted);
       font-family: 'Inter', sans-serif;
       font-size: 0.85rem;
       font-weight: 500;
@@ -233,187 +326,561 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      transition: background 0.2s;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
       -webkit-tap-highlight-color: transparent;
     }
-
-    .btn-secondary:active {
-      background: var(--border);
+    .btn-secondary.selected {
+      border-color: var(--red);
+      color: var(--text);
+      background: rgba(230,57,70,0.08);
     }
+    .btn-secondary:active { background: var(--border); }
 
-    /* Loading spinner */
     .spinner {
       display: none;
-      width: 20px;
-      height: 20px;
+      width: 20px; height: 20px;
       border: 2px solid rgba(255,255,255,0.3);
       border-top-color: #fff;
       border-radius: 50%;
       animation: spin 0.7s linear infinite;
     }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
-    @keyframes spin {
-      to { transform: rotate(360deg); }
+    /* ════ HISTORY ════ */
+    #page-history { gap: 16px; }
+
+    .page-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: 0.06em;
     }
 
-    /* Disclaimer */
-    .disclaimer {
-      font-size: 0.68rem;
+    .history-empty {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
       color: var(--muted);
       text-align: center;
-      line-height: 1.5;
-      margin-top: 4px;
+      padding: 40px 0;
+    }
+    .history-empty svg { opacity: 0.25; }
+    .history-empty p { font-size: 0.85rem; line-height: 1.6; }
+
+    .history-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .history-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+    }
+    .history-thumb {
+      width: 56px; height: 56px;
+      border-radius: 10px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .history-thumb-placeholder {
+      width: 56px; height: 56px;
+      border-radius: 10px;
+      background: var(--surface2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--muted);
+    }
+    .history-info { flex: 1; min-width: 0; }
+    .history-result { font-weight: 600; font-size: 0.88rem; margin-bottom: 3px; }
+    .history-result.positive { color: var(--red); }
+    .history-result.negative { color: var(--green); }
+    .history-meta { font-size: 0.75rem; color: var(--muted); }
+    .history-confidence { font-size: 0.82rem; font-weight: 600; color: var(--muted); }
+
+    .btn-clear {
+      align-self: flex-start;
+      padding: 7px 13px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: none;
+      color: var(--muted);
+      font-size: 0.78rem;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    #file-input { display: none; }
+    /* ════ INFO ════ */
+    #page-info { gap: 16px; }
+
+    .info-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .info-section-title {
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .info-section p { font-size: 0.83rem; color: var(--muted); line-height: 1.65; }
+
+    .info-list { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+    .info-list li {
+      font-size: 0.83rem;
+      color: var(--muted);
+      line-height: 1.5;
+      padding-left: 14px;
+      position: relative;
+    }
+    .info-list li::before { content: '·'; position: absolute; left: 0; color: var(--red); font-size: 1.1rem; line-height: 1.3; }
+
+    .alert-box {
+      background: rgba(230,57,70,0.08);
+      border: 1px solid rgba(230,57,70,0.25);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 0.83rem;
+      color: #f0a0a5;
+      line-height: 1.65;
+    }
+    .alert-box strong { color: #f5c0c3; }
+
+    /* ════ MODEL ════ */
+    #page-model { gap: 16px; }
+
+    .model-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .model-stat {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .model-stat:first-child { padding-top: 0; }
+    .model-stat:last-child { border-bottom: none; padding-bottom: 0; }
+    .model-stat-label { font-size: 0.83rem; color: var(--muted); }
+    .model-stat-value { font-size: 0.95rem; font-weight: 600; }
+    .model-stat-value.accent { color: var(--red); font-size: 1.25rem; }
+
+    #file-input, #camera-input { display: none; }
   </style>
 </head>
 <body>
-  <div id="app">
+<div id="layout">
 
-    <header>
-      <div class="logo">Ring<span>Check</span></div>
-      <p class="tagline">Ringworm scanner for combat sports</p>
-    </header>
+  <div id="overlay"></div>
 
-    <div class="scanner">
-      <div class="preview-wrap" id="preview-wrap">
-        <div class="preview-placeholder" id="placeholder">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-            <circle cx="12" cy="13" r="4"/>
-          </svg>
-          <p>No image selected</p>
+  <aside id="sidebar">
+    <div class="sidebar-logo">Ring<span>Check</span></div>
+    <nav>
+      <div class="nav-item active" data-page="scan">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        Scan
+      </div>
+      <div class="nav-item" data-page="history">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        History
+      </div>
+      <div class="nav-item" data-page="info">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Info
+      </div>
+      <div class="nav-item" data-page="model">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Model
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      Not a medical diagnosis tool.<br>Always consult a doctor if unsure.
+    </div>
+  </aside>
+
+  <div id="main">
+
+    <div id="topbar">
+      <button id="hamburger">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="topbar-text">
+        <div class="topbar-title">Ring<span>Check</span></div>
+        <div id="topbar-subtitle">Ready to scan</div>
+      </div>
+    </div>
+
+    <!-- SCAN -->
+    <div class="page active" id="page-scan">
+
+      <div class="tip-box">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#e63946" stroke-width="2" style="margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span>For best results: take a clear, close-up photo in good lighting. Avoid shadows or flash. The skin area should fill most of the frame.</span>
+      </div>
+
+      <div class="scanner-wrap" id="scanner-wrap">
+        <div class="corner tl"></div>
+        <div class="corner tr"></div>
+        <div class="corner bl"></div>
+        <div class="corner br"></div>
+        <div class="scan-line" id="scan-line"></div>
+        <div class="preview-wrap" id="preview-wrap">
+          <div class="preview-placeholder" id="placeholder">
+            <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            <p>No image selected</p>
+          </div>
+          <img id="preview-img" alt="Selected image" />
+          <div class="result-badge" id="result-badge"></div>
         </div>
-        <img id="preview-img" alt="Selected image" />
-        <div class="result-badge" id="result-badge"></div>
       </div>
 
       <div class="confidence-wrap" id="confidence-wrap">
         <div class="confidence-label">
           <span>Confidence</span>
-          <span id="confidence-pct">—</span>
+          <span id="confidence-pct">0%</span>
         </div>
         <div class="confidence-bar">
           <div class="confidence-fill" id="confidence-fill"></div>
         </div>
       </div>
+
+      <div class="scan-actions">
+        <button class="btn-scan" id="btn-analyze" disabled>
+          <span id="btn-label">Select an image first</span>
+          <div class="spinner" id="spinner"></div>
+        </button>
+        <div class="btn-row">
+          <button class="btn-secondary" id="btn-camera">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            Camera
+          </button>
+          <button class="btn-secondary" id="btn-gallery">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            Gallery
+          </button>
+        </div>
+      </div>
     </div>
 
-    <div class="actions">
-      <button class="btn-scan" id="btn-analyze" disabled>
-        <span id="btn-label">Select an image first</span>
-        <div class="spinner" id="spinner"></div>
-      </button>
+    <!-- HISTORY -->
+    <div class="page" id="page-history">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div class="page-title">History</div>
+        <button class="btn-clear" id="btn-clear">Clear all</button>
+      </div>
+      <div id="history-content"></div>
+    </div>
 
-      <div class="btn-row">
-        <button class="btn-secondary" id="btn-camera">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-            <circle cx="12" cy="13" r="4"/>
-          </svg>
-          Camera
-        </button>
-        <button class="btn-secondary" id="btn-gallery">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
-            <polyline points="21 15 16 10 5 21"/>
-          </svg>
-          Gallery
-        </button>
+    <!-- INFO -->
+    <div class="page" id="page-info">
+      <div class="page-title">Ringworm Info</div>
+
+      <div class="alert-box">
+        <strong>If your scan comes back positive, do not train.</strong> Ringworm spreads easily through skin-to-skin contact on the mat. Stay off the mats until the infection is fully cleared.
       </div>
 
-      <p class="disclaimer">Not medical advice. If unsure, consult a doctor before training.</p>
+      <div class="info-section">
+        <div class="info-section-title">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          What is ringworm?
+        </div>
+        <p>Ringworm (tinea corporis) is a fungal skin infection, not an actual worm. It is extremely common in contact sports like BJJ, wrestling, and MMA due to close skin contact and shared mats.</p>
+      </div>
+
+      <div class="info-section">
+        <div class="info-section-title">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Symptoms
+        </div>
+        <ul class="info-list">
+          <li>Ring-shaped rash with raised, scaly edges</li>
+          <li>Red or pink coloring, sometimes darker in the center</li>
+          <li>Itching or burning sensation</li>
+          <li>Can appear anywhere on the body</li>
+          <li>May expand over several days if untreated</li>
+        </ul>
+      </div>
+
+      <div class="info-section">
+        <div class="info-section-title">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          What to do if positive
+        </div>
+        <ul class="info-list">
+          <li>Stop training immediately</li>
+          <li>Apply an antifungal cream (clotrimazole or terbinafine)</li>
+          <li>Keep the area clean and dry</li>
+          <li>Wash all training gear and towels in hot water</li>
+          <li>Return to training only when fully cleared, usually 2 to 3 weeks</li>
+          <li>See a doctor if there is no improvement after 2 weeks</li>
+        </ul>
+      </div>
+
+      <div class="info-section">
+        <div class="info-section-title">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Prevention
+        </div>
+        <ul class="info-list">
+          <li>Shower immediately after training</li>
+          <li>Wear clean gear every session</li>
+          <li>Avoid sharing towels or equipment</li>
+          <li>Check yourself regularly, especially after training with new partners</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- MODEL -->
+    <div class="page" id="page-model">
+      <div class="page-title">Model Info</div>
+
+      <div class="model-card">
+        <div class="model-stat">
+          <div class="model-stat-label">Accuracy</div>
+          <div class="model-stat-value accent">94.23%</div>
+        </div>
+        <div class="model-stat">
+          <div class="model-stat-label">Architecture</div>
+          <div class="model-stat-value">MobileNetV2</div>
+        </div>
+        <div class="model-stat">
+          <div class="model-stat-label">Task</div>
+          <div class="model-stat-value">Binary classification</div>
+        </div>
+        <div class="model-stat">
+          <div class="model-stat-label">Input size</div>
+          <div class="model-stat-value">224 x 224 px</div>
+        </div>
+        <div class="model-stat">
+          <div class="model-stat-label">Format</div>
+          <div class="model-stat-value">ONNX</div>
+        </div>
+      </div>
+
+      <div class="info-section">
+        <div class="info-section-title">About this model</div>
+        <p>RingCheck uses a MobileNetV2 convolutional neural network fine-tuned on a dataset of ringworm and healthy skin images. The model was developed as part of an applied AI research project focused on combat sports health screening.</p>
+        <p style="margin-top:8px">This tool is a screening aid only. It does not constitute medical advice or a diagnosis. Always consult a healthcare professional if in doubt.</p>
+      </div>
     </div>
 
   </div>
+</div>
 
-  <input type="file" id="file-input" accept="image/*" />
-  <input type="file" id="camera-input" accept="image/*" capture="environment" />
+<input type="file" id="file-input" accept="image/*" />
+<input type="file" id="camera-input" accept="image/*" capture="environment" />
 
-  <script>
-    const API_URL = 'https://ringcheck.onrender.com/predict';
+<script>
+  const API_URL = 'https://ringcheck.onrender.com/predict';
+  const HISTORY_KEY = 'ringcheck_history';
 
-    const fileInput = document.getElementById('file-input');
-    const cameraInput = document.getElementById('camera-input');
-    const previewImg = document.getElementById('preview-img');
-    const placeholder = document.getElementById('placeholder');
-    const previewWrap = document.getElementById('preview-wrap');
-    const btnAnalyze = document.getElementById('btn-analyze');
-    const btnLabel = document.getElementById('btn-label');
-    const spinner = document.getElementById('spinner');
-    const resultBadge = document.getElementById('result-badge');
-    const confidenceWrap = document.getElementById('confidence-wrap');
-    const confidencePct = document.getElementById('confidence-pct');
-    const confidenceFill = document.getElementById('confidence-fill');
+  // Sidebar
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+  document.getElementById('hamburger').addEventListener('click', () => {
+    sidebar.classList.toggle('open');
+    overlay.classList.toggle('open');
+  });
+  overlay.addEventListener('click', () => {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('open');
+  });
 
-    let selectedFile = null;
+  // Navigation
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const target = item.dataset.page;
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      item.classList.add('active');
+      document.getElementById('page-' + target).classList.add('active');
+      sidebar.classList.remove('open');
+      overlay.classList.remove('open');
+      if (target === 'history') renderHistory();
+    });
+  });
 
-    function showPreview(file) {
-      selectedFile = file;
-      const url = URL.createObjectURL(file);
-      previewImg.src = url;
-      previewImg.style.display = 'block';
-      placeholder.style.display = 'none';
-      previewWrap.classList.add('has-image');
-      resultBadge.style.display = 'none';
-      confidenceWrap.style.display = 'none';
-      btnAnalyze.disabled = false;
-      btnLabel.textContent = 'Analyze';
-    }
+  // Scan
+  const fileInput = document.getElementById('file-input');
+  const cameraInput = document.getElementById('camera-input');
+  const previewImg = document.getElementById('preview-img');
+  const placeholder = document.getElementById('placeholder');
+  const previewWrap = document.getElementById('preview-wrap');
+  const scannerWrap = document.getElementById('scanner-wrap');
+  const scanLine = document.getElementById('scan-line');
+  const btnAnalyze = document.getElementById('btn-analyze');
+  const btnLabel = document.getElementById('btn-label');
+  const spinner = document.getElementById('spinner');
+  const resultBadge = document.getElementById('result-badge');
+  const confidenceWrap = document.getElementById('confidence-wrap');
+  const confidencePct = document.getElementById('confidence-pct');
+  const confidenceFill = document.getElementById('confidence-fill');
+  const topbarSubtitle = document.getElementById('topbar-subtitle');
+  const btnCamera = document.getElementById('btn-camera');
+  const btnGallery = document.getElementById('btn-gallery');
 
-    document.getElementById('btn-camera').addEventListener('click', () => cameraInput.click());
-    document.getElementById('btn-gallery').addEventListener('click', () => fileInput.click());
+  let selectedFile = null;
+  let currentImageB64 = null;
+  let activeSource = null;
 
-    fileInput.addEventListener('change', e => { if (e.target.files[0]) showPreview(e.target.files[0]); });
-    cameraInput.addEventListener('change', e => { if (e.target.files[0]) showPreview(e.target.files[0]); });
+  function setSubtitle(text, cls) {
+    topbarSubtitle.textContent = text;
+    topbarSubtitle.className = cls || '';
+  }
 
-    btnAnalyze.addEventListener('click', async () => {
-      if (!selectedFile) return;
+  function showPreview(file, source) {
+    selectedFile = file;
+    activeSource = source;
+    btnCamera.classList.toggle('selected', source === 'camera');
+    btnGallery.classList.toggle('selected', source === 'gallery');
 
-      btnAnalyze.disabled = true;
-      btnLabel.textContent = 'Analyzing...';
-      spinner.style.display = 'block';
-      resultBadge.style.display = 'none';
-      confidenceWrap.style.display = 'none';
+    const url = URL.createObjectURL(file);
+    previewImg.src = url;
+    previewImg.style.display = 'block';
+    placeholder.style.display = 'none';
+    previewWrap.className = 'preview-wrap has-image';
+    scannerWrap.className = 'scanner-wrap';
+    resultBadge.style.display = 'none';
+    confidenceWrap.style.display = 'none';
+    btnAnalyze.disabled = false;
+    btnLabel.textContent = 'Analyze';
+    setSubtitle('Image loaded. Ready to analyze.');
 
-      try {
-        const formData = new FormData();
-        formData.append('file', selectedFile);
+    const reader = new FileReader();
+    reader.onload = e => { currentImageB64 = e.target.result; };
+    reader.readAsDataURL(file);
+  }
 
-        const res = await fetch(API_URL, { method: 'POST', body: formData });
-        const data = await res.json();
+  document.getElementById('btn-camera').addEventListener('click', () => cameraInput.click());
+  document.getElementById('btn-gallery').addEventListener('click', () => fileInput.click());
+  fileInput.addEventListener('change', e => { if (e.target.files[0]) showPreview(e.target.files[0], 'gallery'); });
+  cameraInput.addEventListener('change', e => { if (e.target.files[0]) showPreview(e.target.files[0], 'camera'); });
 
-        const pct = Math.round(data.confidence * 100);
-        const color = data.ringworm ? 'var(--red)' : 'var(--green)';
+  btnAnalyze.addEventListener('click', async () => {
+    if (!selectedFile) return;
+    btnAnalyze.disabled = true;
+    btnLabel.textContent = 'Analyzing...';
+    spinner.style.display = 'block';
+    resultBadge.style.display = 'none';
+    confidenceWrap.style.display = 'none';
+    scanLine.classList.add('active');
+    setSubtitle('Analyzing...');
 
-        resultBadge.textContent = data.ringworm
-          ? `⚠️ Ringworm detected — ${pct}% confidence`
-          : `✅ No ringworm detected — ${pct}% confidence`;
-        resultBadge.className = 'result-badge ' + (data.ringworm ? 'positive' : 'negative');
-        resultBadge.style.display = 'block';
+    try {
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+      const res = await fetch(API_URL, { method: 'POST', body: formData });
+      const data = await res.json();
+      const pct = Math.round(data.confidence * 100);
+      const color = data.ringworm ? 'var(--red)' : 'var(--green)';
 
-        confidenceWrap.style.display = 'flex';
-        confidencePct.textContent = pct + '%';
-        confidenceFill.style.width = pct + '%';
-        confidenceFill.style.background = color;
+      scanLine.classList.remove('active');
 
-        btnLabel.textContent = 'Analyze again';
-
-      } catch (err) {
-        resultBadge.textContent = '⚠️ Could not connect to server';
-        resultBadge.className = 'result-badge positive';
-        resultBadge.style.display = 'block';
-        btnLabel.textContent = 'Retry';
+      if (data.ringworm) {
+        previewWrap.classList.add('result-positive');
+        scannerWrap.classList.remove('result-negative');
+        setSubtitle('Ringworm detected', 'positive');
+      } else {
+        previewWrap.classList.add('result-negative');
+        scannerWrap.classList.add('result-negative');
+        setSubtitle('No ringworm detected', 'negative');
       }
 
-      spinner.style.display = 'none';
-      btnAnalyze.disabled = false;
-    });
+      resultBadge.textContent = data.ringworm
+        ? `Ringworm detected — ${pct}% confidence`
+        : `No ringworm detected — ${pct}% confidence`;
+      resultBadge.className = 'result-badge ' + (data.ringworm ? 'positive' : 'negative');
+      resultBadge.style.display = 'block';
 
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js');
+      confidenceWrap.style.display = 'flex';
+      confidencePct.textContent = pct + '%';
+      confidenceFill.style.width = pct + '%';
+      confidenceFill.style.background = color;
+
+      btnLabel.textContent = 'Analyze again';
+
+      saveToHistory({ date: new Date().toISOString(), ringworm: data.ringworm, confidence: pct, image: currentImageB64 });
+
+    } catch (err) {
+      scanLine.classList.remove('active');
+      resultBadge.textContent = 'Could not connect to server. Try again.';
+      resultBadge.className = 'result-badge positive';
+      resultBadge.style.display = 'block';
+      btnLabel.textContent = 'Retry';
+      setSubtitle('Connection error');
     }
-  </script>
+
+    spinner.style.display = 'none';
+    btnAnalyze.disabled = false;
+  });
+
+  // History
+  function getHistory() {
+    try { return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; } catch { return []; }
+  }
+
+  function saveToHistory(entry) {
+    const h = getHistory();
+    h.unshift(entry);
+    if (h.length > 20) h.pop();
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(h));
+  }
+
+  function formatDate(iso) {
+    const d = new Date(iso);
+    return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+      + ' at ' + d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+  }
+
+  function renderHistory() {
+    const history = getHistory();
+    const container = document.getElementById('history-content');
+    if (!history.length) {
+      container.innerHTML = `<div class="history-empty">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        <p>No scans yet.<br>Run your first analysis to see results here.</p>
+      </div>`;
+      return;
+    }
+    container.innerHTML = `<div class="history-list">${history.map(item => `
+      <div class="history-item">
+        ${item.image
+          ? `<img class="history-thumb" src="${item.image}" alt="scan" />`
+          : `<div class="history-thumb-placeholder"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>`}
+        <div class="history-info">
+          <div class="history-result ${item.ringworm ? 'positive' : 'negative'}">
+            ${item.ringworm ? 'Ringworm detected' : 'No ringworm'}
+          </div>
+          <div class="history-meta">${formatDate(item.date)}</div>
+        </div>
+        <div class="history-confidence">${item.confidence}%</div>
+      </div>`).join('')}
+    </div>`;
+  }
+
+  document.getElementById('btn-clear').addEventListener('click', () => {
+    localStorage.removeItem(HISTORY_KEY);
+    renderHistory();
+  });
+
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+</script>
 </body>
 </html>
