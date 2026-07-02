@@ -15,7 +15,7 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #f8f9fa;
+      --bg: #dde2e8;
       --surface: #ffffff;
       --surface2: #f0f2f4;
       --border: #e4e8ec;
@@ -170,19 +170,21 @@
     .btn-row { display: flex; gap: 8px; width: 100%; }
     .btn-secondary {
       flex: 1; padding: 12px 8px;
-      border-radius: 10px; border: 1px solid var(--border2);
-      background: var(--surface2); color: var(--muted);
+      border-radius: 10px; border: 1.5px solid var(--teal-border);
+      background: var(--surface); color: var(--text);
+      box-shadow: 0 1px 6px rgba(42,184,154,0.1);
       font-family: 'Inter', sans-serif; font-size: 0.83rem; font-weight: 500;
       cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 7px;
       transition: all 0.2s; -webkit-tap-highlight-color: transparent;
     }
-    .btn-secondary.selected { border-color: var(--teal); color: var(--teal); background: var(--teal-bg); }
-    .btn-secondary:active { background: var(--border); }
+    .btn-secondary svg { stroke: var(--teal); }
+    .btn-secondary.selected { border-color: var(--teal); color: var(--teal); background: var(--teal-bg); box-shadow: 0 2px 10px rgba(42,184,154,0.18); }
+    .btn-secondary:active { background: var(--teal-bg); }
 
     .btn-analyze {
       width: 100%; max-width: 320px;
       padding: 16px; border-radius: 13px; border: 1.5px solid var(--border2);
-      background: var(--surface2); color: #bbb;
+      background: var(--surface); color: var(--teal);
       font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.1em;
       cursor: not-allowed; display: flex; align-items: center; justify-content: center; gap: 10px;
       transition: all 0.2s; -webkit-tap-highlight-color: transparent;
@@ -650,7 +652,21 @@
     btnLabel.textContent = 'Analyze';
     topbarSubtitle.textContent = 'Image loaded. Ready to analyze.';
     const reader = new FileReader();
-    reader.onload = e => { currentImageB64 = e.target.result; };
+    reader.onload = e => {
+      currentImageB64 = e.target.result;
+      const placeholder = document.getElementById('placeholder');
+      let previewImg = document.getElementById('scan-preview-img');
+      if (!previewImg) {
+        previewImg = document.createElement('img');
+        previewImg.id = 'scan-preview-img';
+        previewImg.alt = 'Selected image';
+        previewImg.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:13px;z-index:2;';
+        document.getElementById('preview-wrap').appendChild(previewImg);
+      }
+      previewImg.src = e.target.result;
+      previewImg.style.display = 'block';
+      placeholder.style.display = 'none';
+    };
     reader.readAsDataURL(file);
   }
 
@@ -660,10 +676,10 @@
   cameraInput.addEventListener('change', e => { if (e.target.files[0]) showPreview(e.target.files[0], 'camera'); });
 
   function getConfidenceInfo(pct) {
-    if (pct >= 90) return { label: 'Very confident', cls: 'very-confident' };
-    if (pct >= 80) return { label: 'Confident', cls: 'confident' };
-    if (pct >= 65) return { label: 'Low confidence', cls: 'low' };
-    return { label: 'Unclear result', cls: 'unclear' };
+    if (pct >= 90) return { label: 'Very confident', cls: 'very-confident', barColor: '#1eaa6a' };
+    if (pct >= 80) return { label: 'Confident', cls: 'confident', barColor: '#2ab89a' };
+    if (pct >= 55) return { label: 'Low confidence', cls: 'low', barColor: '#f59e0b' };
+    return { label: 'Unclear result', cls: 'unclear', barColor: '#e63946' };
   }
 
   function showResults(data, imageB64) {
@@ -671,7 +687,7 @@
     const pct = Math.min(rawPct, 99);
     const isPositive = data.ringworm;
     const confInfo = getConfidenceInfo(pct);
-    const isUnclear = pct < 65;
+    const isUnclear = pct < 55;
 
     // header
     const header = document.getElementById('result-header');
@@ -682,14 +698,14 @@
 
     if (isUnclear) {
       header.className = 'result-header';
-      header.style.background = '#f8f9fa';
-      header.style.border = '1px solid #e4e8ec';
+      header.style.background = 'rgba(230,57,70,0.06)';
+      header.style.border = '1px solid rgba(230,57,70,0.2)';
       icon.className = 'result-icon';
-      icon.style.background = 'rgba(107,120,133,0.1)';
-      iconSvg.setAttribute('stroke', '#6b7885');
+      icon.style.background = 'rgba(230,57,70,0.1)';
+      iconSvg.setAttribute('stroke', '#e63946');
       iconSvg.innerHTML = '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>';
       title.textContent = 'Unclear Result';
-      title.style.color = '#6b7885';
+      title.style.color = '#e63946';
       subtitle.textContent = 'The model could not determine a result with enough confidence.';
     } else if (isPositive) {
       header.className = 'result-header positive';
@@ -723,7 +739,7 @@
     else { thumb.style.display = 'none'; }
 
     // confidence
-    const fillColor = isUnclear ? '#6b7885' : isPositive ? '#e63946' : '#1eaa6a';
+    const fillColor = isUnclear ? '#e63946' : confInfo.barColor;
     document.getElementById('result-pct').textContent = pct + '%';
     const fill = document.getElementById('result-fill');
     fill.style.width = '0%';
@@ -805,6 +821,10 @@
     btnGallery.classList.remove('selected');
     topbarSubtitle.textContent = 'Ready to scan';
     fileInput.value = ''; cameraInput.value = '';
+    const previewImg = document.getElementById('scan-preview-img');
+    if (previewImg) { previewImg.style.display = 'none'; }
+    const placeholder = document.getElementById('placeholder');
+    if (placeholder) { placeholder.style.display = 'flex'; }
     setNavActive('scan');
     showPage('scan');
   });
