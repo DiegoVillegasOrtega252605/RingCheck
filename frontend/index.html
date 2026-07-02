@@ -3,39 +3,43 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#0d0d0d" />
+  <meta name="theme-color" content="#ffffff" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="RingCheck" />
   <title>RingCheck</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #0d0d0d;
-      --surface: #1a1a1a;
-      --surface2: #111;
-      --border: #1e1e1e;
-      --border2: #2a2a2a;
-      --text: #e8e8e8;
-      --muted: #556;
+      --bg: #f8f9fa;
+      --surface: #ffffff;
+      --surface2: #f0f2f4;
+      --border: #e4e8ec;
+      --border2: #d0d6dc;
+      --text: #0f1923;
+      --muted: #6b7885;
       --teal: #2ab89a;
-      --teal-bg: #0a1a18;
-      --teal-border: #163028;
-      --teal-dim: rgba(42,184,154,0.08);
+      --teal-bg: #f0faf8;
+      --teal-border: #c0e8e0;
+      --teal-dim: rgba(42,184,154,0.1);
       --red: #e63946;
-      --green: #2dc653;
-      --sidebar-w: 260px;
+      --red-bg: #fff5f5;
+      --green: #1eaa6a;
+      --green-bg: #f0faf5;
+      --sidebar-w: 270px;
     }
 
     html, body { height: 100%; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow: hidden; }
     #layout { display: flex; height: 100%; }
-    #overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 10; }
+
+    #overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.3); z-index: 10; }
     #overlay.open { display: block; }
 
+    /* Sidebar */
     #sidebar {
       position: fixed; top: 0; left: 0; bottom: 0;
       width: var(--sidebar-w);
@@ -46,6 +50,7 @@
       z-index: 20;
       transform: translateX(-100%);
       transition: transform 0.28s ease;
+      box-shadow: 4px 0 24px rgba(0,0,0,0.08);
     }
     #sidebar.open { transform: translateX(0); }
 
@@ -55,6 +60,7 @@
       padding: 0 24px 24px;
       border-bottom: 1px solid var(--border);
       display: flex; align-items: center; gap: 10px;
+      color: var(--text);
     }
     .sidebar-logo span { color: var(--teal); }
 
@@ -62,35 +68,35 @@
     .nav-item {
       display: flex; align-items: center; gap: 12px;
       padding: 13px 24px; cursor: pointer;
-      font-size: 0.9rem; font-weight: 500; color: #556;
+      font-size: 0.9rem; font-weight: 500; color: var(--muted);
       border-left: 3px solid transparent;
       transition: all 0.15s; -webkit-tap-highlight-color: transparent;
     }
-    .nav-item:hover { color: var(--text); background: #111; }
-    .nav-item.active { color: var(--text); border-left-color: var(--teal); background: #111; }
-    .sidebar-footer { padding: 16px 24px 0; border-top: 1px solid var(--border); font-size: 0.7rem; color: #334; line-height: 1.6; }
+    .nav-item:hover { color: var(--text); background: var(--surface2); }
+    .nav-item.active { color: var(--teal); border-left-color: var(--teal); background: var(--teal-bg); }
+
+    .sidebar-footer { padding: 16px 24px 0; border-top: 1px solid var(--border); font-size: 0.7rem; color: #aab; line-height: 1.6; }
 
     #main { flex: 1; display: flex; flex-direction: column; height: 100%; overflow: hidden; }
 
     #topbar {
       display: flex; align-items: center; gap: 12px;
       padding: 13px 18px;
+      background: var(--surface);
       border-bottom: 1px solid var(--border);
       flex-shrink: 0;
     }
     #hamburger { background: none; border: none; cursor: pointer; color: var(--text); padding: 4px; display: flex; -webkit-tap-highlight-color: transparent; }
 
     .topbar-text { display: flex; flex-direction: column; }
-    .topbar-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.35rem; letter-spacing: 0.08em; line-height: 1; }
+    .topbar-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.35rem; letter-spacing: 0.08em; line-height: 1; color: var(--text); }
     .topbar-title span { color: var(--teal); }
-    #topbar-subtitle { font-size: 0.65rem; color: #334; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; transition: color 0.3s; }
-    #topbar-subtitle.positive { color: var(--red); }
-    #topbar-subtitle.negative { color: var(--teal); }
+    #topbar-subtitle { font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; transition: color 0.3s; }
 
     .page { display: none; flex: 1; overflow-y: auto; padding: 18px 18px 32px; }
     .page.active { display: flex; flex-direction: column; }
 
-    /* SCAN */
+    /* ═══ SCAN PAGE ═══ */
     #page-scan { gap: 16px; align-items: center; }
 
     .tip-box {
@@ -100,7 +106,7 @@
       border-left: 2px solid var(--teal);
       border-radius: 10px;
       padding: 10px 13px;
-      font-size: 0.77rem; color: #8ad4c4;
+      font-size: 0.77rem; color: #2a7a6a;
       line-height: 1.55;
       display: flex; gap: 9px; align-items: flex-start;
     }
@@ -108,63 +114,45 @@
 
     .scanner-block {
       width: 100%; max-width: 320px;
-      background: var(--surface2);
+      background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 16px 14px 13px;
       display: flex; flex-direction: column; align-items: center; gap: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
     }
 
-    .scanner-wrap {
-      position: relative; width: 260px; height: 260px; flex-shrink: 0;
-    }
+    .scanner-wrap { position: relative; width: 260px; height: 260px; flex-shrink: 0; }
 
     .preview-wrap {
       width: 260px; height: 260px;
       border-radius: 14px;
       border: 1.5px solid var(--border);
       overflow: hidden;
-      background: var(--bg);
+      background: var(--surface2);
       display: flex; align-items: center; justify-content: center;
       position: relative;
       transition: border-color 0.4s, box-shadow 0.4s;
     }
-    .preview-wrap.has-image { border-color: #2a2a2a; }
-    .preview-wrap.result-positive { border-color: var(--red); box-shadow: 0 0 28px rgba(230,57,70,0.25); }
-    .preview-wrap.result-negative { border-color: var(--teal); box-shadow: 0 0 28px rgba(42,184,154,0.2); }
 
-    /* Soft rounded corners - not tactical */
     .corner { position: absolute; width: 18px; height: 18px; z-index: 2; pointer-events: none; }
     .corner.tl { top: 6px; left: 6px; border-top: 2px solid var(--teal); border-left: 2px solid var(--teal); border-radius: 6px 0 0 0; }
     .corner.tr { top: 6px; right: 6px; border-top: 2px solid var(--teal); border-right: 2px solid var(--teal); border-radius: 0 6px 0 0; }
     .corner.bl { bottom: 6px; left: 6px; border-bottom: 2px solid var(--teal); border-left: 2px solid var(--teal); border-radius: 0 0 0 6px; }
     .corner.br { bottom: 6px; right: 6px; border-bottom: 2px solid var(--teal); border-right: 2px solid var(--teal); border-radius: 0 0 6px 0; }
-    .scanner-wrap.result-positive .corner { border-color: var(--red); }
 
-    #preview-img { width: 100%; height: 100%; object-fit: cover; display: none; z-index: 0; position: absolute; inset: 0; }
+    .visor-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+    .preview-placeholder { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; z-index: 1; }
 
-    .result-badge {
-      display: none; position: absolute; bottom: 10px; left: 10px; right: 10px;
-      border-radius: 10px; padding: 10px 14px;
-      font-size: 0.82rem; font-weight: 600; text-align: center; z-index: 4;
-    }
-    .result-badge.positive { background: rgba(230,57,70,0.92); color: #fff; }
-    .result-badge.negative { background: rgba(42,184,154,0.9); color: #fff; }
-
-    .scan-line {
-      display: none; position: absolute; left: 0; right: 0; height: 2px;
-      background: linear-gradient(90deg, transparent, var(--teal), transparent);
-      animation: scanMove 1.4s ease-in-out infinite; z-index: 3; pointer-events: none;
-    }
-    .scan-line.active { display: block; }
-
-    @keyframes scanMove { 0% { top: 0; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
     @keyframes rotateRing { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-    @keyframes waveOut1 { 0%,100%{opacity:0.15; transform:scale(0.92);} 50%{opacity:0.45; transform:scale(1);} }
-    @keyframes waveOut2 { 0%,100%{opacity:0.1; transform:scale(0.95);} 50%{opacity:0.3; transform:scale(1.02);} }
-    @keyframes waveOut3 { 0%,100%{opacity:0.06; transform:scale(0.98);} 50%{opacity:0.18; transform:scale(1.04);} }
-    @keyframes dotPulse { 0%,100%{opacity:0.3;} 50%{opacity:0.8;} }
-    @keyframes centerGlow { 0%,100%{opacity:0.5;} 50%{opacity:1;} }
+    @keyframes waveOut1 { 0%,100%{opacity:0.12;transform:scale(0.93);} 50%{opacity:0.35;transform:scale(1);} }
+    @keyframes waveOut2 { 0%,100%{opacity:0.08;transform:scale(0.96);} 50%{opacity:0.22;transform:scale(1.02);} }
+    @keyframes waveOut3 { 0%,100%{opacity:0.05;transform:scale(0.98);} 50%{opacity:0.14;transform:scale(1.04);} }
+    @keyframes dotPulse { 0%,100%{opacity:0.25;} 50%{opacity:0.7;} }
+    @keyframes centerGlow { 0%,100%{opacity:0.4;} 50%{opacity:0.9;} }
+    @keyframes scanMove { 0% { top: 0; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
     .ring-rotate { transform-origin: 130px 130px; animation: rotateRing 12s linear infinite; }
     .wave1 { transform-origin: 130px 130px; animation: waveOut1 2.8s ease-in-out infinite; }
@@ -176,80 +164,180 @@
     .dot4 { animation: dotPulse 2.4s ease-in-out 1.8s infinite; }
     .center-glow { animation: centerGlow 2.5s ease-in-out infinite; }
 
-    .visor-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
-    .preview-placeholder { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; z-index: 1; }
+    .scan-line { display: none; position: absolute; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--teal), transparent); animation: scanMove 1.4s ease-in-out infinite; z-index: 3; pointer-events: none; }
+    .scan-line.active { display: block; }
 
     .btn-row { display: flex; gap: 8px; width: 100%; }
     .btn-secondary {
       flex: 1; padding: 12px 8px;
       border-radius: 10px; border: 1px solid var(--border2);
-      background: var(--bg); color: #556;
+      background: var(--surface2); color: var(--muted);
       font-family: 'Inter', sans-serif; font-size: 0.83rem; font-weight: 500;
       cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 7px;
-      transition: background 0.2s, color 0.2s, border-color 0.2s;
-      -webkit-tap-highlight-color: transparent;
+      transition: all 0.2s; -webkit-tap-highlight-color: transparent;
     }
-    .btn-secondary.selected { border-color: var(--teal); color: var(--text); background: var(--teal-dim); }
-    .btn-secondary:active { background: #1a1a1a; }
-
-    .confidence-wrap { width: 100%; max-width: 320px; display: none; flex-direction: column; gap: 6px; }
-    .confidence-label { font-size: 0.7rem; color: #445; text-transform: uppercase; letter-spacing: 0.1em; display: flex; justify-content: space-between; }
-    .confidence-bar { height: 3px; border-radius: 2px; background: var(--border2); overflow: hidden; }
-    .confidence-fill { height: 100%; border-radius: 2px; transition: width 0.6s ease; }
+    .btn-secondary.selected { border-color: var(--teal); color: var(--teal); background: var(--teal-bg); }
+    .btn-secondary:active { background: var(--border); }
 
     .btn-analyze {
       width: 100%; max-width: 320px;
-      padding: 16px; border-radius: 13px; border: 1px solid var(--border2);
-      background: #1a1a1a; color: #444;
+      padding: 16px; border-radius: 13px; border: 1.5px solid var(--border2);
+      background: var(--surface2); color: #bbb;
       font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.1em;
       cursor: not-allowed; display: flex; align-items: center; justify-content: center; gap: 10px;
-      transition: background 0.2s, color 0.2s, border-color 0.2s;
-      -webkit-tap-highlight-color: transparent;
+      transition: all 0.2s; -webkit-tap-highlight-color: transparent;
     }
-    .btn-analyze.ready { background: var(--teal); color: #fff; border-color: var(--teal); cursor: pointer; }
+    .btn-analyze.ready { background: var(--teal); color: #fff; border-color: var(--teal); cursor: pointer; box-shadow: 0 4px 16px rgba(42,184,154,0.3); }
     .btn-analyze.ready:active { opacity: 0.88; transform: scale(0.99); }
 
     .spinner { display: none; width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ═══ ANALYZING PAGE ═══ */
+    #page-analyzing {
+      align-items: center; justify-content: center; gap: 28px; text-align: center;
+    }
+    .analyzing-visor { position: relative; width: 200px; height: 200px; }
+    .analyzing-text { font-size: 1rem; font-weight: 600; color: var(--text); }
+    .analyzing-sub { font-size: 0.82rem; color: var(--muted); line-height: 1.6; max-width: 260px; }
+
+    /* ═══ RESULTS PAGE ═══ */
+    #page-results { gap: 16px; align-items: center; }
+
+    .result-header {
+      width: 100%; max-width: 320px;
+      border-radius: 16px;
+      padding: 20px;
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      text-align: center;
+      animation: fadeIn 0.4s ease;
+    }
+    .result-header.positive { background: var(--red-bg); border: 1px solid rgba(230,57,70,0.2); }
+    .result-header.negative { background: var(--green-bg); border: 1px solid rgba(30,170,106,0.2); }
+
+    .result-icon { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .result-icon.positive { background: rgba(230,57,70,0.1); }
+    .result-icon.negative { background: rgba(30,170,106,0.1); }
+
+    .result-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 0.06em; }
+    .result-title.positive { color: var(--red); }
+    .result-title.negative { color: var(--green); }
+
+    .result-thumb {
+      width: 100%; max-width: 320px;
+      height: 180px;
+      border-radius: 14px;
+      object-fit: cover;
+      border: 1.5px solid var(--border);
+      animation: fadeIn 0.4s ease;
+    }
+
+    .confidence-card {
+      width: 100%; max-width: 320px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      display: flex; flex-direction: column; gap: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      animation: fadeIn 0.5s ease;
+    }
+    .confidence-top { display: flex; justify-content: space-between; align-items: center; }
+    .confidence-label-text { font-size: 0.8rem; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; }
+    .confidence-pct { font-size: 1.1rem; font-weight: 700; color: var(--text); }
+    .confidence-bar { height: 5px; border-radius: 3px; background: var(--border); overflow: hidden; }
+    .confidence-fill { height: 100%; border-radius: 3px; transition: width 0.8s ease; }
+    .confidence-badge {
+      align-self: flex-start;
+      padding: 4px 10px; border-radius: 20px;
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.05em;
+    }
+    .confidence-badge.very-confident { background: rgba(42,184,154,0.12); color: #1a8870; }
+    .confidence-badge.confident { background: rgba(42,184,154,0.08); color: #2a9880; }
+    .confidence-badge.low { background: rgba(245,158,11,0.1); color: #b45309; }
+    .confidence-badge.unclear { background: rgba(107,120,133,0.1); color: var(--muted); }
+
+    .advice-card {
+      width: 100%; max-width: 320px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      display: flex; flex-direction: column; gap: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      animation: fadeIn 0.6s ease;
+    }
+    .advice-title { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+    .advice-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .advice-list li { font-size: 0.82rem; color: var(--muted); line-height: 1.5; padding-left: 16px; position: relative; }
+    .advice-list li::before { content: '·'; position: absolute; left: 0; color: var(--teal); font-size: 1.1rem; line-height: 1.3; }
+
+    .result-actions {
+      width: 100%; max-width: 320px;
+      display: flex; flex-direction: column; gap: 10px;
+      animation: fadeIn 0.7s ease;
+    }
+    .btn-primary {
+      width: 100%; padding: 15px; border-radius: 12px; border: none;
+      background: var(--teal); color: #fff;
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.1em;
+      cursor: pointer; -webkit-tap-highlight-color: transparent;
+      box-shadow: 0 4px 14px rgba(42,184,154,0.25);
+    }
+    .btn-primary:active { opacity: 0.88; }
+    .btn-outline {
+      width: 100%; padding: 13px; border-radius: 12px;
+      border: 1.5px solid var(--teal); background: transparent;
+      color: var(--teal); font-family: 'Inter', sans-serif;
+      font-size: 0.88rem; font-weight: 600;
+      cursor: pointer; -webkit-tap-highlight-color: transparent;
+    }
 
     /* HISTORY */
     #page-history { gap: 16px; }
-    .page-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 0.06em; }
-    .history-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; color: #334; text-align: center; padding: 40px 0; }
-    .history-empty svg { opacity: 0.2; }
+    .page-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 0.06em; color: var(--text); }
+    .history-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; color: var(--muted); text-align: center; padding: 40px 0; }
+    .history-empty svg { opacity: 0.25; }
     .history-empty p { font-size: 0.85rem; line-height: 1.6; }
     .history-list { display: flex; flex-direction: column; gap: 10px; }
-    .history-item { display: flex; align-items: center; gap: 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 12px; }
+    .history-item { display: flex; align-items: center; gap: 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
     .history-thumb { width: 56px; height: 56px; border-radius: 10px; object-fit: cover; flex-shrink: 0; }
-    .history-thumb-placeholder { width: 56px; height: 56px; border-radius: 10px; background: #111; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #334; }
+    .history-thumb-placeholder { width: 56px; height: 56px; border-radius: 10px; background: var(--surface2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--muted); }
     .history-info { flex: 1; min-width: 0; }
     .history-result { font-weight: 600; font-size: 0.88rem; margin-bottom: 3px; }
     .history-result.positive { color: var(--red); }
-    .history-result.negative { color: var(--teal); }
-    .history-meta { font-size: 0.75rem; color: #445; }
-    .history-confidence { font-size: 0.82rem; font-weight: 600; color: #445; }
-    .btn-clear { align-self: flex-start; padding: 7px 13px; border-radius: 8px; border: 1px solid var(--border2); background: none; color: #445; font-size: 0.78rem; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .history-result.negative { color: var(--green); }
+    .history-meta { font-size: 0.75rem; color: var(--muted); }
+    .history-confidence { font-size: 0.82rem; font-weight: 600; color: var(--muted); }
+    .btn-clear { align-self: flex-start; padding: 7px 13px; border-radius: 8px; border: 1px solid var(--border2); background: none; color: var(--muted); font-size: 0.78rem; cursor: pointer; }
 
     /* INFO */
     #page-info { gap: 16px; }
-    .info-section { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 10px; }
-    .info-section-title { font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; }
-    .info-section p { font-size: 0.83rem; color: #556; line-height: 1.65; }
+    .info-section { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+    .info-section-title { font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; color: var(--text); }
+    .info-section p { font-size: 0.83rem; color: var(--muted); line-height: 1.65; }
     .info-list { list-style: none; display: flex; flex-direction: column; gap: 7px; }
-    .info-list li { font-size: 0.83rem; color: #556; line-height: 1.5; padding-left: 14px; position: relative; }
+    .info-list li { font-size: 0.83rem; color: var(--muted); line-height: 1.5; padding-left: 14px; position: relative; }
     .info-list li::before { content: '·'; position: absolute; left: 0; color: var(--teal); font-size: 1.1rem; line-height: 1.3; }
-    .alert-box { background: rgba(42,184,154,0.06); border: 1px solid rgba(42,184,154,0.18); border-radius: 12px; padding: 14px 16px; font-size: 0.83rem; color: #7abfb3; line-height: 1.65; }
-    .alert-box strong { color: #9ad4cb; }
+    .alert-box { background: rgba(42,184,154,0.06); border: 1px solid rgba(42,184,154,0.2); border-radius: 12px; padding: 14px 16px; font-size: 0.83rem; color: #1a7a6a; line-height: 1.65; }
+    .alert-box strong { color: #0a6a5a; }
 
     /* MODEL */
     #page-model { gap: 16px; }
-    .model-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; }
+    .model-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
     .model-stat { display: flex; justify-content: space-between; align-items: center; padding: 13px 0; border-bottom: 1px solid var(--border); }
     .model-stat:first-child { padding-top: 0; }
     .model-stat:last-child { border-bottom: none; padding-bottom: 0; }
-    .model-stat-label { font-size: 0.83rem; color: #556; }
-    .model-stat-value { font-size: 0.95rem; font-weight: 600; }
+    .model-stat-label { font-size: 0.83rem; color: var(--muted); }
+    .model-stat-value { font-size: 0.95rem; font-weight: 600; color: var(--text); }
     .model-stat-value.accent { color: var(--teal); font-size: 1.25rem; }
+    .threshold-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); }
+    .threshold-row:last-child { border-bottom: none; }
+    .threshold-range { font-size: 0.8rem; color: var(--muted); }
+    .threshold-badge { font-size: 0.75rem; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
+    .tb-very { background: rgba(42,184,154,0.12); color: #1a8870; }
+    .tb-conf { background: rgba(42,184,154,0.08); color: #2a9880; }
+    .tb-low { background: rgba(245,158,11,0.1); color: #b45309; }
+    .tb-unclear { background: rgba(107,120,133,0.1); color: var(--muted); }
 
     #file-input, #camera-input { display: none; }
   </style>
@@ -267,7 +355,7 @@
         <line x1="48" y1="66" x2="48" y2="92" stroke="#2ab89a" stroke-width="3" opacity="0.4" stroke-linecap="round"/>
         <line x1="4" y1="48" x2="18" y2="48" stroke="#2ab89a" stroke-width="3" opacity="0.4" stroke-linecap="round"/>
         <line x1="78" y1="48" x2="92" y2="48" stroke="#2ab89a" stroke-width="3" opacity="0.4" stroke-linecap="round"/>
-        <text x="48" y="56" text-anchor="middle" font-family="Georgia, serif" font-weight="700" font-size="28" fill="#ffffff" letter-spacing="1">RC</text>
+        <text x="48" y="56" text-anchor="middle" font-family="Georgia, serif" font-weight="700" font-size="28" fill="#0f1923" letter-spacing="1">RC</text>
         <rect x="32" y="60" width="32" height="4" rx="2" fill="#2ab89a"/>
       </svg>
       Ring<span>Check</span>
@@ -305,7 +393,7 @@
         <line x1="48" y1="66" x2="48" y2="92" stroke="#2ab89a" stroke-width="3" opacity="0.4" stroke-linecap="round"/>
         <line x1="4" y1="48" x2="18" y2="48" stroke="#2ab89a" stroke-width="3" opacity="0.4" stroke-linecap="round"/>
         <line x1="78" y1="48" x2="92" y2="48" stroke="#2ab89a" stroke-width="3" opacity="0.4" stroke-linecap="round"/>
-        <text x="48" y="56" text-anchor="middle" font-family="Georgia, serif" font-weight="700" font-size="28" fill="#ffffff" letter-spacing="1">RC</text>
+        <text x="48" y="56" text-anchor="middle" font-family="Georgia, serif" font-weight="700" font-size="28" fill="#0f1923" letter-spacing="1">RC</text>
         <rect x="32" y="60" width="32" height="4" rx="2" fill="#2ab89a"/>
       </svg>
       <div class="topbar-text">
@@ -325,13 +413,9 @@
         <div class="scanner-wrap" id="scanner-wrap">
           <div class="corner tl"></div><div class="corner tr"></div>
           <div class="corner bl"></div><div class="corner br"></div>
-          <div class="scan-line" id="scan-line"></div>
           <div class="preview-wrap" id="preview-wrap">
-            <img id="preview-img" alt="Selected image" />
-            <div class="result-badge" id="result-badge"></div>
             <div class="preview-placeholder" id="placeholder">
               <svg class="visor-svg" viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg">
-                <!-- subtle grid -->
                 <g opacity="0.04" stroke="#2ab89a" stroke-width="0.6">
                   <line x1="86" y1="0" x2="86" y2="260"/>
                   <line x1="130" y1="0" x2="130" y2="260"/>
@@ -340,29 +424,22 @@
                   <line x1="0" y1="130" x2="260" y2="130"/>
                   <line x1="0" y1="174" x2="260" y2="174"/>
                 </g>
-                <!-- outer glow -->
-                <circle cx="130" cy="130" r="100" fill="none" stroke="#2ab89a" stroke-width="1" opacity="0.07"/>
-                <!-- segmented rotating ring -->
+                <circle cx="130" cy="130" r="100" fill="none" stroke="#2ab89a" stroke-width="1" opacity="0.06"/>
                 <g class="ring-rotate">
-                  <circle cx="130" cy="130" r="88" fill="none" stroke="#2ab89a" stroke-width="2" stroke-dasharray="22 12" opacity="0.3"/>
+                  <circle cx="130" cy="130" r="88" fill="none" stroke="#2ab89a" stroke-width="2" stroke-dasharray="22 12" opacity="0.25"/>
                 </g>
-                <!-- wave rings -->
                 <circle cx="130" cy="130" r="68" fill="none" stroke="#2ab89a" stroke-width="1.2" class="wave1"/>
                 <circle cx="130" cy="130" r="50" fill="none" stroke="#2ab89a" stroke-width="1" class="wave2"/>
                 <circle cx="130" cy="130" r="32" fill="none" stroke="#2ab89a" stroke-width="0.8" class="wave3"/>
-                <!-- compass dots -->
                 <circle cx="130" cy="36" r="2.5" fill="#2ab89a" class="dot1"/>
                 <circle cx="224" cy="130" r="2.5" fill="#2ab89a" class="dot2"/>
                 <circle cx="130" cy="224" r="2.5" fill="#2ab89a" class="dot3"/>
                 <circle cx="36" cy="130" r="2.5" fill="#2ab89a" class="dot4"/>
-                <!-- skin center -->
-                <circle cx="130" cy="130" r="18" fill="#c8a080" opacity="0.08"/>
-                <circle cx="130" cy="130" r="18" fill="none" stroke="#c8a080" stroke-width="1" opacity="0.2"/>
-                <!-- AI arc highlight -->
-                <path d="M 130 112 A 18 18 0 0 1 148 130" fill="none" stroke="#2ab89a" stroke-width="1.5" opacity="0.5" stroke-linecap="round"/>
-                <!-- center -->
+                <circle cx="130" cy="130" r="18" fill="#c8a080" opacity="0.07"/>
+                <circle cx="130" cy="130" r="18" fill="none" stroke="#c8a080" stroke-width="1" opacity="0.18"/>
+                <path d="M 130 112 A 18 18 0 0 1 148 130" fill="none" stroke="#2ab89a" stroke-width="1.5" opacity="0.4" stroke-linecap="round"/>
                 <circle cx="130" cy="130" r="5" fill="#2ab89a" class="center-glow"/>
-                <circle cx="130" cy="130" r="2.5" fill="#fff" opacity="0.7"/>
+                <circle cx="130" cy="130" r="2.5" fill="#fff" opacity="0.8"/>
               </svg>
             </div>
           </div>
@@ -380,15 +457,74 @@
         </div>
       </div>
 
-      <div class="confidence-wrap" id="confidence-wrap">
-        <div class="confidence-label"><span>Confidence</span><span id="confidence-pct">0%</span></div>
-        <div class="confidence-bar"><div class="confidence-fill" id="confidence-fill"></div></div>
-      </div>
-
       <button class="btn-analyze" id="btn-analyze">
         <span id="btn-label">Select an image first</span>
         <div class="spinner" id="spinner"></div>
       </button>
+    </div>
+
+    <!-- ANALYZING -->
+    <div class="page" id="page-analyzing">
+      <div class="analyzing-visor">
+        <svg width="200" height="200" viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg">
+          <g opacity="0.05" stroke="#2ab89a" stroke-width="0.6">
+            <line x1="86" y1="0" x2="86" y2="260"/>
+            <line x1="130" y1="0" x2="130" y2="260"/>
+            <line x1="174" y1="0" x2="174" y2="260"/>
+            <line x1="0" y1="86" x2="260" y2="86"/>
+            <line x1="0" y1="130" x2="260" y2="130"/>
+            <line x1="0" y1="174" x2="260" y2="174"/>
+          </g>
+          <g class="ring-rotate">
+            <circle cx="130" cy="130" r="88" fill="none" stroke="#2ab89a" stroke-width="2.5" stroke-dasharray="22 12" opacity="0.35"/>
+          </g>
+          <circle cx="130" cy="130" r="68" fill="none" stroke="#2ab89a" stroke-width="1.5" class="wave1"/>
+          <circle cx="130" cy="130" r="50" fill="none" stroke="#2ab89a" stroke-width="1.2" class="wave2"/>
+          <circle cx="130" cy="130" r="32" fill="none" stroke="#2ab89a" stroke-width="1" class="wave3"/>
+          <circle cx="130" cy="36" r="3" fill="#2ab89a" class="dot1"/>
+          <circle cx="224" cy="130" r="3" fill="#2ab89a" class="dot2"/>
+          <circle cx="130" cy="224" r="3" fill="#2ab89a" class="dot3"/>
+          <circle cx="36" cy="130" r="3" fill="#2ab89a" class="dot4"/>
+          <circle cx="130" cy="130" r="6" fill="#2ab89a" class="center-glow"/>
+          <circle cx="130" cy="130" r="3" fill="#fff" opacity="0.8"/>
+        </svg>
+      </div>
+      <div class="analyzing-text" id="analyzing-text">Analyzing your scan...</div>
+      <div class="analyzing-sub" id="analyzing-sub">This may take a few seconds.</div>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="page" id="page-results">
+      <div class="result-header" id="result-header">
+        <div class="result-icon" id="result-icon">
+          <svg id="result-icon-svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></svg>
+        </div>
+        <div class="result-title" id="result-title"></div>
+        <div style="font-size:0.82rem;color:var(--muted)" id="result-subtitle"></div>
+      </div>
+
+      <img id="result-thumb" class="result-thumb" alt="Scanned image" style="display:none"/>
+
+      <div class="confidence-card">
+        <div class="confidence-top">
+          <div class="confidence-label-text">Confidence</div>
+          <div class="confidence-pct" id="result-pct">0%</div>
+        </div>
+        <div class="confidence-bar">
+          <div class="confidence-fill" id="result-fill"></div>
+        </div>
+        <div class="confidence-badge" id="result-badge"></div>
+      </div>
+
+      <div class="advice-card" id="advice-card">
+        <div class="advice-title" id="advice-title"></div>
+        <ul class="advice-list" id="advice-list"></ul>
+      </div>
+
+      <div class="result-actions">
+        <button class="btn-outline" id="btn-info-link">Learn more about ringworm</button>
+        <button class="btn-primary" id="btn-new-scan">New Scan</button>
+      </div>
     </div>
 
     <!-- HISTORY -->
@@ -403,7 +539,7 @@
     <!-- INFO -->
     <div class="page" id="page-info">
       <div class="page-title">Ringworm Info</div>
-      <div class="alert-box"><strong>If your scan comes back positive, do not train.</strong> Ringworm spreads easily through skin-to-skin contact on the mat. Stay off the mats until the infection is fully cleared.</div>
+      <div class="alert-box"><strong>If your scan comes back positive, do not train.</strong> Ringworm spreads easily through skin-to-skin contact on the mat. Stay off the mats until fully cleared.</div>
       <div class="info-section">
         <div class="info-section-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>What is ringworm?</div>
         <p>Ringworm (tinea corporis) is a fungal skin infection, not an actual worm. It is extremely common in contact sports like BJJ, wrestling, and MMA due to close skin contact and shared mats.</p>
@@ -445,15 +581,17 @@
       <div class="page-title">Model Info</div>
       <div class="model-card">
         <div class="model-stat"><div class="model-stat-label">Accuracy</div><div class="model-stat-value accent">94.23%</div></div>
-        <div class="model-stat"><div class="model-stat-label">Architecture</div><div class="model-stat-value">MobileNetV2</div></div>
-        <div class="model-stat"><div class="model-stat-label">Task</div><div class="model-stat-value">Binary classification</div></div>
-        <div class="model-stat"><div class="model-stat-label">Input size</div><div class="model-stat-value">224 x 224 px</div></div>
-        <div class="model-stat"><div class="model-stat-label">Format</div><div class="model-stat-value">ONNX</div></div>
+      </div>
+      <div class="page-title" style="font-size:1.2rem;margin-top:4px;">Confidence Thresholds</div>
+      <div class="model-card">
+        <div class="threshold-row"><div class="threshold-range">90% and above</div><div class="threshold-badge tb-very">Very confident</div></div>
+        <div class="threshold-row"><div class="threshold-range">80% to 89%</div><div class="threshold-badge tb-conf">Confident</div></div>
+        <div class="threshold-row"><div class="threshold-range">65% to 79%</div><div class="threshold-badge tb-low">Low confidence</div></div>
+        <div class="threshold-row"><div class="threshold-range">Below 65%</div><div class="threshold-badge tb-unclear">Unclear result</div></div>
       </div>
       <div class="info-section">
         <div class="info-section-title">About this model</div>
-        <p>RingCheck uses a MobileNetV2 convolutional neural network fine-tuned on a dataset of ringworm and healthy skin images. The model was developed as part of an applied AI research project focused on combat sports health screening.</p>
-        <p style="margin-top:8px">This tool is a screening aid only. It does not constitute medical advice or a diagnosis. Always consult a healthcare professional if in doubt.</p>
+        <p>RingCheck uses a MobileNetV2 convolutional neural network fine-tuned on a dataset of ringworm and healthy skin images. This tool is a screening aid only and does not constitute medical advice. Always consult a healthcare professional if in doubt.</p>
       </div>
     </div>
   </div>
@@ -471,55 +609,46 @@
   document.getElementById('hamburger').addEventListener('click', () => { sidebar.classList.toggle('open'); overlay.classList.toggle('open'); });
   overlay.addEventListener('click', () => { sidebar.classList.remove('open'); overlay.classList.remove('open'); });
 
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    if (id === 'history') renderHistory();
+  }
+
   document.querySelectorAll('.nav-item').forEach(item => {
     item.addEventListener('click', () => {
-      const target = item.dataset.page;
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       item.classList.add('active');
-      document.getElementById('page-' + target).classList.add('active');
+      showPage(item.dataset.page);
       sidebar.classList.remove('open'); overlay.classList.remove('open');
-      if (target === 'history') renderHistory();
     });
   });
 
+  function setNavActive(page) {
+    document.querySelectorAll('.nav-item').forEach(n => {
+      n.classList.toggle('active', n.dataset.page === page);
+    });
+  }
+
   const fileInput = document.getElementById('file-input');
   const cameraInput = document.getElementById('camera-input');
-  const previewImg = document.getElementById('preview-img');
-  const placeholder = document.getElementById('placeholder');
-  const previewWrap = document.getElementById('preview-wrap');
-  const scannerWrap = document.getElementById('scanner-wrap');
-  const scanLine = document.getElementById('scan-line');
   const btnAnalyze = document.getElementById('btn-analyze');
   const btnLabel = document.getElementById('btn-label');
   const spinner = document.getElementById('spinner');
-  const resultBadge = document.getElementById('result-badge');
-  const confidenceWrap = document.getElementById('confidence-wrap');
-  const confidencePct = document.getElementById('confidence-pct');
-  const confidenceFill = document.getElementById('confidence-fill');
-  const topbarSubtitle = document.getElementById('topbar-subtitle');
   const btnCamera = document.getElementById('btn-camera');
   const btnGallery = document.getElementById('btn-gallery');
+  const topbarSubtitle = document.getElementById('topbar-subtitle');
 
   let selectedFile = null;
   let currentImageB64 = null;
-
-  function setSubtitle(text, cls) { topbarSubtitle.textContent = text; topbarSubtitle.className = cls || ''; }
 
   function showPreview(file, source) {
     selectedFile = file;
     btnCamera.classList.toggle('selected', source === 'camera');
     btnGallery.classList.toggle('selected', source === 'gallery');
-    const url = URL.createObjectURL(file);
-    previewImg.src = url; previewImg.style.display = 'block';
-    placeholder.style.display = 'none';
-    previewWrap.className = 'preview-wrap has-image';
-    scannerWrap.className = 'scanner-wrap';
-    resultBadge.style.display = 'none';
-    confidenceWrap.style.display = 'none';
     btnAnalyze.classList.add('ready');
     btnLabel.textContent = 'Analyze';
-    setSubtitle('Image loaded. Ready to analyze.');
+    topbarSubtitle.textContent = 'Image loaded. Ready to analyze.';
     const reader = new FileReader();
     reader.onload = e => { currentImageB64 = e.target.result; };
     reader.readAsDataURL(file);
@@ -530,51 +659,159 @@
   fileInput.addEventListener('change', e => { if (e.target.files[0]) showPreview(e.target.files[0], 'gallery'); });
   cameraInput.addEventListener('change', e => { if (e.target.files[0]) showPreview(e.target.files[0], 'camera'); });
 
+  function getConfidenceInfo(pct) {
+    if (pct >= 90) return { label: 'Very confident', cls: 'very-confident' };
+    if (pct >= 80) return { label: 'Confident', cls: 'confident' };
+    if (pct >= 65) return { label: 'Low confidence', cls: 'low' };
+    return { label: 'Unclear result', cls: 'unclear' };
+  }
+
+  function showResults(data, imageB64) {
+    const rawPct = Math.round(data.confidence * 100);
+    const pct = Math.min(rawPct, 99);
+    const isPositive = data.ringworm;
+    const confInfo = getConfidenceInfo(pct);
+    const isUnclear = pct < 65;
+
+    // header
+    const header = document.getElementById('result-header');
+    const icon = document.getElementById('result-icon');
+    const iconSvg = document.getElementById('result-icon-svg');
+    const title = document.getElementById('result-title');
+    const subtitle = document.getElementById('result-subtitle');
+
+    if (isUnclear) {
+      header.className = 'result-header';
+      header.style.background = '#f8f9fa';
+      header.style.border = '1px solid #e4e8ec';
+      icon.className = 'result-icon';
+      icon.style.background = 'rgba(107,120,133,0.1)';
+      iconSvg.setAttribute('stroke', '#6b7885');
+      iconSvg.innerHTML = '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>';
+      title.textContent = 'Unclear Result';
+      title.style.color = '#6b7885';
+      subtitle.textContent = 'The model could not determine a result with enough confidence.';
+    } else if (isPositive) {
+      header.className = 'result-header positive';
+      header.style.background = '';
+      header.style.border = '';
+      icon.className = 'result-icon positive';
+      icon.style.background = '';
+      iconSvg.setAttribute('stroke', '#e63946');
+      iconSvg.innerHTML = '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>';
+      title.textContent = 'Ringworm Detected';
+      title.style.color = '';
+      title.className = 'result-title positive';
+      subtitle.textContent = 'Signs consistent with ringworm were found in your scan.';
+    } else {
+      header.className = 'result-header negative';
+      header.style.background = '';
+      header.style.border = '';
+      icon.className = 'result-icon negative';
+      icon.style.background = '';
+      iconSvg.setAttribute('stroke', '#1eaa6a');
+      iconSvg.innerHTML = '<polyline points="20 6 9 17 4 12"/>';
+      title.textContent = 'No Ringworm Detected';
+      title.style.color = '';
+      title.className = 'result-title negative';
+      subtitle.textContent = 'No signs of ringworm were found in your scan.';
+    }
+
+    // thumb
+    const thumb = document.getElementById('result-thumb');
+    if (imageB64) { thumb.src = imageB64; thumb.style.display = 'block'; }
+    else { thumb.style.display = 'none'; }
+
+    // confidence
+    const fillColor = isUnclear ? '#6b7885' : isPositive ? '#e63946' : '#1eaa6a';
+    document.getElementById('result-pct').textContent = pct + '%';
+    const fill = document.getElementById('result-fill');
+    fill.style.width = '0%';
+    fill.style.background = fillColor;
+    setTimeout(() => { fill.style.width = pct + '%'; }, 100);
+    const badge = document.getElementById('result-badge');
+    badge.textContent = confInfo.label;
+    badge.className = 'confidence-badge ' + confInfo.cls;
+
+    // advice
+    const adviceTitle = document.getElementById('advice-title');
+    const adviceList = document.getElementById('advice-list');
+    if (isUnclear) {
+      adviceTitle.textContent = 'What to do';
+      adviceList.innerHTML = `
+        <li>Take another photo in better lighting</li>
+        <li>Make sure the skin area fills most of the frame</li>
+        <li>If you have concerns, consult a doctor</li>`;
+    } else if (isPositive) {
+      adviceTitle.textContent = 'What to do now';
+      adviceList.innerHTML = `
+        <li>Stop training immediately</li>
+        <li>Apply an antifungal cream (clotrimazole or terbinafine)</li>
+        <li>Keep the area clean and dry</li>
+        <li>Wash training gear and towels in hot water</li>
+        <li>See a doctor if no improvement after 2 weeks</li>`;
+    } else {
+      adviceTitle.textContent = 'Stay safe';
+      adviceList.innerHTML = `
+        <li>Continue your usual training routine</li>
+        <li>Check yourself regularly, especially after new training partners</li>
+        <li>Shower immediately after training sessions</li>
+        <li>If you notice any new skin changes, scan again</li>`;
+    }
+
+    setNavActive('scan');
+    showPage('results');
+    topbarSubtitle.textContent = isUnclear ? 'Unclear result' : isPositive ? 'Ringworm detected' : 'No ringworm detected';
+
+    saveToHistory({ date: new Date().toISOString(), ringworm: isPositive, confidence: pct, image: imageB64, unclear: isUnclear });
+  }
+
   btnAnalyze.addEventListener('click', async () => {
     if (!selectedFile || !btnAnalyze.classList.contains('ready')) return;
-    btnAnalyze.classList.remove('ready');
-    btnLabel.textContent = 'Analyzing...';
-    spinner.style.display = 'block';
-    resultBadge.style.display = 'none';
-    confidenceWrap.style.display = 'none';
-    scanLine.classList.add('active');
-    setSubtitle('Analyzing...');
+
+    showPage('analyzing');
+    setNavActive('scan');
+    document.getElementById('analyzing-text').textContent = 'Analyzing your scan...';
+    document.getElementById('analyzing-sub').textContent = 'This may take a few seconds.';
+
+    const wakeTimer = setTimeout(() => {
+      document.getElementById('analyzing-sub').textContent = 'Waking up the server, please wait a moment...';
+    }, 5000);
+
     try {
       const formData = new FormData();
       formData.append('file', selectedFile);
       const res = await fetch(API_URL, { method: 'POST', body: formData });
+      clearTimeout(wakeTimer);
       const data = await res.json();
-      const pct = Math.round(data.confidence * 100);
-      const color = data.ringworm ? 'var(--red)' : 'var(--teal)';
-      scanLine.classList.remove('active');
-      if (data.ringworm) {
-        previewWrap.classList.add('result-positive');
-        scannerWrap.classList.add('result-positive');
-        setSubtitle('Ringworm detected', 'positive');
-      } else {
-        previewWrap.classList.add('result-negative');
-        setSubtitle('No ringworm detected', 'negative');
-      }
-      resultBadge.textContent = data.ringworm ? `Ringworm detected — ${pct}% confidence` : `No ringworm detected — ${pct}% confidence`;
-      resultBadge.className = 'result-badge ' + (data.ringworm ? 'positive' : 'negative');
-      resultBadge.style.display = 'block';
-      confidenceWrap.style.display = 'flex';
-      confidencePct.textContent = pct + '%';
-      confidenceFill.style.width = pct + '%';
-      confidenceFill.style.background = color;
-      btnLabel.textContent = 'Analyze again';
-      btnAnalyze.classList.add('ready');
-      saveToHistory({ date: new Date().toISOString(), ringworm: data.ringworm, confidence: pct, image: currentImageB64 });
+      showResults(data, currentImageB64);
     } catch (err) {
-      scanLine.classList.remove('active');
-      resultBadge.textContent = 'Could not connect to server. Try again.';
-      resultBadge.className = 'result-badge positive';
-      resultBadge.style.display = 'block';
-      btnLabel.textContent = 'Retry';
-      btnAnalyze.classList.add('ready');
-      setSubtitle('Connection error');
+      clearTimeout(wakeTimer);
+      document.getElementById('analyzing-text').textContent = 'Connection error';
+      document.getElementById('analyzing-sub').textContent = 'Could not reach the server. Please check your connection and try again.';
+      setTimeout(() => {
+        showPage('scan');
+        setNavActive('scan');
+        topbarSubtitle.textContent = 'Ready to scan';
+      }, 3000);
     }
-    spinner.style.display = 'none';
+  });
+
+  document.getElementById('btn-new-scan').addEventListener('click', () => {
+    selectedFile = null; currentImageB64 = null;
+    btnAnalyze.classList.remove('ready');
+    btnLabel.textContent = 'Select an image first';
+    btnCamera.classList.remove('selected');
+    btnGallery.classList.remove('selected');
+    topbarSubtitle.textContent = 'Ready to scan';
+    fileInput.value = ''; cameraInput.value = '';
+    setNavActive('scan');
+    showPage('scan');
+  });
+
+  document.getElementById('btn-info-link').addEventListener('click', () => {
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.page === 'info'));
+    showPage('info');
   });
 
   function getHistory() { try { return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; } catch { return []; } }
@@ -594,7 +831,7 @@
       <div class="history-item">
         ${item.image ? `<img class="history-thumb" src="${item.image}" alt="scan" />` : `<div class="history-thumb-placeholder"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>`}
         <div class="history-info">
-          <div class="history-result ${item.ringworm ? 'positive' : 'negative'}">${item.ringworm ? 'Ringworm detected' : 'No ringworm'}</div>
+          <div class="history-result ${item.unclear ? '' : item.ringworm ? 'positive' : 'negative'}">${item.unclear ? 'Unclear result' : item.ringworm ? 'Ringworm detected' : 'No ringworm'}</div>
           <div class="history-meta">${formatDate(item.date)}</div>
         </div>
         <div class="history-confidence">${item.confidence}%</div>
