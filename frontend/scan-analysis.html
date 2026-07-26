@@ -1,0 +1,306 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>RINGCHECK | ANALYZING</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Geist:wght@400;700&amp;family=Space+Mono:wght@400;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton:wght@100..900&amp;family=Geist:wght@100..900&amp;family=Space+Mono:wght@100..900&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed": "#271900",
+                    "surface-container": "#201f1f",
+                    "surface-variant": "#353534",
+                    "error": "#ffb4ab",
+                    "primary-fixed": "#c3f400",
+                    "surface-container-highest": "#353534",
+                    "on-primary-fixed-variant": "#3c4d00",
+                    "primary-container": "#c3f400",
+                    "background": "#131313",
+                    "surface-container-lowest": "#0e0e0e",
+                    "on-secondary-container": "#6b4b00",
+                    "secondary": "#ffdb9d",
+                    "inverse-primary": "#506600",
+                    "on-error-container": "#ffdad6",
+                    "primary-fixed-dim": "#abd600",
+                    "on-secondary-fixed-variant": "#5e4200",
+                    "on-surface": "#e5e2e1",
+                    "inverse-on-surface": "#313030",
+                    "error-container": "#93000a",
+                    "secondary-fixed": "#ffdea8",
+                    "outline-variant": "#444933",
+                    "outline": "#8e9379",
+                    "on-error": "#690005",
+                    "tertiary-container": "#7df4ff",
+                    "tertiary": "#ffffff",
+                    "on-tertiary-fixed": "#002022",
+                    "tertiary-fixed": "#7df4ff",
+                    "on-primary-fixed": "#161e00",
+                    "secondary-fixed-dim": "#ffba20",
+                    "on-surface-variant": "#c4c9ac",
+                    "inverse-surface": "#e5e2e1",
+                    "surface-tint": "#abd600",
+                    "on-tertiary": "#00363a",
+                    "surface-bright": "#393939",
+                    "on-primary-container": "#556d00",
+                    "on-background": "#e5e2e1",
+                    "surface-dim": "#131313",
+                    "surface-container-high": "#2a2a2a",
+                    "on-tertiary-container": "#006f77",
+                    "primary": "#ffffff",
+                    "surface": "#131313",
+                    "on-tertiary-fixed-variant": "#004f54",
+                    "on-primary": "#283500",
+                    "on-secondary": "#412d00",
+                    "surface-container-low": "#1c1b1b",
+                    "secondary-container": "#feb700",
+                    "tertiary-fixed-dim": "#00dbe9"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "sm": "12px",
+                    "margin-mobile": "20px",
+                    "xs": "8px",
+                    "base": "4px",
+                    "margin-desktop": "40px",
+                    "xl": "32px",
+                    "lg": "24px",
+                    "md": "16px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Anton"],
+                    "body-lg": ["Geist"],
+                    "data-num": ["Geist"],
+                    "display-lg": ["Anton"],
+                    "body-md": ["Geist"],
+                    "label-caps": ["Space Mono"],
+                    "headline-lg": ["Anton"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["28px", {"lineHeight": "32px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "data-num": ["24px", {"lineHeight": "24px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "48px", "letterSpacing": "0.02em", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "36px", "letterSpacing": "0.02em", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        @keyframes scan-move {
+            0% { transform: translateY(-100%); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(100%); opacity: 0; }
+        }
+        @keyframes pulse-glow {
+            0%, 100% { filter: drop-shadow(0 0 5px rgba(195, 244, 0, 0.4)); opacity: 0.8; }
+            50% { filter: drop-shadow(0 0 20px rgba(195, 244, 0, 0.8)); opacity: 1; }
+        }
+        @keyframes data-stream {
+            from { transform: translateY(0); }
+            to { transform: translateY(-50%); }
+        }
+        .scan-line {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #c3f400, transparent);
+            box-shadow: 0 0 15px #c3f400;
+            animation: scan-move 3s infinite linear;
+        }
+        .logo-pulse {
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
+        .data-scroll {
+            animation: data-stream 10s infinite linear;
+        }
+        .bracket {
+            border-color: #c3f400;
+            width: 20px;
+            height: 20px;
+        }
+        .grid-overlay {
+            background-image: linear-gradient(#ffffff05 1px, transparent 1px), linear-gradient(90deg, #ffffff05 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md overflow-hidden h-screen flex flex-col">
+<!-- Top Navigation -->
+<header class="flex justify-between items-center w-full px-margin-mobile h-16 border-b border-surface-variant z-50 bg-background/80 backdrop-blur-sm">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full border border-primary-container p-1 overflow-hidden">
+<img alt="Logo Mascot" class="w-full h-full object-contain" src="assets/anaconda-logo.png">
+</div>
+<span class="font-headline-lg-mobile text-headline-lg-mobile tracking-widest text-primary">RINGCHECK</span>
+</div>
+<button class="text-primary hover:bg-surface-variant/20 p-2 rounded-lg transition-transform active:scale-95">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</header>
+<!-- Main Viewfinder Section -->
+<main class="relative flex-grow flex flex-col items-center justify-center px-margin-mobile">
+<!-- Viewfinder Canvas -->
+<div class="relative w-full max-w-sm aspect-square bg-surface-container rounded-xl border border-outline-variant overflow-hidden group">
+<!-- Background Mascot Pulse -->
+<div class="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
+<img alt="Faded Background Logo" class="w-4/5 logo-pulse" src="assets/anaconda-logo.png">
+</div>
+<!-- Grid Overlay -->
+<div class="absolute inset-0 grid-overlay"></div>
+<!-- Analysis Subject Placeholder (Captured Image) -->
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-full h-full p-6">
+<div class="w-full h-full bg-surface-container-low border border-dashed border-outline-variant rounded-lg flex items-center justify-center relative overflow-hidden">
+<img class="w-full h-full object-cover opacity-60" data-alt="A macro close-up of a textured gym mat surface with sweat droplets and slight imperfections, illuminated by high-contrast neon green scanning lasers in a dark, tactical, tech-focused environment. The lighting is moody and elite, emphasizing a professional diagnostic atmosphere with a sharp focus on micro-details of the material." src="https://lh3.googleusercontent.com/aida-public/AB6AXuByOuahXOOchPshT1rB72hj8WDIzmq7AV6Gw_il7BcXWUCQwSZItNOyJIIUM_fqsHSczIJCKsRltzVlHw9FkgXGo3NhW4IKmiAZT9KLMrNxHFVPIBP6UG_3ASV_gYw6-w4E9qNq5vItJNRS5walxIvEQJcTKj8kLHM5yTMPfgjEjFvTw2Y-IN_wbr6MfFkI4ELLUI6I0fY8wk7ow2eAaG2fLSTmZNzT5rePUIl6m_jomxvF7bP7fNoO57Vuc7Cg5AXbIEUMfRGL9sk">
+<!-- Scanning Line -->
+<div class="absolute top-0 left-0 w-full scan-line"></div>
+</div>
+</div>
+</div>
+<!-- HUD Viewfinder Brackets -->
+<div class="absolute top-4 left-4 bracket border-t-2 border-l-2"></div>
+<div class="absolute top-4 right-4 bracket border-t-2 border-r-2"></div>
+<div class="absolute bottom-4 left-4 bracket border-b-2 border-l-2"></div>
+<div class="absolute bottom-4 right-4 bracket border-b-2 border-r-2"></div>
+<!-- Live Status Tags -->
+<div class="absolute top-8 left-8 flex flex-col gap-2">
+<div class="flex items-center gap-2 bg-black/60 backdrop-blur-md border border-primary-container px-2 py-0.5 rounded">
+<div class="w-2 h-2 rounded-full bg-primary-container animate-pulse"></div>
+<span class="font-label-caps text-[10px] text-primary-container">SCANNING_ACTIVE</span>
+</div>
+<div class="font-label-caps text-[10px] text-white/40">FR_RATE: 60FPS</div>
+</div>
+<div class="absolute bottom-8 right-8">
+<div class="font-label-caps text-[10px] text-white/40 text-right">LOCK_COORD: 40.7128° N<br>74.0060° W</div>
+</div>
+</div>
+<!-- Progress & Data Area -->
+<div class="w-full max-w-sm mt-8 space-y-6">
+<!-- Progress Info -->
+<div class="flex justify-between items-end">
+<div class="space-y-1">
+<p class="font-label-caps text-label-caps text-primary-container flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">search</span>
+                        ANALYZING MAT-PATHOGENS...
+                    </p>
+<p class="font-body-md text-xs text-on-surface-variant opacity-60">THREAT_LEVEL: CALCULATING</p>
+</div>
+<div class="text-right">
+<span class="font-data-num text-primary-container" id="progress-val">42%</span>
+</div>
+</div>
+<!-- Tactical Segmented Progress Bar -->
+<div class="flex gap-1 w-full h-4" id="progress-bar">
+<!-- Segments will be injected by JS -->
+</div>
+<!-- Data Stream Console -->
+<div class="h-24 bg-surface-container-lowest rounded-lg border border-outline-variant p-3 overflow-hidden relative">
+<div class="data-scroll flex flex-col font-label-caps text-[10px] text-on-surface-variant leading-relaxed opacity-50">
+<div>&gt; INITIALIZING NEURAL SCAN... OK</div>
+<div>&gt; SAMPLING SURFACE TEXTURE [MT_X092]</div>
+<div>&gt; DETECTING BIOLOGICAL ANOMALIES...</div>
+<div>&gt; SEQ_MATCH: STAPHYLOCOCCUS (98.2% CONF)</div>
+<div>&gt; SEQ_MATCH: TINEA CORPORIS (0.4% CONF)</div>
+<div>&gt; RADIUS SCAN: 12.4mm / 14.8mm / 11.0mm</div>
+<div>&gt; THREAT DB SYNC: COMPLETE</div>
+<div>&gt; PROTOCOL: RINGCHECK_SECURE_V4</div>
+<div>&gt; RECURSIVE HASH CHECK... [PASS]</div>
+<div>&gt; ENCRYPTING DIAGNOSTIC PACKET...</div>
+<div>&gt; INITIALIZING NEURAL SCAN... OK</div>
+<div>&gt; SAMPLING SURFACE TEXTURE [MT_X092]</div>
+<div>&gt; DETECTING BIOLOGICAL ANOMALIES...</div>
+</div>
+<!-- Fade out top/bottom -->
+<div class="absolute inset-0 pointer-events-none bg-gradient-to-b from-surface-container-lowest via-transparent to-surface-container-lowest opacity-80"></div>
+</div>
+</div>
+</main>
+<!-- Navigation Shell (BottomNavBar) -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-3 bg-surface-container-highest/95 backdrop-blur-md border-t border-outline-variant shadow-[0px_-4px_12px_rgba(171,214,0,0.1)] z-50">
+<a class="flex flex-col items-center justify-center text-primary-container bg-surface-variant/30 rounded-xl px-4 py-2 shadow-[0_0_12px_rgba(195,244,0,0.3)] active:scale-90 duration-150 ease-in-out" href="scan-hub.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">center_focus_strong</span>
+<span class="font-label-caps text-label-caps mt-1">SCAN</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-2 hover:text-primary transition-colors active:scale-90 duration-150 ease-in-out" href="scan-history.html">
+<span class="material-symbols-outlined">history</span>
+<span class="font-label-caps text-label-caps mt-1">HISTORY</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-2 hover:text-primary transition-colors active:scale-90 duration-150 ease-in-out" href="mat-hygiene.html">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-label-caps text-label-caps mt-1">ATHLETES</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-2 hover:text-primary transition-colors active:scale-90 duration-150 ease-in-out" href="profile.html">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-caps text-label-caps mt-1">PROFILE</span>
+</a>
+</nav>
+<script>
+        // Progress Bar & Percentage Logic
+        const progressBar = document.getElementById('progress-bar');
+        const progressVal = document.getElementById('progress-val');
+        const numSegments = 12;
+        let currentProgress = 0;
+
+        // Initialize progress bar segments
+        for (let i = 0; i < numSegments; i++) {
+            const segment = document.createElement('div');
+            segment.className = 'flex-grow h-full bg-surface-variant transition-all duration-300';
+            progressBar.appendChild(segment);
+        }
+
+        const segments = progressBar.children;
+
+        function updateProgress() {
+            if (currentProgress < 100) {
+                currentProgress += Math.random() * 2.5;
+                if (currentProgress > 100) currentProgress = 100;
+                
+                const percent = Math.floor(currentProgress);
+                progressVal.textContent = `${percent}%`;
+
+                // Update segments
+                const activeSegments = Math.floor((currentProgress / 100) * numSegments);
+                for (let i = 0; i < numSegments; i++) {
+                    if (i < activeSegments) {
+                        segments[i].classList.remove('bg-surface-variant');
+                        segments[i].classList.add('bg-primary-container', 'shadow-[0_0_8px_#c3f400]');
+                    }
+                }
+
+                if (currentProgress < 100) {
+                    setTimeout(updateProgress, 100 + Math.random() * 200);
+                } else {
+                    progressVal.textContent = "DONE";
+                    progressVal.classList.add('animate-pulse');
+                    setTimeout(() => {
+                        window.location.href = 'results.html';
+                    }, 900);
+                }
+            }
+        }
+
+        // Start progress simulation
+        setTimeout(updateProgress, 500);
+
+        // Interactive micro-interaction: hover effect on cards
+        document.querySelector('.group').addEventListener('mousemove', (e) => {
+            const rect = e.currentTarget.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            e.currentTarget.style.setProperty('--mouse-x', `${x}px`);
+            e.currentTarget.style.setProperty('--mouse-y', `${y}px`);
+        });
+    </script>
+</body></html>

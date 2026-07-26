@@ -1,0 +1,241 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>RINGCHECK - Scan Results</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Geist:wght@400;700&family=Space+Mono:wght@400;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton:wght@100..900&family=Geist:wght@100..900&family=Space+Mono:wght@100..900&display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed": "#271900",
+                    "surface-container": "#201f1f",
+                    "surface-variant": "#353534",
+                    "error": "#ffb4ab",
+                    "primary-fixed": "#c3f400",
+                    "surface-container-highest": "#353534",
+                    "on-primary-fixed-variant": "#3c4d00",
+                    "primary-container": "#c3f400",
+                    "background": "#131313",
+                    "surface-container-lowest": "#0e0e0e",
+                    "on-secondary-container": "#6b4b00",
+                    "secondary": "#ffdb9d",
+                    "inverse-primary": "#506600",
+                    "on-error-container": "#ffdad6",
+                    "primary-fixed-dim": "#abd600",
+                    "on-secondary-fixed-variant": "#5e4200",
+                    "on-surface": "#e5e2e1",
+                    "inverse-on-surface": "#313030",
+                    "error-container": "#93000a",
+                    "secondary-fixed": "#ffdea8",
+                    "outline-variant": "#444933",
+                    "outline": "#8e9379",
+                    "on-error": "#690005",
+                    "tertiary-container": "#7df4ff",
+                    "tertiary": "#ffffff",
+                    "on-tertiary-fixed": "#002022",
+                    "tertiary-fixed": "#7df4ff",
+                    "on-primary-fixed": "#161e00",
+                    "secondary-fixed-dim": "#ffba20",
+                    "on-surface-variant": "#c4c9ac",
+                    "inverse-surface": "#e5e2e1",
+                    "surface-tint": "#abd600",
+                    "on-tertiary": "#00363a",
+                    "surface-bright": "#393939",
+                    "on-primary-container": "#556d00",
+                    "on-background": "#e5e2e1",
+                    "surface-dim": "#131313",
+                    "surface-container-high": "#2a2a2a",
+                    "on-tertiary-container": "#006f77",
+                    "primary": "#ffffff",
+                    "surface": "#131313",
+                    "on-tertiary-fixed-variant": "#004f54",
+                    "on-primary": "#283500",
+                    "on-secondary": "#412d00",
+                    "surface-container-low": "#1c1b1b",
+                    "secondary-container": "#feb700",
+                    "tertiary-fixed-dim": "#00dbe9"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "sm": "12px",
+                    "margin-mobile": "20px",
+                    "xs": "8px",
+                    "base": "4px",
+                    "margin-desktop": "40px",
+                    "xl": "32px",
+                    "lg": "24px",
+                    "md": "16px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Anton"],
+                    "body-lg": ["Geist"],
+                    "data-num": ["Geist"],
+                    "display-lg": ["Anton"],
+                    "body-md": ["Geist"],
+                    "label-caps": ["Space Mono"],
+                    "headline-lg": ["Anton"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["28px", {"lineHeight": "32px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "data-num": ["24px", {"lineHeight": "24px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "48px", "letterSpacing": "0.02em", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "36px", "letterSpacing": "0.02em", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .scan-line {
+            background: linear-gradient(to bottom, transparent 50%, rgba(195, 244, 0, 0.05) 50%);
+            background-size: 100% 4px;
+        }
+        .success-glow {
+            box-shadow: 0 0 40px rgba(195, 244, 0, 0.15);
+        }
+        .segmented-progress div {
+            height: 8px;
+            width: 100%;
+            background-color: #353534;
+        }
+        .segmented-progress div.active {
+            background-color: #c3f400;
+            box-shadow: 0 0 8px #c3f400;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md antialiased overflow-x-hidden min-h-screen pb-24">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 left-0 w-full z-50 bg-background border-b border-surface-variant flex justify-between items-center px-margin-mobile h-16">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden border border-primary-container/30">
+<img class="w-full h-full object-cover" src="assets/anaconda-logo.png">
+</div>
+<span class="font-headline-lg-mobile text-headline-lg-mobile tracking-widest text-primary">RINGCHECK</span>
+</div>
+<button class="w-10 h-10 flex items-center justify-center hover:bg-surface-variant/20 rounded-full transition-transform active:scale-95">
+<span class="material-symbols-outlined text-primary">settings</span>
+</button>
+</header>
+<main class="pt-24 px-margin-mobile">
+<!-- Viewfinder Canvas Section -->
+<div class="relative w-full aspect-square max-w-md mx-auto mb-lg rounded-xl overflow-hidden border border-surface-variant bg-surface-container-lowest success-glow">
+<!-- Scan-line overlay -->
+<div class="absolute inset-0 scan-line pointer-events-none opacity-40"></div>
+<!-- Corner Brackets (Viewfinder Aesthetic) -->
+<div class="absolute top-4 left-4 w-8 h-8 border-t-2 border-l-2 border-primary-container"></div>
+<div class="absolute top-4 right-4 w-8 h-8 border-t-2 border-r-2 border-primary-container"></div>
+<div class="absolute bottom-4 left-4 w-8 h-8 border-b-2 border-l-2 border-primary-container"></div>
+<div class="absolute bottom-4 right-4 w-8 h-8 border-b-2 border-r-2 border-primary-container"></div>
+<div class="absolute inset-0 flex flex-col items-center justify-center p-8">
+<div class="w-48 h-48 mb-6 relative">
+<img class="w-full h-full object-contain filter drop-shadow-[0_0_15px_rgba(195,244,0,0.5)]" src="assets/anaconda-logo.png">
+</div>
+<div class="text-center space-y-2">
+<span class="font-label-caps text-label-caps text-primary-container uppercase tracking-widest">SCAN ANALYSIS COMPLETE</span>
+<h1 class="font-display-lg text-display-lg text-primary-container">MAT-READY</h1>
+</div>
+</div>
+</div>
+<!-- Result Badge & Subtitle -->
+<div class="max-w-md mx-auto mb-lg">
+<div class="bg-primary-container text-on-primary-container py-4 px-6 rounded-lg text-center mb-4 flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(195,244,0,0.4)]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile tracking-tighter">STATUS: CLEAR</span>
+</div>
+<p class="text-center text-on-surface-variant font-label-caps text-label-caps">NO DETECTABLE SKIN CONDITIONS.</p>
+</div>
+<!-- Data Visualization Bento -->
+<div class="max-w-md mx-auto grid grid-cols-2 gap-gutter mb-lg">
+<!-- Confidence Score Module -->
+<div class="bg-surface-container border border-surface-variant p-4 rounded-xl flex flex-col justify-between">
+<div>
+<p class="font-label-caps text-label-caps text-outline mb-base uppercase">CONFIDENCE</p>
+<p class="font-data-num text-data-num text-primary-container">98%</p>
+</div>
+<div class="segmented-progress flex gap-1 mt-2">
+<div class="active"></div><div class="active"></div><div class="active"></div><div class="active"></div><div class="active"></div>
+<div class="active"></div><div class="active"></div><div class="active"></div><div class="active"></div><div></div>
+</div>
+</div>
+<!-- Recommendation Module -->
+<div class="bg-surface-container border border-surface-variant p-4 rounded-xl">
+<p class="font-label-caps text-label-caps text-outline mb-base uppercase">ADVISORY</p>
+<div class="flex flex-col gap-1">
+<p class="font-headline-lg-mobile text-[24px] text-primary leading-tight">KEEP TRAINING.</p>
+<p class="text-[11px] text-on-surface-variant font-body-md">Clear for competition contact.</p>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="max-w-md mx-auto space-y-4">
+<button class="w-full bg-primary-container text-on-primary-container h-14 flex items-center justify-center gap-3 font-label-caps text-label-caps rounded-xl shadow-[0_0_12px_rgba(195,244,0,0.3)] hover:brightness-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined">share</span>
+                SHARE RESULT
+            </button>
+<button class="w-full border border-surface-variant text-primary h-14 flex items-center justify-center gap-3 font-label-caps text-label-caps rounded-xl hover:bg-surface-variant/20 active:scale-95 transition-all" onclick="window.location.href='scan-history.html'">
+<span class="material-symbols-outlined">history_edu</span>
+                LOG TO HISTORY
+            </button>
+</div>
+</main>
+<!-- Bottom Navigation Shell -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 bg-surface-container-highest/95 backdrop-blur-md border-t border-outline-variant shadow-[0px_-4px_12px_rgba(171,214,0,0.1)]">
+<!-- SCAN (Active) -->
+<a class="flex flex-col items-center justify-center text-primary-container bg-surface-variant/30 rounded-xl px-4 py-2 shadow-[0_0_12px_rgba(195,244,0,0.3)] scale-90 duration-150 ease-in-out" href="scan-hub.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">center_focus_strong</span>
+<span class="font-label-caps text-label-caps mt-1">SCAN</span>
+</a>
+<!-- HISTORY -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-2 hover:text-primary transition-colors" href="scan-history.html">
+<span class="material-symbols-outlined">history</span>
+<span class="font-label-caps text-label-caps mt-1">HISTORY</span>
+</a>
+<!-- ATHLETES -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-2 hover:text-primary transition-colors" href="mat-hygiene.html">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-label-caps text-label-caps mt-1">ATHLETES</span>
+</a>
+<!-- PROFILE -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-2 hover:text-primary transition-colors" href="profile.html">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-caps text-label-caps mt-1">PROFILE</span>
+</a>
+</nav>
+<script>
+        document.querySelectorAll('button, a').forEach(el => {
+            el.addEventListener('mousedown', () => { el.classList.add('scale-95'); });
+            el.addEventListener('mouseup', () => { el.classList.remove('scale-95'); });
+            el.addEventListener('mouseleave', () => { el.classList.remove('scale-95'); });
+        });
+        let glowDirection = 1;
+        let glowOpacity = 0.5;
+        function animateGlow() {
+            glowOpacity += (0.01 * glowDirection);
+            if(glowOpacity > 0.8 || glowOpacity < 0.3) glowDirection *= -1;
+            const img = document.querySelector('.drop-shadow');
+            if(img) {
+                img.style.filter = `drop-shadow(0 0 ${10 + (glowOpacity * 10)}px rgba(195, 244, 0, ${glowOpacity}))`;
+            }
+            requestAnimationFrame(animateGlow);
+        }
+        animateGlow();
+    </script>
+</body></html>

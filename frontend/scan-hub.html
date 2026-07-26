@@ -1,0 +1,259 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>RINGCHECK - SCAN HUB</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Geist:wght@400;700&family=Space+Mono:wght@400;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton:wght@100..900&family=Geist:wght@100..900&family=Space+Mono:wght@100..900&display=swap" rel="stylesheet">
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-secondary-fixed": "#271900",
+            "surface-container": "#201f1f",
+            "surface-variant": "#353534",
+            "error": "#ffb4ab",
+            "primary-fixed": "#c3f400",
+            "surface-container-highest": "#353534",
+            "on-primary-fixed-variant": "#3c4d00",
+            "primary-container": "#c3f400",
+            "background": "#131313",
+            "surface-container-lowest": "#0e0e0e",
+            "on-secondary-container": "#6b4b00",
+            "secondary": "#ffdb9d",
+            "inverse-primary": "#506600",
+            "on-error-container": "#ffdad6",
+            "primary-fixed-dim": "#abd600",
+            "on-secondary-fixed-variant": "#5e4200",
+            "on-surface": "#e5e2e1",
+            "inverse-on-surface": "#313030",
+            "error-container": "#93000a",
+            "secondary-fixed": "#ffdea8",
+            "outline-variant": "#444933",
+            "outline": "#8e9379",
+            "on-error": "#690005",
+            "tertiary-container": "#7df4ff",
+            "tertiary": "#ffffff",
+            "on-tertiary-fixed": "#002022",
+            "tertiary-fixed": "#7df4ff",
+            "on-primary-fixed": "#161e00",
+            "secondary-fixed-dim": "#ffba20",
+            "on-surface-variant": "#c4c9ac",
+            "inverse-surface": "#e5e2e1",
+            "surface-tint": "#abd600",
+            "on-tertiary": "#00363a",
+            "surface-bright": "#393939",
+            "on-primary-container": "#556d00",
+            "on-background": "#e5e2e1",
+            "surface-dim": "#131313",
+            "surface-container-high": "#2a2a2a",
+            "on-tertiary-container": "#006f77",
+            "primary": "#ffffff",
+            "surface": "#131313",
+            "on-tertiary-fixed-variant": "#004f54",
+            "on-primary": "#283500",
+            "on-secondary": "#412d00",
+            "surface-container-low": "#1c1b1b",
+            "secondary-container": "#feb700",
+            "tertiary-fixed-dim": "#00dbe9"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "sm": "12px",
+            "margin-mobile": "20px",
+            "xs": "8px",
+            "base": "4px",
+            "margin-desktop": "40px",
+            "xl": "32px",
+            "lg": "24px",
+            "md": "16px",
+            "gutter": "16px"
+          },
+          "fontFamily": {
+            "headline-lg-mobile": ["Anton"],
+            "body-lg": ["Geist"],
+            "data-num": ["Geist"],
+            "display-lg": ["Anton"],
+            "body-md": ["Geist"],
+            "label-caps": ["Space Mono"],
+            "headline-lg": ["Anton"]
+          },
+          "fontSize": {
+            "headline-lg-mobile": ["28px", {"lineHeight": "32px", "fontWeight": "400"}],
+            "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+            "data-num": ["24px", {"lineHeight": "24px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+            "display-lg": ["48px", {"lineHeight": "48px", "letterSpacing": "0.02em", "fontWeight": "400"}],
+            "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+            "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "700"}],
+            "headline-lg": ["32px", {"lineHeight": "36px", "letterSpacing": "0.02em", "fontWeight": "400"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      background-color: #131313;
+      color: #e5e2e1;
+      overflow: hidden;
+      height: 100vh;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .scan-glow {
+      box-shadow: 0 0 12px rgba(195, 244, 0, 0.4);
+    }
+    .viewfinder-corner {
+      width: 40px;
+      height: 40px;
+      border-color: #c3f400;
+      position: absolute;
+    }
+    .grid-overlay {
+      background-image: linear-gradient(rgba(195, 244, 0, 0.05) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(195, 244, 0, 0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    @keyframes pulse-glow {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 1; }
+    }
+    .animate-glow-pulse {
+      animation: pulse-glow 2s infinite ease-in-out;
+    }
+    .camera-feed {
+      filter: grayscale(0.2) contrast(1.1);
+    }
+  </style>
+</head>
+<body class="flex flex-col">
+<!-- TopAppBar -->
+<header class="bg-background dark:bg-background text-primary dark:text-primary docked full-width top-0 border-b border-surface-variant flex justify-between items-center w-full px-margin-mobile h-16 z-50">
+<div class="flex items-center gap-3">
+<img alt="RINGCHECK Logo" class="w-8 h-8 object-contain" src="assets/anaconda-logo.png">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile tracking-widest text-primary dark:text-primary">RINGCHECK</h1>
+</div>
+<button class="material-symbols-outlined text-primary hover:bg-surface-variant/20 p-2 rounded-full Active: scale-95 transition-transform" data-icon="settings">settings</button>
+</header>
+<!-- Main Canvas / Viewfinder Screen -->
+<main class="flex-1 relative overflow-hidden bg-background">
+<!-- Camera Simulation Layer -->
+<div class="absolute inset-0 camera-feed bg-cover bg-center opacity-70" data-alt="A cinematic, high-contrast close-up shot of an athlete's muscular forearm with visible skin texture, set against a dark, moody gym background. The lighting is focused and clinical, mimicking a professional medical imaging environment. The overall aesthetic is tactical and high-performance, with deep shadows and sharp highlights." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCyY_jwRZ6aXy4Ld9IN9SwQXtyCMcMsPK5hyMTEL2F5SnfbclNea0Mb94oIeXhG2gRKATlU0BDmtO90MQeIPi9KzTDIC48YgVq2KpFVzB23HQUgdmfEyun8ONo0bn70kedOizqn-kPEs999k46P-WbxsOmqpztIKxl4bnn8hl00ZlCUURETd-aof5N3HYCi2nYrtB9Kn6WZmm81feN8LIWStlTeO4ib_34q2w2CahfkbeenEfDsAkptPoFlXx6ySCpoH2mOYJ5ykW0')">
+</div>
+<!-- UI Overlays -->
+<div class="absolute inset-0 z-10 pointer-events-none grid-overlay"></div>
+<!-- Optical Information HUD -->
+<div class="absolute top-8 left-margin-mobile z-20 flex flex-col gap-2">
+<div class="flex items-center gap-2 bg-surface-container/80 backdrop-blur-sm px-3 py-1 rounded-lg border border-outline-variant">
+<span class="material-symbols-outlined text-primary-container text-sm" data-icon="light_mode">light_mode</span>
+<span class="font-label-caps text-label-caps text-on-surface">LIGHT: OPTIMAL</span>
+</div>
+<div class="flex items-center gap-2 bg-surface-container/80 backdrop-blur-sm px-3 py-1 rounded-lg border border-outline-variant">
+<span class="material-symbols-outlined text-primary-container text-sm animate-glow-pulse" data-icon="center_focus_strong">center_focus_strong</span>
+<span class="font-label-caps text-label-caps text-on-surface">FOCUS: LOCKED</span>
+</div>
+</div>
+<div class="absolute top-8 right-margin-mobile z-20 flex flex-col gap-4 pointer-events-auto">
+<button class="w-12 h-12 flex items-center justify-center rounded-full bg-surface-container-highest/60 backdrop-blur-md border border-outline-variant hover:bg-surface-variant text-primary transition-all">
+<span class="material-symbols-outlined" data-icon="flash_on">flash_on</span>
+</button>
+<button class="w-12 h-12 flex items-center justify-center rounded-full bg-surface-container-highest/60 backdrop-blur-md border border-outline-variant hover:bg-surface-variant text-primary transition-all">
+<span class="material-symbols-outlined" data-icon="flip_camera_ios">flip_camera_ios</span>
+</button>
+</div>
+<!-- CENTRAL VIEW FINDER -->
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="relative w-64 h-64 md:w-80 md:h-80">
+<!-- Viewfinder Corners -->
+<div class="viewfinder-corner top-0 left-0 border-t-2 border-l-2"></div>
+<div class="viewfinder-corner top-0 right-0 border-t-2 border-r-2"></div>
+<div class="viewfinder-corner bottom-0 left-0 border-b-2 border-l-2"></div>
+<div class="viewfinder-corner bottom-0 right-0 border-b-2 border-r-2"></div>
+<!-- Central Crosshair / Reticle -->
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-12 h-12 flex items-center justify-center">
+<div class="w-full h-[1px] bg-primary-container/60 absolute"></div>
+<div class="h-full w-[1px] bg-primary-container/60 absolute"></div>
+<div class="w-4 h-4 border border-primary-container rounded-full scan-glow"></div>
+</div>
+</div>
+<!-- Scanning Animation Overlay -->
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary-container to-transparent opacity-40 shadow-[0_0_10px_#c3f400] animate-[scan_3s_infinite_linear]"></div>
+<style>
+          @keyframes scan {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(256px); }
+            100% { transform: translateY(0); }
+          }
+          @media (min-width: 768px) {
+            @keyframes scan {
+              0% { transform: translateY(0); }
+              50% { transform: translateY(320px); }
+              100% { transform: translateY(0); }
+            }
+          }
+        </style>
+</div>
+</div>
+<!-- Instructional Text -->
+<div class="absolute bottom-24 left-0 w-full px-margin-mobile text-center z-20">
+<p class="font-label-caps text-label-caps text-primary-container tracking-widest bg-surface-container/40 backdrop-blur-sm py-2 inline-block px-4 rounded border border-primary-container/20">
+        ALIGN SKIN CONDITION WITHIN RETICLE
+      </p>
+</div>
+<!-- Capture Button -->
+<div class="absolute bottom-6 left-0 w-full flex justify-center z-30">
+<button class="w-20 h-20 rounded-full border-4 border-primary-container flex items-center justify-center bg-background/50 active:scale-90 transition-transform duration-150">
+<div class="w-16 h-16 rounded-full bg-primary-container flex items-center justify-center shadow-[0_0_20px_rgba(195,244,0,0.4)]">
+<span class="material-symbols-outlined text-background text-4xl" data-icon="photo_camera" data-weight="fill" style="font-variation-settings: 'FILL' 1;">photo_camera</span>
+</div>
+</button>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-3 bg-surface-container-highest/95 backdrop-blur-md z-50 border-t border-outline-variant shadow-[0px_-4px_12px_rgba(171,214,0,0.1)]">
+<a class="flex flex-col items-center justify-center text-primary-container dark:text-primary-container bg-surface-variant/30 rounded-xl px-4 py-2 shadow-[0_0_12px_rgba(195,244,0,0.3)] active:scale-90 duration-150 ease-in-out" href="scan-hub.html">
+<span class="material-symbols-outlined" data-icon="center_focus_strong">center_focus_strong</span>
+<span class="font-label-caps text-label-caps mt-1">SCAN</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-2 hover:text-primary transition-colors active:scale-90 duration-150 ease-in-out" href="scan-history.html">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="font-label-caps text-label-caps mt-1">HISTORY</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-2 hover:text-primary transition-colors active:scale-90 duration-150 ease-in-out" href="mat-hygiene.html">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span class="font-label-caps text-label-caps mt-1">ATHLETES</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-2 hover:text-primary transition-colors active:scale-90 duration-150 ease-in-out" href="profile.html">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-caps text-label-caps mt-1">PROFILE</span>
+</a>
+</nav>
+<script>
+    document.querySelector('button[class*="rounded-full border-4"]')?.addEventListener('click', () => {
+      const flash = document.createElement('div');
+      flash.className = 'fixed inset-0 bg-white z-[100] pointer-events-none opacity-0';
+      flash.style.transition = 'opacity 0.1s ease-out';
+      document.body.appendChild(flash);
+      requestAnimationFrame(() => {
+        flash.style.opacity = '1';
+        setTimeout(() => {
+          flash.style.opacity = '0';
+          setTimeout(() => {
+            flash.remove();
+            window.location.href = 'scan-analysis.html';
+          }, 100);
+        }, 50);
+      });
+    });
+  </script>
+</body></html>

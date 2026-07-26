@@ -1,0 +1,299 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>RINGCHECK | Mat Hygiene</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Geist:wght@400;700&amp;family=Space+Mono:wght@700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton:wght@100..900&amp;family=Geist:wght@100..900&amp;family=Space+Mono:wght@100..900&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed": "#271900",
+                    "surface-container": "#201f1f",
+                    "surface-variant": "#353534",
+                    "error": "#ffb4ab",
+                    "primary-fixed": "#c3f400",
+                    "surface-container-highest": "#353534",
+                    "on-primary-fixed-variant": "#3c4d00",
+                    "primary-container": "#c3f400",
+                    "background": "#131313",
+                    "surface-container-lowest": "#0e0e0e",
+                    "on-secondary-container": "#6b4b00",
+                    "secondary": "#ffdb9d",
+                    "inverse-primary": "#506600",
+                    "on-error-container": "#ffdad6",
+                    "primary-fixed-dim": "#abd600",
+                    "on-secondary-fixed-variant": "#5e4200",
+                    "on-surface": "#e5e2e1",
+                    "inverse-on-surface": "#313030",
+                    "error-container": "#93000a",
+                    "secondary-fixed": "#ffdea8",
+                    "outline-variant": "#444933",
+                    "outline": "#8e9379",
+                    "on-error": "#690005",
+                    "tertiary-container": "#7df4ff",
+                    "tertiary": "#ffffff",
+                    "on-tertiary-fixed": "#002022",
+                    "tertiary-fixed": "#7df4ff",
+                    "on-primary-fixed": "#161e00",
+                    "secondary-fixed-dim": "#ffba20",
+                    "on-surface-variant": "#c4c9ac",
+                    "inverse-surface": "#e5e2e1",
+                    "surface-tint": "#abd600",
+                    "on-tertiary": "#00363a",
+                    "surface-bright": "#393939",
+                    "on-primary-container": "#556d00",
+                    "on-background": "#e5e2e1",
+                    "surface-dim": "#131313",
+                    "surface-container-high": "#2a2a2a",
+                    "on-tertiary-container": "#006f77",
+                    "primary": "#ffffff",
+                    "surface": "#131313",
+                    "on-tertiary-fixed-variant": "#004f54",
+                    "on-primary": "#283500",
+                    "on-secondary": "#412d00",
+                    "surface-container-low": "#1c1b1b",
+                    "secondary-container": "#feb700",
+                    "tertiary-fixed-dim": "#00dbe9"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "sm": "12px",
+                    "margin-mobile": "20px",
+                    "xs": "8px",
+                    "base": "4px",
+                    "margin-desktop": "40px",
+                    "xl": "32px",
+                    "lg": "24px",
+                    "md": "16px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Anton"],
+                    "body-lg": ["Geist"],
+                    "data-num": ["Geist"],
+                    "display-lg": ["Anton"],
+                    "body-md": ["Geist"],
+                    "label-caps": ["Space Mono"],
+                    "headline-lg": ["Anton"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["28px", {"lineHeight": "32px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "data-num": ["24px", {"lineHeight": "24px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "48px", "letterSpacing": "0.02em", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "36px", "letterSpacing": "0.02em", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glow-primary {
+            box-shadow: 0 0 12px rgba(195, 244, 0, 0.3);
+        }
+        .glow-text-primary {
+            text-shadow: 0 0 8px rgba(195, 244, 0, 0.5);
+        }
+        .scan-line {
+            background: linear-gradient(to bottom, transparent 50%, rgba(195, 244, 0, 0.05) 50.5%, transparent 51%);
+            background-size: 100% 4px;
+        }
+        .tactical-border-clip {
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 95% 100%, 0 100%);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-[100] bg-background border-b border-surface-variant flex justify-between items-center px-margin-mobile h-16">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 overflow-hidden bg-surface-container-high rounded-full border border-primary-fixed/30 flex items-center justify-center">
+<img alt="RINGCHECK Logo" class="w-full h-full object-cover" src="assets/anaconda-logo.png">
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile tracking-widest text-primary">RINGCHECK</h1>
+</div>
+<button class="material-symbols-outlined text-primary hover:bg-surface-variant/20 p-2 rounded-lg transition-transform active:scale-95">settings</button>
+</header>
+<main class="pt-20 pb-32 px-margin-mobile max-w-2xl mx-auto">
+<!-- Viewfinder Decorative Overlay (Atmospheric) -->
+<div class="fixed inset-0 pointer-events-none z-10 scan-line opacity-30"></div>
+<div class="fixed top-24 left-6 w-8 h-8 border-t-2 border-l-2 border-primary-fixed/20 z-0"></div>
+<div class="fixed top-24 right-6 w-8 h-8 border-t-2 border-r-2 border-primary-fixed/20 z-0"></div>
+<section class="mb-lg relative z-20">
+<div class="flex items-center gap-2 mb-xs">
+<span class="w-2 h-2 bg-primary-fixed animate-pulse"></span>
+<span class="font-label-caps text-label-caps text-primary-fixed uppercase">Tactical Health Briefing</span>
+</div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile mb-md text-on-surface uppercase">Combat Hygiene</h2>
+</section>
+<!-- POST-TRAINING PROTOCOL -->
+<div class="mb-gutter relative z-20">
+<div class="bg-surface-container border border-surface-variant p-md tactical-border-clip group hover:border-primary-fixed/50 transition-colors">
+<div class="flex justify-between items-start mb-md">
+<div class="bg-surface-variant p-2 rounded-lg">
+<span class="material-symbols-outlined text-primary-fixed text-[32px]">clean_hands</span>
+</div>
+<span class="font-label-caps text-label-caps bg-primary-fixed/10 text-primary-fixed px-2 py-1 rounded border border-primary-fixed/20">PRIORITY 01</span>
+</div>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-primary mb-xs">POST-TRAINING PROTOCOL</h3>
+<div class="h-[1px] w-full bg-surface-variant mb-md"></div>
+<ul class="space-y-3">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary-fixed scale-75 mt-0.5">check_circle</span>
+<p class="text-on-surface-variant font-body-md"><span class="text-on-surface font-bold">Shower Immediately:</span> Within 30 minutes of mat exposure using antimicrobial soap.</p>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary-fixed scale-75 mt-0.5">check_circle</span>
+<p class="text-on-surface-variant font-body-md"><span class="text-on-surface font-bold">Gear Quarantine:</span> Seal used rash guards and gi's in a separate laundry bag.</p>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary-fixed scale-75 mt-0.5">check_circle</span>
+<p class="text-on-surface-variant font-body-md"><span class="text-on-surface font-bold">Seal Cuts:</span> Liquid bandage all abrasions before and after every session.</p>
+</li>
+</ul>
+</div>
+</div>
+<!-- TOP 3 SKIN WARNING SIGNS -->
+<div class="mb-gutter relative z-20">
+<div class="bg-surface-container border border-error-container p-md tactical-border-clip hover:bg-surface-container-high transition-all">
+<div class="flex justify-between items-start mb-md">
+<div class="bg-error-container/30 p-2 rounded-lg">
+<span class="material-symbols-outlined text-error text-[32px]">report_problem</span>
+</div>
+<span class="font-label-caps text-label-caps bg-error-container text-error px-2 py-1 rounded" style="opacity: 1;">WARNING STATUS</span>
+</div>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-error mb-xs">SKIN WARNING SIGNS</h3>
+<div class="h-[1px] w-full bg-error-container/40 mb-md"></div>
+<div class="grid grid-cols-1 gap-base">
+<div class="bg-surface-variant/30 p-md border-l-4 border-error flex items-center justify-between">
+<div>
+<p class="font-label-caps text-label-caps text-on-surface">CIRCULAR RASH</p>
+<p class="text-[10px] text-on-surface-variant uppercase">Potential Ringworm (Fungal)</p>
+</div>
+<span class="material-symbols-outlined text-error">dangerous</span>
+</div>
+<div class="bg-surface-variant/30 p-md border-l-4 border-error flex items-center justify-between">
+<div>
+<p class="font-label-caps text-label-caps text-on-surface">RED HONEY CRUSTS</p>
+<p class="text-[10px] text-on-surface-variant uppercase">Impetigo (Staph/Strep)</p>
+</div>
+<span class="material-symbols-outlined text-error">dangerous</span>
+</div>
+<div class="bg-surface-variant/30 p-md border-l-4 border-error flex items-center justify-between">
+<div>
+<p class="font-label-caps text-label-caps text-on-surface">PAINFUL PUSTULES</p>
+<p class="text-[10px] text-on-surface-variant uppercase">Folloculitis / Staph Infection</p>
+</div>
+<span class="material-symbols-outlined text-error">dangerous</span>
+</div>
+</div>
+</div>
+</div>
+<!-- MAT SANITATION BASICS -->
+<div class="mb-xl relative z-20">
+<div class="bg-surface-container-low border border-surface-variant p-md rounded-xl">
+<div class="flex items-center gap-4 mb-md">
+<div class="w-12 h-12 bg-primary-fixed/10 border border-primary-fixed/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary-fixed">sanitizer</span>
+</div>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-primary">MAT SANITATION</h3>
+</div>
+<div class="grid grid-cols-2 gap-md">
+<div class="bg-surface-variant/20 p-sm border border-outline-variant">
+<span class="font-label-caps text-label-caps text-primary-fixed mb-1 block">DAILY CYCLE</span>
+<p class="text-[13px] text-on-surface-variant">Mats must be vacuumed and mopped twice daily with medical-grade solution.</p>
+</div>
+<div class="bg-surface-variant/20 p-sm border border-outline-variant">
+<span class="font-label-caps text-label-caps text-primary-fixed mb-1 block">CHEMICAL RATIO</span>
+<p class="text-[13px] text-on-surface-variant">Use EPA-registered virucidal disinfectants. Allow 10m dwell time.</p>
+</div>
+</div>
+<div class="mt-md bg-background border border-primary-fixed/30 p-md flex items-center gap-4 glow-primary">
+<div class="flex-shrink-0 relative">
+<div class="w-16 h-16 bg-surface-container border-2 border-primary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-primary-fixed text-4xl">verified</span>
+</div>
+<div class="absolute -top-1 -right-1 w-3 h-3 bg-primary-fixed rounded-full animate-ping"></div>
+</div>
+<div>
+<h4 class="font-label-caps text-label-caps text-primary glow-text-primary">HYGIENE CERTIFIED</h4>
+<p class="text-[11px] text-on-surface-variant uppercase tracking-tighter">RingCheck Standard V.2.4 Active</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Featured Product (Bento Style) -->
+<div class="relative z-20 group cursor-pointer">
+<div class="absolute inset-0 bg-primary-fixed/5 blur-xl group-hover:bg-primary-fixed/10 transition-all"></div>
+<div class="relative bg-surface-container-highest border border-primary-fixed/40 p-md flex flex-row items-center gap-md rounded-lg overflow-hidden">
+<div class="w-24 h-24 bg-background border border-outline-variant flex-shrink-0 relative">
+<img class="w-full h-full object-contain" data-alt="A high-contrast macro studio photograph of a premium medical-grade antimicrobial skin foam bottle for combat athletes. The bottle is matte black with neon green typography. The lighting is dramatic, high-key, with strong backlighting highlighting the silhouette against a dark industrial background. Performance-tech aesthetic, sharp focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAMoxMjHn3iFtF1CSfZH6FgC38QVqlEZmy0eiM1uCHY0_w2I8eSbdg0ZxgSbjnxbFn-rpyee1pgnIKKpy31d5c0iDkKWE58QUOkrWHor71NaPIYn5IdsgIwVYPLRkLtZUO4LgsU-L96kcG9dafqlje7YgTLucX_qtBRTnOldzdWf2DNxp84nsAVYFzDKwP65BzgXrnCk9xh1FCFd5zV67TRD-An93QgHx7W3xbaFQn0YEl9f6Pq8-3ceVNN5jtxxi2qmeyz1bjyno">
+<div class="absolute inset-0 bg-primary-fixed/5 flex items-end p-1">
+<span class="text-[8px] font-label-caps text-primary-fixed">RINGCHECK GEAR</span>
+</div>
+</div>
+<div class="flex-1">
+<h4 class="font-label-caps text-label-caps text-primary mb-1">DEFENSE FOAM PRO</h4>
+<p class="text-[12px] text-on-surface-variant line-clamp-2">The ultimate shield against mat-borne pathogens. Elite-level barrier protection.</p>
+<button class="mt-2 text-primary-fixed font-label-caps text-[10px] flex items-center gap-1 hover:underline">
+                        UPGRADE ARMOR <span class="material-symbols-outlined text-[12px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 bg-surface-container-highest/95 backdrop-blur-md border-t border-outline-variant shadow-[0px_-4px_12px_rgba(171,214,0,0.1)]">
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-2 hover:text-primary transition-colors active:scale-90 duration-150 ease-in-out" href="scan-hub.html">
+<span class="material-symbols-outlined">center_focus_strong</span>
+<span class="font-label-caps text-label-caps mt-1">SCAN</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-2 hover:text-primary transition-colors active:scale-90 duration-150 ease-in-out" href="scan-history.html">
+<span class="material-symbols-outlined">history</span>
+<span class="font-label-caps text-label-caps mt-1">HISTORY</span>
+</a>
+<!-- ACTIVE: ATHLETES (Simulated since hygiene/tips often falls under athlete welfare) -->
+<a class="flex flex-col items-center justify-center text-primary-container bg-surface-variant/30 rounded-xl px-4 py-2 shadow-[0_0_12px_rgba(195,244,0,0.3)] active:scale-90 duration-150 ease-in-out" href="mat-hygiene.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">groups</span>
+<span class="font-label-caps text-label-caps mt-1">ATHLETES</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-2 hover:text-primary transition-colors active:scale-90 duration-150 ease-in-out" href="profile.html">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-caps text-label-caps mt-1">PROFILE</span>
+</a>
+</nav>
+<script>
+        // Micro-interaction for cards
+        document.querySelectorAll('.tactical-border-clip').forEach(card => {
+            card.addEventListener('mousedown', () => {
+                card.style.transform = 'scale(0.98)';
+            });
+            card.addEventListener('mouseup', () => {
+                card.style.transform = 'scale(1)';
+            });
+        });
+
+        // Atmospheric flicker effect on warning card
+        setInterval(() => {
+            const warningGlow = document.querySelector('.bg-error-container');
+            if(warningGlow) {
+                warningGlow.style.opacity = Math.random() > 0.9 ? '0.7' : '1';
+            }
+        }, 100);
+    </script>
+</body></html>

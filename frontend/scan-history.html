@@ -1,0 +1,329 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>RINGCHECK | History</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Geist:wght@400;700&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed": "#271900",
+                    "surface-container": "#201f1f",
+                    "surface-variant": "#353534",
+                    "error": "#ffb4ab",
+                    "primary-fixed": "#c3f400",
+                    "surface-container-highest": "#353534",
+                    "on-primary-fixed-variant": "#3c4d00",
+                    "primary-container": "#c3f400",
+                    "background": "#131313",
+                    "surface-container-lowest": "#0e0e0e",
+                    "on-secondary-container": "#6b4b00",
+                    "secondary": "#ffdb9d",
+                    "inverse-primary": "#506600",
+                    "on-error-container": "#ffdad6",
+                    "primary-fixed-dim": "#abd600",
+                    "on-secondary-fixed-variant": "#5e4200",
+                    "on-surface": "#e5e2e1",
+                    "inverse-on-surface": "#313030",
+                    "error-container": "#93000a",
+                    "secondary-fixed": "#ffdea8",
+                    "outline-variant": "#444933",
+                    "outline": "#8e9379",
+                    "on-error": "#690005",
+                    "tertiary-container": "#7df4ff",
+                    "tertiary": "#ffffff",
+                    "on-tertiary-fixed": "#002022",
+                    "tertiary-fixed": "#7df4ff",
+                    "on-primary-fixed": "#161e00",
+                    "secondary-fixed-dim": "#ffba20",
+                    "on-surface-variant": "#c4c9ac",
+                    "inverse-surface": "#e5e2e1",
+                    "surface-tint": "#abd600",
+                    "on-tertiary": "#00363a",
+                    "surface-bright": "#393939",
+                    "on-primary-container": "#556d00",
+                    "on-background": "#e5e2e1",
+                    "surface-dim": "#131313",
+                    "surface-container-high": "#2a2a2a",
+                    "on-tertiary-container": "#006f77",
+                    "primary": "#ffffff",
+                    "surface": "#131313",
+                    "on-tertiary-fixed-variant": "#004f54",
+                    "on-primary": "#283500",
+                    "on-secondary": "#412d00",
+                    "surface-container-low": "#1c1b1b",
+                    "secondary-container": "#feb700",
+                    "tertiary-fixed-dim": "#00dbe9"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "sm": "12px",
+                    "margin-mobile": "20px",
+                    "xs": "8px",
+                    "base": "4px",
+                    "margin-desktop": "40px",
+                    "xl": "32px",
+                    "lg": "24px",
+                    "md": "16px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Anton"],
+                    "body-lg": ["Geist"],
+                    "data-num": ["Geist"],
+                    "display-lg": ["Anton"],
+                    "body-md": ["Geist"],
+                    "label-caps": ["Space Mono"],
+                    "headline-lg": ["Anton"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["28px", {"lineHeight": "32px", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "data-num": ["24px", {"lineHeight": "24px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "48px", "letterSpacing": "0.02em", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "36px", "letterSpacing": "0.02em", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { background-color: #131313; color: #e5e2e1; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .active-glow { box-shadow: 0 0 12px rgba(195,244,0,0.3); }
+        .scan-line-overlay {
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+        .viewfinder-corner {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-color: #c3f400;
+        }
+        .v-tl { border-top: 1px solid; border-left: 1px solid; top: 8px; left: 8px; }
+        .v-tr { border-top: 1px solid; border-right: 1px solid; top: 8px; right: 8px; }
+        .v-bl { border-bottom: 1px solid; border-left: 1px solid; bottom: 8px; left: 8px; }
+        .v-br { border-bottom: 1px solid; border-right: 1px solid; bottom: 8px; right: 8px; }
+        
+        @keyframes pulse-glow {
+            0% { opacity: 0.8; }
+            50% { opacity: 1; }
+            100% { opacity: 0.8; }
+        }
+        .status-pulse { animation: pulse-glow 2s infinite ease-in-out; }
+    </style>
+</head>
+<body class="antialiased font-body-md overflow-x-hidden">
+<!-- TopAppBar Shell -->
+<header class="fixed top-0 left-0 w-full z-50 bg-background flex justify-between items-center h-16 px-margin-mobile border-b border-surface-variant">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" src="assets/anaconda-logo.png">
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile tracking-widest text-primary">RINGCHECK</h1>
+</div>
+<button class="w-10 h-10 flex items-center justify-center hover:bg-surface-variant/20 rounded-full transition-transform active:scale-95">
+<span class="material-symbols-outlined text-primary">settings</span>
+</button>
+</header>
+<main class="pt-20 pb-32 px-margin-mobile max-w-2xl mx-auto">
+<!-- Summary Stats Section -->
+<section class="mb-lg border border-outline-variant bg-surface-container-low p-md relative overflow-hidden">
+<div class="absolute top-0 right-0 p-base opacity-20">
+<span class="material-symbols-outlined text-primary-fixed" style="font-size: 48px;">monitoring</span>
+</div>
+<div class="relative z-10">
+<div class="flex items-center gap-xs mb-xs">
+<div class="w-2 h-2 rounded-full bg-primary-fixed status-pulse"></div>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Mission Briefing</span>
+</div>
+<div class="flex flex-col gap-base">
+<p class="font-headline-lg-mobile text-headline-lg-mobile text-primary">7 SCANS COMPLETED</p>
+<div class="flex items-center gap-sm">
+<span class="font-label-caps text-label-caps text-primary-fixed">0 ACTIVE ISSUES</span>
+<span class="text-on-surface-variant opacity-30">|</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">READY FOR SCAN</span>
+</div>
+</div>
+</div>
+<!-- Tactical segment bar -->
+<div class="mt-md flex gap-1">
+<div class="h-1 flex-1 bg-primary-fixed"></div>
+<div class="h-1 flex-1 bg-primary-fixed"></div>
+<div class="h-1 flex-1 bg-primary-fixed"></div>
+<div class="h-1 flex-1 bg-primary-fixed"></div>
+<div class="h-1 flex-1 bg-primary-fixed"></div>
+<div class="h-1 flex-1 bg-primary-fixed"></div>
+<div class="h-1 flex-1 bg-primary-fixed/30"></div>
+<div class="h-1 flex-1 bg-primary-fixed/30"></div>
+<div class="h-1 flex-1 bg-primary-fixed/30"></div>
+<div class="h-1 flex-1 bg-primary-fixed/30"></div>
+</div>
+</section>
+<!-- Scan Log Header -->
+<div class="flex justify-between items-end mb-md">
+<h2 class="font-label-caps text-label-caps text-primary uppercase tracking-widest">Temporal Log</h2>
+<button class="text-xs font-label-caps text-on-surface-variant underline underline-offset-4">FILTER: ALL</button>
+</div>
+<!-- Scan Log List -->
+<div class="space-y-gutter">
+<!-- Scan Item 1 -->
+<div class="group relative bg-surface-container-high border border-outline-variant p-sm flex gap-md items-start transition-all hover:border-primary-fixed/50">
+<div class="relative w-24 h-24 flex-shrink-0 bg-background border border-surface-variant overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Close-up tactical view of a professional athlete's hand with a performance ring. The image is filtered with a dark, high-contrast monochrome aesthetic and neon green HUD scan lines overlaying the skin texture. Sophisticated and high-tech performance tracking atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrnVaWbzfKcVkCq4piY-MetSCdxXxVSgtdq6IWXq4kQdFJMV3srYDieUf8POEXonHv7T9ikIEsnI4J67iPrwLZ5p5xPZWJ-iMnfdfkQx1jEZPXhbxEmwI3vwvo7YqsXHAX2bRRpGnZEo16YQqpvf1Bb-COq4wMBPOjiSGlQ9Iw2Z2px11QGJfFnvGOFT5IvF13omLhrc2HDAEA-MixM__HhfCdZiuuxdM76GDHGU46gdo0NDoucsPRhLvantu89JxcIFhAMKEoJvI">
+<div class="absolute inset-0 scan-line-overlay"></div>
+<div class="viewfinder-corner v-tl"></div>
+<div class="viewfinder-corner v-tr"></div>
+<div class="viewfinder-corner v-bl"></div>
+<div class="viewfinder-corner v-br"></div>
+</div>
+<div class="flex-grow flex flex-col justify-between min-h-[96px]">
+<div>
+<div class="flex justify-between items-start">
+<span class="font-label-caps text-label-caps text-on-surface-variant">24 OCT 2023 | 09:42</span>
+<div class="flex items-center gap-xs">
+<span class="w-2 h-2 rounded-full bg-primary-fixed"></span>
+<span class="font-label-caps text-label-caps text-primary-fixed">CLEAR</span>
+</div>
+</div>
+<h3 class="font-data-num text-data-num text-primary mt-base">ALPHA-7 SCAN</h3>
+</div>
+<button class="w-full flex items-center justify-center gap-xs py-base border border-outline font-label-caps text-label-caps text-primary hover:bg-primary-fixed hover:text-black transition-colors group-active:scale-[0.98]">
+                        VIEW DETAILS
+                        <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Scan Item 2 -->
+<div class="group relative bg-surface-container-high border border-outline-variant p-sm flex gap-md items-start transition-all hover:border-primary-fixed/50">
+<div class="relative w-24 h-24 flex-shrink-0 bg-background border border-surface-variant overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Tactical overhead view of sports equipment on a dark training mat. High-contrast lighting with deep shadows and sharp edges. Subtle digital UI elements like crosshairs and coordinate markers are visible in the background, matching a performance monitoring dashboard aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4jdEMzKMzDb8Nw54sAJN6r3BSvs2YFyti5DfcxE18Qq9qBMFE6geuJNrjBsz9GVkHTdLpXqC5vvDBW2GUiLZv9MVO8rNp0G_qKySdIW5Ln39hn1sg51Qnwm16n-LBdm7PE563DxbhNU_6xUC5ojJNHmGHapcNkVq2bNlYZMEEC02AgISYzuU5TANRtjzO-oYuJUT1XwTMxR0rsuupT90JN4hgZcw4BD9WArxPeux8b6hIEjZOwraDmHGD7K5g0wDFqIZjhwsSzEE">
+<div class="absolute inset-0 scan-line-overlay"></div>
+<div class="viewfinder-corner v-tl"></div>
+<div class="viewfinder-corner v-tr"></div>
+<div class="viewfinder-corner v-bl"></div>
+<div class="viewfinder-corner v-br"></div>
+</div>
+<div class="flex-grow flex flex-col justify-between min-h-[96px]">
+<div>
+<div class="flex justify-between items-start">
+<span class="font-label-caps text-label-caps text-on-surface-variant">22 OCT 2023 | 18:15</span>
+<div class="flex items-center gap-xs">
+<span class="w-2 h-2 rounded-full bg-primary-fixed"></span>
+<span class="font-label-caps text-label-caps text-primary-fixed">CLEAR</span>
+</div>
+</div>
+<h3 class="font-data-num text-data-num text-primary mt-base">SIGMA-2 SCAN</h3>
+</div>
+<button class="w-full flex items-center justify-center gap-xs py-base border border-outline font-label-caps text-label-caps text-primary hover:bg-primary-fixed hover:text-black transition-colors group-active:scale-[0.98]">
+                        VIEW DETAILS
+                        <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Scan Item 3 (Warning Example) -->
+<div class="group relative bg-surface-container-high border border-error-container/50 p-sm flex gap-md items-start transition-all hover:border-error">
+<div class="relative w-24 h-24 flex-shrink-0 bg-background border border-error-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Macro photography of a high-end athletic sensor glowing with a warm amber light in a dark, tactical environment. The image uses extremely shallow depth of field, focusing on the textured metallic surface of the device. Neon amber data overlays suggest a warning or attention-needed state." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIddNcJFwQCGVjSFI_UI9W4G7sR8xy-UHMt5SCUwxQoeCJ6mZa01KdjhxTHp33d5hFk0ytJO-oM8aoslpIUHvnjbEbEN90z8FAedKufe6EiJBEy-HHHQAgJ-ElgNwR_TOlS-w4VjGrL9wmaliGje18P53yS4C-nSGAzIZfq2C--QehATOK0KYSu6QUfy9erU7vd1i1kN21XqVCdKybmlRtD6oz0Fyi3s3_Xi1qxHJq6gmNfmUsCcJ2QpG0SLcneigWKLxO515lTys">
+<div class="absolute inset-0 bg-error/5 mix-blend-overlay"></div>
+<div class="viewfinder-corner v-tl !border-error"></div>
+<div class="viewfinder-corner v-tr !border-error"></div>
+<div class="viewfinder-corner v-bl !border-error"></div>
+<div class="viewfinder-corner v-br !border-error"></div>
+</div>
+<div class="flex-grow flex flex-col justify-between min-h-[96px]">
+<div>
+<div class="flex justify-between items-start">
+<span class="font-label-caps text-label-caps text-on-surface-variant">19 OCT 2023 | 07:30</span>
+<div class="flex items-center gap-xs">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+<span class="font-label-caps text-label-caps text-error">WARNING</span>
+</div>
+</div>
+<h3 class="font-data-num text-data-num text-primary mt-base">DELTA-9 SCAN</h3>
+</div>
+<button class="w-full flex items-center justify-center gap-xs py-base border border-error-container font-label-caps text-label-caps text-error hover:bg-error hover:text-black transition-colors group-active:scale-[0.98]">
+                        VIEW DETAILS
+                        <span class="material-symbols-outlined text-[14px]">priority_high</span>
+</button>
+</div>
+</div>
+<!-- Scan Item 4 -->
+<div class="group relative bg-surface-container-high border border-outline-variant p-sm flex gap-md items-start transition-all hover:border-primary-fixed/50">
+<div class="relative w-24 h-24 flex-shrink-0 bg-background border border-surface-variant overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A futuristic biometric interface showing heart rate and data streams in vibrant green neon on a dark glass surface. The style is sharp, geometric, and professional, mimicking elite tactical hardware displays used for performance monitoring. High-contrast, dark-mode aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAL_NXbP3iWMFfyfCfZL5mJwTWPeDwUaRmo8SzGFV0enUEUJmcBA5EGdV4JSs0fDpgE1OILCRfHvxbBLKzSW32Q0pgF6_vY4x3JMJQz2TnREngYjDsxjAicDoQYgyaCyR-2q0SlUUacQrdAOj3VKtF2VWuQiHyolJ6RdBrLg-RlGANbTYuKS5epjkndOaHLkJcEV1_ZLh2raUuZHeJ__WIu03HRnDVgycTjBLnr1UyAcyRmRK8AX6xIqHNvjNhtr7OK6_AWpSfBOiY">
+<div class="absolute inset-0 scan-line-overlay"></div>
+<div class="viewfinder-corner v-tl"></div>
+<div class="viewfinder-corner v-tr"></div>
+<div class="viewfinder-corner v-bl"></div>
+<div class="viewfinder-corner v-br"></div>
+</div>
+<div class="flex-grow flex flex-col justify-between min-h-[96px]">
+<div>
+<div class="flex justify-between items-start">
+<span class="font-label-caps text-label-caps text-on-surface-variant">15 OCT 2023 | 21:02</span>
+<div class="flex items-center gap-xs">
+<span class="w-2 h-2 rounded-full bg-primary-fixed"></span>
+<span class="font-label-caps text-label-caps text-primary-fixed">CLEAR</span>
+</div>
+</div>
+<h3 class="font-data-num text-data-num text-primary mt-base">OMEGA-4 SCAN</h3>
+</div>
+<button class="w-full flex items-center justify-center gap-xs py-base border border-outline font-label-caps text-label-caps text-primary hover:bg-primary-fixed hover:text-black transition-colors group-active:scale-[0.98]">
+                        VIEW DETAILS
+                        <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar Shell -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-3 bg-surface-container-highest/95 backdrop-blur-md z-50 border-t border-outline-variant shadow-[0px_-4px_12px_rgba(171,214,0,0.1)]">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-2 hover:text-primary transition-colors active:scale-90 duration-150 ease-in-out" href="scan-hub.html">
+<span class="material-symbols-outlined">center_focus_strong</span>
+<span class="font-label-caps text-label-caps mt-1">SCAN</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary-container dark:text-primary-container bg-surface-variant/30 rounded-xl px-4 py-2 shadow-[0_0_12px_rgba(195,244,0,0.3)] active:scale-90 duration-150 ease-in-out" href="scan-history.html">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">history</span>
+<span class="font-label-caps text-label-caps mt-1">HISTORY</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-2 hover:text-primary transition-colors active:scale-90 duration-150 ease-in-out" href="mat-hygiene.html">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-label-caps text-label-caps mt-1">ATHLETES</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-surface-variant px-4 py-2 hover:text-primary transition-colors active:scale-90 duration-150 ease-in-out" href="profile.html">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-caps text-label-caps mt-1">PROFILE</span>
+</a>
+</nav>
+<script>
+        // Micro-interaction for buttons
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                const rect = btn.getBoundingClientRect();
+                const ripple = document.createElement('div');
+                ripple.className = 'absolute bg-primary-fixed opacity-30 rounded-full animate-ping';
+                ripple.style.width = ripple.style.height = Math.max(rect.width, rect.height) + 'px';
+                ripple.style.left = e.clientX - rect.left - (parseInt(ripple.style.width)/2) + 'px';
+                ripple.style.top = e.clientY - rect.top - (parseInt(ripple.style.height)/2) + 'px';
+                btn.classList.add('relative', 'overflow-hidden');
+                btn.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+    </script>
+</body></html>
