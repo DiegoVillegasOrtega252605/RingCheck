@@ -1,6 +1,13 @@
 <!DOCTYPE html><html class="dark" lang="en"><head>
 <meta charset="utf-8">
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#131313">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="RingCheck">
+
 <title>RINGCHECK - Scan Results</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Geist:wght@400;700&family=Space+Mono:wght@400;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
@@ -150,17 +157,17 @@
 </div>
 <div class="text-center space-y-2">
 <span class="font-label-caps text-label-caps text-primary-container uppercase tracking-widest">SCAN ANALYSIS COMPLETE</span>
-<h1 class="font-display-lg text-display-lg text-primary-container">MAT-READY</h1>
+<h1 id="result-headline" class="font-display-lg text-display-lg text-primary-container">MAT-READY</h1>
 </div>
 </div>
 </div>
 <!-- Result Badge & Subtitle -->
 <div class="max-w-md mx-auto mb-lg">
-<div class="bg-primary-container text-on-primary-container py-4 px-6 rounded-lg text-center mb-4 flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(195,244,0,0.4)]">
-<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-<span class="font-headline-lg-mobile text-headline-lg-mobile tracking-tighter">STATUS: CLEAR</span>
+<div id="status-badge" class="bg-primary-container text-on-primary-container py-4 px-6 rounded-lg text-center mb-4 flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(195,244,0,0.4)]">
+<span id="status-icon" class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span id="status-text" class="font-headline-lg-mobile text-headline-lg-mobile tracking-tighter">STATUS: CLEAR</span>
 </div>
-<p class="text-center text-on-surface-variant font-label-caps text-label-caps">NO DETECTABLE SKIN CONDITIONS.</p>
+<p id="status-subtitle" class="text-center text-on-surface-variant font-label-caps text-label-caps">NO DETECTABLE SKIN CONDITIONS.</p>
 </div>
 <!-- Data Visualization Bento -->
 <div class="max-w-md mx-auto grid grid-cols-2 gap-gutter mb-lg">
@@ -168,19 +175,16 @@
 <div class="bg-surface-container border border-surface-variant p-4 rounded-xl flex flex-col justify-between">
 <div>
 <p class="font-label-caps text-label-caps text-outline mb-base uppercase">CONFIDENCE</p>
-<p class="font-data-num text-data-num text-primary-container">98%</p>
+<p id="confidence-value" class="font-data-num text-data-num text-primary-container">--%</p>
 </div>
-<div class="segmented-progress flex gap-1 mt-2">
-<div class="active"></div><div class="active"></div><div class="active"></div><div class="active"></div><div class="active"></div>
-<div class="active"></div><div class="active"></div><div class="active"></div><div class="active"></div><div></div>
-</div>
+<div id="segmented-progress" class="segmented-progress flex gap-1 mt-2"></div>
 </div>
 <!-- Recommendation Module -->
 <div class="bg-surface-container border border-surface-variant p-4 rounded-xl">
 <p class="font-label-caps text-label-caps text-outline mb-base uppercase">ADVISORY</p>
 <div class="flex flex-col gap-1">
-<p class="font-headline-lg-mobile text-[24px] text-primary leading-tight">KEEP TRAINING.</p>
-<p class="text-[11px] text-on-surface-variant font-body-md">Clear for competition contact.</p>
+<p id="advisory-headline" class="font-headline-lg-mobile text-[24px] text-primary leading-tight">--</p>
+<p id="advisory-subtitle" class="text-[11px] text-on-surface-variant font-body-md">--</p>
 </div>
 </div>
 </div>
@@ -220,6 +224,63 @@
 </a>
 </nav>
 <script>
+        // --- Render real inference result from scan-analysis.html ---
+        (function renderResult() {
+            const raw = sessionStorage.getItem('ringcheck_result');
+            const numSegments = 10;
+            const segmentsContainer = document.getElementById('segmented-progress');
+
+            let hasRingworm = false;
+            let confidencePct = 0;
+
+            if (raw) {
+                try {
+                    const data = JSON.parse(raw);
+                    hasRingworm = !!data.ringworm;
+                    confidencePct = Math.round((data.confidence || 0) * 100);
+                } catch (e) {
+                    console.error('Could not parse stored result:', e);
+                }
+            } else {
+                console.warn('No scan result found in sessionStorage — showing placeholder.');
+            }
+
+            // Confidence number + segmented bar
+            document.getElementById('confidence-value').textContent = `${confidencePct}%`;
+            const activeSegments = Math.round((confidencePct / 100) * numSegments);
+            for (let i = 0; i < numSegments; i++) {
+                const seg = document.createElement('div');
+                if (i < activeSegments) seg.classList.add('active');
+                segmentsContainer.appendChild(seg);
+            }
+
+            const badge = document.getElementById('status-badge');
+            const icon = document.getElementById('status-icon');
+            const statusText = document.getElementById('status-text');
+            const subtitle = document.getElementById('status-subtitle');
+            const headline = document.getElementById('result-headline');
+            const advisoryHeadline = document.getElementById('advisory-headline');
+            const advisorySubtitle = document.getElementById('advisory-subtitle');
+
+            if (hasRingworm) {
+                // Positive / warning state — swap green for amber
+                headline.textContent = 'REVIEW NEEDED';
+                badge.classList.remove('bg-primary-container', 'text-on-primary-container', 'shadow-[0_0_20px_rgba(195,244,0,0.4)]');
+                badge.classList.add('bg-secondary-container', 'text-on-secondary-container', 'shadow-[0_0_20px_rgba(254,183,0,0.4)]');
+                icon.textContent = 'warning';
+                statusText.textContent = 'STATUS: FLAGGED';
+                subtitle.textContent = 'POSSIBLE SKIN CONDITION DETECTED.';
+                advisoryHeadline.textContent = 'SEE A DOCTOR.';
+                advisorySubtitle.textContent = 'Avoid mat contact until cleared by a physician.';
+            } else {
+                headline.textContent = 'MAT-READY';
+                statusText.textContent = 'STATUS: CLEAR';
+                subtitle.textContent = 'NO DETECTABLE SKIN CONDITIONS.';
+                advisoryHeadline.textContent = 'KEEP TRAINING.';
+                advisorySubtitle.textContent = 'Clear for competition contact.';
+            }
+        })();
+
         document.querySelectorAll('button, a').forEach(el => {
             el.addEventListener('mousedown', () => { el.classList.add('scale-95'); });
             el.addEventListener('mouseup', () => { el.classList.remove('scale-95'); });

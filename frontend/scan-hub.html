@@ -1,6 +1,13 @@
 <!DOCTYPE html><html class="dark" lang="en"><head>
 <meta charset="utf-8">
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#131313">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="RingCheck">
+
 <title>RINGCHECK - SCAN HUB</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Geist:wght@400;700&family=Space+Mono:wght@400;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
@@ -146,8 +153,11 @@
 </header>
 <!-- Main Canvas / Viewfinder Screen -->
 <main class="flex-1 relative overflow-hidden bg-background">
-<!-- Camera Simulation Layer -->
-<div class="absolute inset-0 camera-feed bg-cover bg-center opacity-70" data-alt="A cinematic, high-contrast close-up shot of an athlete's muscular forearm with visible skin texture, set against a dark, moody gym background. The lighting is focused and clinical, mimicking a professional medical imaging environment. The overall aesthetic is tactical and high-performance, with deep shadows and sharp highlights." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCyY_jwRZ6aXy4Ld9IN9SwQXtyCMcMsPK5hyMTEL2F5SnfbclNea0Mb94oIeXhG2gRKATlU0BDmtO90MQeIPi9KzTDIC48YgVq2KpFVzB23HQUgdmfEyun8ONo0bn70kedOizqn-kPEs999k46P-WbxsOmqpztIKxl4bnn8hl00ZlCUURETd-aof5N3HYCi2nYrtB9Kn6WZmm81feN8LIWStlTeO4ib_34q2w2CahfkbeenEfDsAkptPoFlXx6ySCpoH2mOYJ5ykW0')">
+<!-- Live Camera Feed -->
+<video id="camera-feed" class="absolute inset-0 w-full h-full object-cover camera-feed opacity-90" autoplay playsinline muted></video>
+<canvas id="capture-canvas" class="hidden"></canvas>
+<div id="camera-error" class="hidden absolute inset-0 flex items-center justify-center px-margin-mobile text-center">
+<p class="font-label-caps text-label-caps text-secondary-container">CAMERA UNAVAILABLE. CHECK PERMISSIONS.</p>
 </div>
 <!-- UI Overlays -->
 <div class="absolute inset-0 z-10 pointer-events-none grid-overlay"></div>
@@ -239,11 +249,48 @@
 </a>
 </nav>
 <script>
+    // --- Real camera access ---
+    const video = document.getElementById('camera-feed');
+    const canvas = document.getElementById('capture-canvas');
+    const cameraError = document.getElementById('camera-error');
+
+    async function startCamera() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 1280 } },
+          audio: false
+        });
+        video.srcObject = stream;
+      } catch (err) {
+        console.error('Camera access failed:', err);
+        video.classList.add('hidden');
+        cameraError.classList.remove('hidden');
+      }
+    }
+    startCamera();
+
+    // --- Capture button: grab frame, store it, go to analysis ---
     document.querySelector('button[class*="rounded-full border-4"]')?.addEventListener('click', () => {
       const flash = document.createElement('div');
       flash.className = 'fixed inset-0 bg-white z-[100] pointer-events-none opacity-0';
       flash.style.transition = 'opacity 0.1s ease-out';
       document.body.appendChild(flash);
+
+      // Draw the current video frame to canvas
+      if (video.videoWidth > 0) {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const imageDataUrl = canvas.toDataURL('image/jpeg', 0.9);
+        sessionStorage.setItem('ringcheck_captured_image', imageDataUrl);
+      }
+
+      // Stop camera stream before navigating away
+      if (video.srcObject) {
+        video.srcObject.getTracks().forEach(track => track.stop());
+      }
+
       requestAnimationFrame(() => {
         flash.style.opacity = '1';
         setTimeout(() => {

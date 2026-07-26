@@ -1,6 +1,13 @@
 <!DOCTYPE html><html class="dark" lang="en"><head>
 <meta charset="utf-8">
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#131313">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="RingCheck">
+
 <title>RINGCHECK | ANALYZING</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Geist:wght@400;700&amp;family=Space+Mono:wght@400;700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
@@ -247,11 +254,17 @@
 </a>
 </nav>
 <script>
+        // ⚠️ CONFIG: replace with your real Render backend URL
+        const API_BASE_URL = "https://ringcheck.onrender.com";
+
         // Progress Bar & Percentage Logic
         const progressBar = document.getElementById('progress-bar');
         const progressVal = document.getElementById('progress-val');
         const numSegments = 12;
         let currentProgress = 0;
+        let apiResult = null;
+        let apiError = null;
+        let apiSettled = false;
 
         // Initialize progress bar segments
         for (let i = 0; i < numSegments; i++) {
@@ -262,15 +275,67 @@
 
         const segments = progressBar.children;
 
+        function dataUrlToBlob(dataUrl) {
+            const [header, base64] = dataUrl.split(',');
+            const mime = header.match(/:(.*?);/)[1];
+            const binary = atob(base64);
+            const bytes = new Uint8Array(binary.length);
+            for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+            return new Blob([bytes], { type: mime });
+        }
+
+        async function runInference() {
+            try {
+                const imageDataUrl = sessionStorage.getItem('ringcheck_captured_image');
+                if (!imageDataUrl) {
+                    throw new Error('No captured image found. Go back and scan again.');
+                }
+                const blob = dataUrlToBlob(imageDataUrl);
+                const formData = new FormData();
+                formData.append('file', blob, 'scan.jpg');
+
+                const response = await fetch(`${API_BASE_URL}/predict`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Server responded with ${response.status}`);
+                }
+
+                apiResult = await response.json(); // { ringworm: bool, confidence: float }
+            } catch (err) {
+                console.error('Inference failed:', err);
+                apiError = err.message || 'Unknown error';
+            } finally {
+                apiSettled = true;
+            }
+        }
+        runInference();
+
+        // Render free tier can take 50s+ to wake up from sleep — warn the user instead of looking frozen
+        setTimeout(() => {
+            if (!apiSettled) {
+                const wakeMsg = document.createElement('p');
+                wakeMsg.id = 'wake-msg';
+                wakeMsg.className = 'text-center font-label-caps text-label-caps text-on-surface-variant mt-4 animate-pulse';
+                wakeMsg.textContent = 'SERVER WAKING UP — THIS CAN TAKE UP TO A MINUTE...';
+                progressBar.parentElement.appendChild(wakeMsg);
+            }
+        }, 6000);
+
         function updateProgress() {
-            if (currentProgress < 100) {
+            // Cap simulated progress at 90% until the real API response arrives,
+            // so the bar doesn't finish before we actually have a result.
+            const ceiling = apiSettled ? 100 : 90;
+
+            if (currentProgress < ceiling) {
                 currentProgress += Math.random() * 2.5;
-                if (currentProgress > 100) currentProgress = 100;
-                
+                if (currentProgress > ceiling) currentProgress = ceiling;
+
                 const percent = Math.floor(currentProgress);
                 progressVal.textContent = `${percent}%`;
 
-                // Update segments
                 const activeSegments = Math.floor((currentProgress / 100) * numSegments);
                 for (let i = 0; i < numSegments; i++) {
                     if (i < activeSegments) {
@@ -278,17 +343,31 @@
                         segments[i].classList.add('bg-primary-container', 'shadow-[0_0_8px_#c3f400]');
                     }
                 }
-
-                if (currentProgress < 100) {
-                    setTimeout(updateProgress, 100 + Math.random() * 200);
-                } else {
-                    progressVal.textContent = "DONE";
-                    progressVal.classList.add('animate-pulse');
-                    setTimeout(() => {
-                        window.location.href = 'results.html';
-                    }, 900);
-                }
             }
+
+            if (currentProgress >= 100 && apiSettled) {
+                const wakeMsg = document.getElementById('wake-msg');
+                if (wakeMsg) wakeMsg.remove();
+
+                if (apiError) {
+                    progressVal.textContent = "ERROR";
+                    progressVal.classList.add('text-error');
+                    const errBanner = document.createElement('p');
+                    errBanner.className = 'text-center font-label-caps text-label-caps text-error mt-4';
+                    errBanner.textContent = apiError.toUpperCase();
+                    progressBar.parentElement.appendChild(errBanner);
+                    return; // don't navigate on error
+                }
+                progressVal.textContent = "DONE";
+                progressVal.classList.add('animate-pulse');
+                sessionStorage.setItem('ringcheck_result', JSON.stringify(apiResult));
+                setTimeout(() => {
+                    window.location.href = 'results.html';
+                }, 900);
+                return;
+            }
+
+            setTimeout(updateProgress, 100 + Math.random() * 200);
         }
 
         // Start progress simulation
