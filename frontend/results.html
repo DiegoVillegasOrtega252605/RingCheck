@@ -194,7 +194,7 @@
 <span class="material-symbols-outlined">share</span>
                 SHARE RESULT
             </button>
-<button class="w-full border border-surface-variant text-primary h-14 flex items-center justify-center gap-3 font-label-caps text-label-caps rounded-xl hover:bg-surface-variant/20 active:scale-95 transition-all" onclick="window.location.href='scan-history.html'">
+<button class="w-full border border-surface-variant text-primary h-14 flex items-center justify-center gap-3 font-label-caps text-label-caps rounded-xl hover:bg-surface-variant/20 active:scale-95 transition-all" onclick="logToHistory(this)">
 <span class="material-symbols-outlined">history_edu</span>
                 LOG TO HISTORY
             </button>
@@ -280,6 +280,53 @@
                 advisorySubtitle.textContent = 'Clear for competition contact.';
             }
         })();
+
+        function makeThumbnail(dataUrl, maxSize, callback) {
+            const img = new Image();
+            img.onload = function () {
+                const scale = Math.min(maxSize / img.width, maxSize / img.height, 1);
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width * scale;
+                canvas.height = img.height * scale;
+                canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+                callback(canvas.toDataURL('image/jpeg', 0.7));
+            };
+            img.onerror = function () { callback(''); };
+            img.src = dataUrl;
+        }
+
+        function logToHistory(btn) {
+            const rawResult = sessionStorage.getItem('ringcheck_result');
+            const capturedImage = sessionStorage.getItem('ringcheck_captured_image');
+            let result = { ringworm: false, confidence: 0 };
+            try { result = JSON.parse(rawResult) || result; } catch (e) {}
+
+            const saveEntry = (thumbnail) => {
+                let history = [];
+                try { history = JSON.parse(localStorage.getItem('ringcheck_history') || '[]'); } catch (e) {}
+                history.push({
+                    timestamp: Date.now(),
+                    ringworm: !!result.ringworm,
+                    confidence: result.confidence || 0,
+                    thumbnail: thumbnail
+                });
+                try {
+                    localStorage.setItem('ringcheck_history', JSON.stringify(history));
+                } catch (e) {
+                    // Storage full — drop oldest entry and retry once
+                    history.shift();
+                    try { localStorage.setItem('ringcheck_history', JSON.stringify(history)); } catch (e2) {}
+                }
+                btn.textContent = 'SAVED ✓';
+                setTimeout(() => { window.location.href = 'scan-history.html'; }, 500);
+            };
+
+            if (capturedImage) {
+                makeThumbnail(capturedImage, 200, saveEntry);
+            } else {
+                saveEntry('');
+            }
+        }
 
         document.querySelectorAll('button, a').forEach(el => {
             el.addEventListener('mousedown', () => { el.classList.add('scale-95'); });

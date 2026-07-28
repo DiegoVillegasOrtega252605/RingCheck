@@ -170,7 +170,7 @@
 <div class="absolute inset-0 flex items-center justify-center">
 <div class="w-full h-full p-6">
 <div class="w-full h-full bg-surface-container-low border border-dashed border-outline-variant rounded-lg flex items-center justify-center relative overflow-hidden">
-<img class="w-full h-full object-cover opacity-60" data-alt="A macro close-up of a textured gym mat surface with sweat droplets and slight imperfections, illuminated by high-contrast neon green scanning lasers in a dark, tactical, tech-focused environment. The lighting is moody and elite, emphasizing a professional diagnostic atmosphere with a sharp focus on micro-details of the material." src="https://lh3.googleusercontent.com/aida-public/AB6AXuByOuahXOOchPshT1rB72hj8WDIzmq7AV6Gw_il7BcXWUCQwSZItNOyJIIUM_fqsHSczIJCKsRltzVlHw9FkgXGo3NhW4IKmiAZT9KLMrNxHFVPIBP6UG_3ASV_gYw6-w4E9qNq5vItJNRS5walxIvEQJcTKj8kLHM5yTMPfgjEjFvTw2Y-IN_wbr6MfFkI4ELLUI6I0fY8wk7ow2eAaG2fLSTmZNzT5rePUIl6m_jomxvF7bP7fNoO57Vuc7Cg5AXbIEUMfRGL9sk">
+<img id="captured-photo-preview" class="w-full h-full object-cover opacity-90" src="" alt="Your captured scan">
 <!-- Scanning Line -->
 <div class="absolute top-0 left-0 w-full scan-line"></div>
 </div>
@@ -256,6 +256,15 @@
 <script>
         // ⚠️ CONFIG: replace with your real Render backend URL
         const API_BASE_URL = "https://ringcheck.onrender.com";
+
+        // Show the real captured photo instead of a stock placeholder
+        (function loadCapturedPhoto() {
+            const img = document.getElementById('captured-photo-preview');
+            const stored = sessionStorage.getItem('ringcheck_captured_image');
+            if (stored) {
+                img.src = stored;
+            }
+        })();
 
         // Progress Bar & Percentage Logic
         const progressBar = document.getElementById('progress-bar');

@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#131313">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="RingCheck">
+
+<title>RINGCHECK - Operative Profile</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Space+Mono:wght@400;700&amp;family=Geist:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error-container": "#93000a",
+                        "primary-container": "#c3f400",
+                        "on-surface-variant": "#c4c9ac",
+                        "on-secondary-fixed": "#271900",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-surface": "#e5e2e1",
+                        "on-tertiary-fixed": "#002022",
+                        "on-secondary-fixed-variant": "#5e4200",
+                        "outline-variant": "#444933",
+                        "on-secondary": "#412d00",
+                        "inverse-surface": "#e5e2e1",
+                        "on-primary-container": "#556d00",
+                        "outline": "#8e9379",
+                        "on-tertiary": "#00363a",
+                        "primary-fixed": "#c3f400",
+                        "tertiary-fixed": "#7df4ff",
+                        "surface": "#131313",
+                        "on-primary-fixed": "#161e00",
+                        "surface-tint": "#abd600",
+                        "on-primary-fixed-variant": "#3c4d00",
+                        "surface-container-low": "#1c1b1b",
+                        "primary-fixed-dim": "#abd600",
+                        "on-tertiary-container": "#006f77",
+                        "on-secondary-container": "#6b4b00",
+                        "surface-container-high": "#2a2a2a",
+                        "surface-bright": "#393939",
+                        "primary": "#ffffff",
+                        "inverse-on-surface": "#313030",
+                        "secondary-container": "#feb700",
+                        "secondary": "#ffdb9d",
+                        "inverse-primary": "#506600",
+                        "tertiary-container": "#7df4ff",
+                        "on-error": "#690005",
+                        "secondary-fixed-dim": "#ffba20",
+                        "tertiary": "#ffffff",
+                        "surface-dim": "#131313",
+                        "surface-container": "#201f1f",
+                        "on-primary": "#283500",
+                        "tertiary-fixed-dim": "#00dbe9",
+                        "on-error-container": "#ffdad6",
+                        "secondary-fixed": "#ffdea8",
+                        "surface-container-highest": "#353534",
+                        "error": "#ffb4ab",
+                        "background": "#131313",
+                        "on-background": "#e5e2e1",
+                        "on-tertiary-fixed-variant": "#004f54",
+                        "surface-variant": "#353534"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "base": "4px",
+                        "margin-desktop": "40px",
+                        "xl": "32px",
+                        "lg": "24px",
+                        "gutter": "16px",
+                        "xs": "8px",
+                        "sm": "12px",
+                        "margin-mobile": "20px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Anton"],
+                        "data-num": ["Geist"],
+                        "display-lg": ["Anton"],
+                        "body-lg": ["Geist"],
+                        "headline-lg-mobile": ["Anton"],
+                        "body-md": ["Geist"],
+                        "label-caps": ["Space Mono"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", {"lineHeight": "36px", "letterSpacing": "0.02em", "fontWeight": "400"}],
+                        "data-num": ["24px", {"lineHeight": "24px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "display-lg": ["48px", {"lineHeight": "48px", "letterSpacing": "0.02em", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "32px", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .hud-bracket {
+            position: relative;
+        }
+        .hud-bracket::before, .hud-bracket::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 100%;
+            border-color: #c3f400;
+            border-style: solid;
+        }
+        .hud-bracket::before {
+            left: -4px;
+            border-width: 1px 0 1px 1px;
+        }
+        .hud-bracket::after {
+            right: -4px;
+            border-width: 1px 1px 1px 0;
+        }
+        .scan-line-bg {
+            background: linear-gradient(0deg, rgba(19, 19, 19, 1) 0%, rgba(19, 19, 19, 0.8) 50%, rgba(19, 19, 19, 1) 100%), 
+                        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(195, 244, 0, 0.03) 3px);
+        }
+        .glow-active {
+            box-shadow: 0 0 12px rgba(195, 244, 0, 0.3);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen font-body-md text-body-md flex flex-col scan-line-bg overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 bg-background/80 backdrop-blur-md border-b border-surface-variant flex justify-between items-center px-margin-mobile h-16">
+<div class="flex items-center gap-3">
+<img alt="RingCheck Logo" class="w-10 h-10 rounded-full border border-primary-container/30" src="assets/anaconda-logo.png"/>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile tracking-widest text-primary-container">RINGCHECK</h1>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-surface-variant/20 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 0;">settings</span>
+</button>
+</header>
+<main class="flex-1 mt-16 mb-24 px-margin-mobile py-lg max-w-lg mx-auto w-full">
+<!-- Profile Header Section -->
+<section class="flex flex-col items-center mb-xl">
+<div class="relative w-32 h-32 mb-lg cursor-pointer" id="avatar-upload-trigger">
+<input type="file" accept="image/*" id="avatar-file-input" class="hidden">
+<div class="absolute inset-0 border-2 border-primary-container/20 rounded-full animate-pulse"></div>
+<div class="absolute -inset-2 border border-primary-container/10 rounded-full"></div>
+<!-- Viewfinder Brackets for Avatar -->
+<div class="absolute -top-1 -left-1 w-4 h-4 border-t-2 border-l-2 border-primary-container"></div>
+<div class="absolute -top-1 -right-1 w-4 h-4 border-t-2 border-r-2 border-primary-container"></div>
+<div class="absolute -bottom-1 -left-1 w-4 h-4 border-b-2 border-l-2 border-primary-container"></div>
+<div class="absolute -bottom-1 -right-1 w-4 h-4 border-b-2 border-r-2 border-primary-container"></div>
+<div id="avatar-display" class="w-full h-full rounded-full overflow-hidden bg-surface-container-highest flex items-center justify-center"><div class="flex flex-col items-center justify-center gap-1">
+<span class="material-symbols-outlined text-primary-container/40 text-4xl">add_a_photo</span>
+<span class="font-label-caps text-[10px] text-primary-container/60">ADD PHOTO</span>
+</div></div>
+</div>
+<div class="text-center">
+<span class="font-label-caps text-label-caps text-primary-container uppercase tracking-widest">Status: Active Operative</span>
+</div>
+</section>
+<!-- Form Section -->
+<div class="space-y-xl">
+<!-- Operative Name Input -->
+<div class="space-y-xs">
+<label class="font-label-caps text-label-caps text-on-surface-variant ml-2">NAME</label>
+<div class="hud-bracket h-14 w-full flex items-center bg-surface-container/50 px-4">
+<input id="profile-name-input" class="bg-transparent border-none focus:ring-0 text-primary font-headline-lg-mobile text-xl tracking-wide w-full uppercase" type="text" placeholder="ENTER YOUR NAME" value=""/>
+<span class="material-symbols-outlined text-primary-container/40">edit</span>
+</div>
+</div>
+<!-- Sport Selector -->
+<div class="space-y-xs">
+<label class="font-label-caps text-label-caps text-on-surface-variant ml-2">COMBAT DISCIPLINE</label>
+<div class="grid grid-cols-4 gap-2 h-12">
+<button class="sport-btn bg-surface-container text-on-surface-variant font-label-caps text-[10px] flex items-center justify-center border border-outline-variant hover:border-primary-container/50 transition-colors" id="btn-BJJ" onclick="updateSelector('BJJ')">BJJ</button>
+<button class="sport-btn bg-surface-container text-on-surface-variant font-label-caps text-[10px] flex items-center justify-center border border-outline-variant hover:border-primary-container/50 transition-colors" id="btn-Wrestling" onclick="updateSelector('Wrestling')">WRESTLING</button>
+<button class="sport-btn bg-surface-container text-on-surface-variant font-label-caps text-[10px] flex items-center justify-center border border-outline-variant hover:border-primary-container/50 transition-colors" id="btn-MMA" onclick="updateSelector('MMA')">MMA</button>
+<button class="sport-btn bg-surface-container text-on-surface-variant font-label-caps text-[10px] flex items-center justify-center border border-outline-variant hover:border-primary-container/50 transition-colors" id="btn-Judo" onclick="updateSelector('Judo')">JUDO</button>
+</div>
+</div>
+<!-- Conditional Field -->
+<div class="space-y-xs hidden" id="conditional-rank-container">
+<label class="font-label-caps text-label-caps text-on-surface-variant ml-2" id="rank-label">BELT RANK</label>
+<div class="hud-bracket h-14 w-full flex items-center bg-surface-container/50 px-4 overflow-hidden">
+<select class="bg-transparent border-none focus:ring-0 text-primary font-label-caps text-md w-full appearance-none" id="rank-select">
+<option class="bg-surface-container" value="White">WHITE</option>
+<option class="bg-surface-container" value="Blue">BLUE</option>
+<option class="bg-surface-container" value="Purple">PURPLE</option>
+<option class="bg-surface-container" value="Brown">BROWN</option>
+<option class="bg-surface-container" value="Black">BLACK</option>
+</select>
+<span class="material-symbols-outlined text-primary-container">expand_more</span>
+</div>
+</div>
+<!-- Tactical Stats Grid (Extra for visual richness) -->
+<div class="grid grid-cols-2 gap-md">
+<div class="border border-outline-variant p-md bg-surface-container-low/30">
+<p class="font-label-caps text-[10px] text-on-surface-variant mb-1">TOTAL SCANS</p>
+<p id="stat-total-scans" class="font-data-num text-data-num text-primary-container">0</p>
+</div>
+<div class="border border-outline-variant p-md bg-surface-container-low/30">
+<p class="font-label-caps text-[10px] text-on-surface-variant mb-1">AVG CONFIDENCE</p>
+<p id="stat-avg-confidence" class="font-data-num text-data-num text-primary-container">—</p>
+</div>
+</div>
+<!-- Primary Action -->
+<div class="space-y-xs">
+<label class="font-label-caps text-label-caps text-on-surface-variant ml-2">OPERATIVE IDENTIFICATION</label>
+<div class="relative bg-surface-container-low/30 border border-outline-variant p-md overflow-hidden">
+<!-- Scan line texture overlay -->
+<div class="absolute inset-0 pointer-events-none opacity-10 bg-[repeating-linear-gradient(0deg,transparent,transparent_2px,#c3f400_3px)]"></div>
+<!-- Corner Brackets -->
+<div class="absolute top-0 left-0 w-2 h-2 border-t border-l border-primary-container"></div>
+<div class="absolute top-0 right-0 w-2 h-2 border-t border-r border-primary-container"></div>
+<div class="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-primary-container"></div>
+<div class="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-primary-container"></div>
+<div class="flex gap-md relative z-10">
+<!-- Small Avatar -->
+<div id="card-avatar" class="w-16 h-16 rounded-full border border-primary-container/30 bg-surface-container-highest flex items-center justify-center shrink-0 overflow-hidden">
+<span class="material-symbols-outlined text-primary-container/20">person</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-start">
+<h3 id="card-name" class="font-headline-lg-mobile text-lg text-primary truncate">YOUR NAME</h3>
+<span id="card-tier" class="bg-surface-container text-on-surface-variant font-label-caps text-[8px] px-1.5 py-0.5 rounded">FREE</span>
+</div>
+<div class="grid grid-cols-2 gap-2 mt-2">
+<div>
+<p class="font-label-caps text-[8px] text-on-surface-variant">DISCIPLINE</p>
+<p id="card-discipline" class="font-body-md text-xs text-primary-container">—</p>
+</div>
+<div>
+<p class="font-label-caps text-[8px] text-on-surface-variant" id="card-rank-label">RANK</p>
+<div class="flex items-center gap-1">
+<div id="card-belt-swatch" class="w-3 h-1 hidden"></div>
+<p id="card-rank" class="font-body-md text-xs text-primary-container">—</p>
+</div>
+</div>
+<div>
+<p class="font-label-caps text-[8px] text-on-surface-variant">SCANS</p>
+<p id="card-scans" class="font-data-num text-sm text-primary-container">0</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<button id="share-card-btn" class="w-full py-2 border border-primary-container/40 text-primary-container font-label-caps text-[10px] tracking-widest hover:bg-primary-container/10 transition-colors flex items-center justify-center gap-2 mt-2">
+<span class="material-symbols-outlined text-sm">share</span>
+    SHARE ID CARD
+  </button>
+</div><div class="pt-lg">
+<button id="confirm-save-btn" class="w-full h-16 bg-primary-container text-on-primary-container flex items-center justify-center gap-2 font-headline-lg-mobile text-lg glow-active active:scale-95 transition-all group">
+<span>CONFIRM DATA SYNC</span>
+<span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">chevron_right</span>
+</button>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-3 bg-surface-container-highest/95 backdrop-blur-md border-t border-outline-variant shadow-[0px_-4px_12px_rgba(171,214,0,0.1)] z-50">
+<!-- SCAN -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-2 hover:text-primary transition-colors active:scale-90 duration-150 ease-in-out" href="scan-hub.html">
+<span class="material-symbols-outlined mb-1">center_focus_strong</span>
+<span class="font-label-caps text-[10px]">SCAN</span>
+</a>
+<!-- HISTORY -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-2 hover:text-primary transition-colors active:scale-90 duration-150 ease-in-out" href="scan-history.html">
+<span class="material-symbols-outlined mb-1">history</span>
+<span class="font-label-caps text-[10px]">HISTORY</span>
+</a>
+<!-- ATHLETES -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-2 hover:text-primary transition-colors active:scale-90 duration-150 ease-in-out" href="mat-hygiene.html">
+<span class="material-symbols-outlined mb-1">groups</span>
+<span class="font-label-caps text-[10px]">ATHLETES</span>
+</a>
+<!-- PROFILE (Active) -->
+<a class="flex flex-col items-center justify-center text-primary-container bg-surface-variant/30 rounded-xl px-4 py-2 shadow-[0_0_12px_rgba(195,244,0,0.3)] active:scale-90 duration-150 ease-in-out" href="profile.html">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-label-caps text-[10px]">PROFILE</span>
+</a>
+</nav>
+<script>
+        const BELT_COLORS = {
+            White: '#e5e2e1', Blue: '#2563eb', Purple: '#7c3aed', Brown: '#5c3a21', Black: '#111111'
+        };
+
+        function updateSelector(sport) {
+            // Update UI buttons
+            const buttons = document.querySelectorAll('.sport-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-primary-container', 'text-on-primary-container', 'border-primary-container', 'glow-active');
+                btn.classList.add('bg-surface-container', 'text-on-surface-variant', 'border-outline-variant');
+            });
+
+            const activeBtn = document.getElementById(`btn-${sport}`);
+            activeBtn.classList.add('bg-primary-container', 'text-on-primary-container', 'border-primary-container', 'glow-active');
+            activeBtn.classList.remove('bg-surface-container', 'text-on-surface-variant', 'border-outline-variant');
+
+            // Reveal the conditional rank field now that a sport is chosen
+            document.getElementById('conditional-rank-container').classList.remove('hidden');
+
+            // Update conditional rank field
+            const label = document.getElementById('rank-label');
+            const select = document.getElementById('rank-select');
+
+            if (sport === 'BJJ') {
+                label.innerText = 'BELT RANK';
+                select.innerHTML = `
+                    <option value="White">WHITE</option>
+                    <option value="Blue">BLUE</option>
+                    <option value="Purple">PURPLE</option>
+                    <option value="Brown">BROWN</option>
+                    <option value="Black">BLACK</option>
+                `;
+            } else if (sport === 'MMA' || sport === 'Wrestling') {
+                label.innerText = 'EXPERIENCE LEVEL';
+                select.innerHTML = `
+                    <option value="Beginner">BEGINNER</option>
+                    <option value="Intermediate">INTERMEDIATE</option>
+                    <option value="Advanced">ADVANCED</option>
+                    <option value="Pro">PRO</option>
+                `;
+            } else {
+                label.innerText = 'RANK';
+                select.innerHTML = `
+                    <option value="Kyū">KYŪ</option>
+                    <option value="Dan">DAN</option>
+                `;
+            }
+            updateLiveCard();
+        }
+
+        // --- Live ID card preview ---
+        function updateLiveCard() {
+            const name = document.getElementById('profile-name-input').value.trim();
+            document.getElementById('card-name').textContent = name || 'YOUR NAME';
+
+            const activeSportBtn = document.querySelector('.sport-btn.bg-primary-container');
+            const sport = activeSportBtn ? activeSportBtn.id.replace('btn-', '') : null;
+            document.getElementById('card-discipline').textContent = sport || '—';
+
+            const rankSelect = document.getElementById('rank-select');
+            const rankLabelText = document.getElementById('rank-label').textContent;
+            const cardRankLabel = document.getElementById('card-rank-label');
+            const cardRank = document.getElementById('card-rank');
+            const swatch = document.getElementById('card-belt-swatch');
+
+            if (sport && rankSelect.value) {
+                cardRankLabel.textContent = rankLabelText;
+                cardRank.textContent = rankSelect.options[rankSelect.selectedIndex].text;
+                if (sport === 'BJJ' && BELT_COLORS[rankSelect.value]) {
+                    swatch.style.backgroundColor = BELT_COLORS[rankSelect.value];
+                    swatch.classList.remove('hidden');
+                } else {
+                    swatch.classList.add('hidden');
+                }
+            } else {
+                cardRank.textContent = '—';
+                swatch.classList.add('hidden');
+            }
+        }
+
+        document.getElementById('profile-name-input').addEventListener('input', updateLiveCard);
+        document.getElementById('rank-select')?.addEventListener('change', updateLiveCard);
+        document.addEventListener('change', (e) => {
+            if (e.target && e.target.id === 'rank-select') updateLiveCard();
+        });
+
+        // --- Avatar upload ---
+        function setAvatarImage(dataUrl) {
+            const bigDisplay = document.getElementById('avatar-display');
+            bigDisplay.innerHTML = `<img src="${dataUrl}" class="w-full h-full object-cover">`;
+            const cardAvatar = document.getElementById('card-avatar');
+            cardAvatar.innerHTML = `<img src="${dataUrl}" class="w-full h-full object-cover">`;
+        }
+
+        document.getElementById('avatar-upload-trigger').addEventListener('click', () => {
+            document.getElementById('avatar-file-input').click();
+        });
+
+        document.getElementById('avatar-file-input').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function (evt) {
+                const img = new Image();
+                img.onload = function () {
+                    const size = 300;
+                    const canvas = document.createElement('canvas');
+                    canvas.width = size; canvas.height = size;
+                    const ctx = canvas.getContext('2d');
+                    const scale = Math.max(size / img.width, size / img.height);
+                    const w = img.width * scale, h = img.height * scale;
+                    ctx.drawImage(img, (size - w) / 2, (size - h) / 2, w, h);
+                    const resized = canvas.toDataURL('image/jpeg', 0.85);
+                    setAvatarImage(resized);
+                    window._ringcheckAvatarData = resized;
+                };
+                img.src = evt.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // --- Stats from real scan history ---
+        function loadStats() {
+            let history = [];
+            try { history = JSON.parse(localStorage.getItem('ringcheck_history') || '[]'); } catch (e) {}
+            document.getElementById('stat-total-scans').textContent = history.length;
+            document.getElementById('card-scans').textContent = history.length;
+            if (history.length > 0) {
+                const avg = history.reduce((sum, h) => sum + (h.confidence || 0), 0) / history.length;
+                document.getElementById('stat-avg-confidence').textContent = Math.round(avg * 100) + '%';
+            } else {
+                document.getElementById('stat-avg-confidence').textContent = '—';
+            }
+        }
+
+        // --- Load saved profile on page load ---
+        function loadProfile() {
+            let profile = null;
+            try { profile = JSON.parse(localStorage.getItem('ringcheck_profile') || 'null'); } catch (e) {}
+            if (profile) {
+                document.getElementById('profile-name-input').value = profile.name || '';
+                if (profile.avatar) {
+                    setAvatarImage(profile.avatar);
+                    window._ringcheckAvatarData = profile.avatar;
+                }
+                if (profile.sport) {
+                    updateSelector(profile.sport);
+                    if (profile.rank) {
+                        document.getElementById('rank-select').value = profile.rank;
+                    }
+                }
+                if (profile.tier) {
+                    document.getElementById('card-tier').textContent = profile.tier.toUpperCase();
+                }
+            }
+            updateLiveCard();
+            loadStats();
+        }
+
+        // --- Save profile ---
+        document.getElementById('confirm-save-btn').addEventListener('click', () => {
+            const name = document.getElementById('profile-name-input').value.trim();
+            const activeSportBtn = document.querySelector('.sport-btn.bg-primary-container');
+            const sport = activeSportBtn ? activeSportBtn.id.replace('btn-', '') : null;
+            const rankSelect = document.getElementById('rank-select');
+            const rank = (sport && rankSelect) ? rankSelect.value : null;
+
+            let existing = {};
+            try { existing = JSON.parse(localStorage.getItem('ringcheck_profile') || '{}'); } catch (e) {}
+
+            const profile = {
+                name: name,
+                sport: sport,
+                rank: rank,
+                avatar: window._ringcheckAvatarData || existing.avatar || null,
+                tier: existing.tier || 'free'
+            };
+            localStorage.setItem('ringcheck_profile', JSON.stringify(profile));
+
+            const btn = document.getElementById('confirm-save-btn');
+            const original = btn.innerHTML;
+            btn.innerHTML = '<span>SAVED ✓</span>';
+            setTimeout(() => { btn.innerHTML = original; }, 1200);
+        });
+
+        // --- Share ID card (basic text share for now) ---
+        document.getElementById('share-card-btn').addEventListener('click', async () => {
+            const name = document.getElementById('card-name').textContent;
+            const discipline = document.getElementById('card-discipline').textContent;
+            const rank = document.getElementById('card-rank').textContent;
+            const scans = document.getElementById('card-scans').textContent;
+            const text = `${name} — RingCheck ID\nDiscipline: ${discipline}\nRank: ${rank}\nScans logged: ${scans}`;
+
+            if (navigator.share) {
+                try { await navigator.share({ title: 'My RingCheck ID Card', text }); } catch (e) {}
+            } else if (navigator.clipboard) {
+                await navigator.clipboard.writeText(text);
+                const btn = document.getElementById('share-card-btn');
+                const original = btn.innerHTML;
+                btn.innerHTML = '<span>COPIED TO CLIPBOARD</span>';
+                setTimeout(() => { btn.innerHTML = original; }, 1500);
+            }
+        });
+
+        loadProfile();
+    </script>
+</body></html>

@@ -159,143 +159,27 @@
 <span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Mission Briefing</span>
 </div>
 <div class="flex flex-col gap-base">
-<p class="font-headline-lg-mobile text-headline-lg-mobile text-primary">7 SCANS COMPLETED</p>
+<p id="scan-count-label" class="font-headline-lg-mobile text-headline-lg-mobile text-primary">0 SCANS COMPLETED</p>
 <div class="flex items-center gap-sm">
-<span class="font-label-caps text-label-caps text-primary-fixed">0 ACTIVE ISSUES</span>
+<span id="active-issues-label" class="font-label-caps text-label-caps text-primary-fixed">0 ACTIVE ISSUES</span>
 <span class="text-on-surface-variant opacity-30">|</span>
 <span class="font-label-caps text-label-caps text-on-surface-variant">READY FOR SCAN</span>
 </div>
 </div>
 </div>
-<!-- Tactical segment bar -->
-<div class="mt-md flex gap-1">
-<div class="h-1 flex-1 bg-primary-fixed"></div>
-<div class="h-1 flex-1 bg-primary-fixed"></div>
-<div class="h-1 flex-1 bg-primary-fixed"></div>
-<div class="h-1 flex-1 bg-primary-fixed"></div>
-<div class="h-1 flex-1 bg-primary-fixed"></div>
-<div class="h-1 flex-1 bg-primary-fixed"></div>
-<div class="h-1 flex-1 bg-primary-fixed/30"></div>
-<div class="h-1 flex-1 bg-primary-fixed/30"></div>
-<div class="h-1 flex-1 bg-primary-fixed/30"></div>
-<div class="h-1 flex-1 bg-primary-fixed/30"></div>
-</div>
 </section>
 <!-- Scan Log Header -->
 <div class="flex justify-between items-end mb-md">
 <h2 class="font-label-caps text-label-caps text-primary uppercase tracking-widest">Temporal Log</h2>
-<button class="text-xs font-label-caps text-on-surface-variant underline underline-offset-4">FILTER: ALL</button>
 </div>
-<!-- Scan Log List -->
-<div class="space-y-gutter">
-<!-- Scan Item 1 -->
-<div class="group relative bg-surface-container-high border border-outline-variant p-sm flex gap-md items-start transition-all hover:border-primary-fixed/50">
-<div class="relative w-24 h-24 flex-shrink-0 bg-background border border-surface-variant overflow-hidden">
-<img class="w-full h-full object-cover" data-alt="Close-up tactical view of a professional athlete's hand with a performance ring. The image is filtered with a dark, high-contrast monochrome aesthetic and neon green HUD scan lines overlaying the skin texture. Sophisticated and high-tech performance tracking atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrnVaWbzfKcVkCq4piY-MetSCdxXxVSgtdq6IWXq4kQdFJMV3srYDieUf8POEXonHv7T9ikIEsnI4J67iPrwLZ5p5xPZWJ-iMnfdfkQx1jEZPXhbxEmwI3vwvo7YqsXHAX2bRRpGnZEo16YQqpvf1Bb-COq4wMBPOjiSGlQ9Iw2Z2px11QGJfFnvGOFT5IvF13omLhrc2HDAEA-MixM__HhfCdZiuuxdM76GDHGU46gdo0NDoucsPRhLvantu89JxcIFhAMKEoJvI">
-<div class="absolute inset-0 scan-line-overlay"></div>
-<div class="viewfinder-corner v-tl"></div>
-<div class="viewfinder-corner v-tr"></div>
-<div class="viewfinder-corner v-bl"></div>
-<div class="viewfinder-corner v-br"></div>
+<!-- Scan Log List (populated dynamically from real logged scans) -->
+<div id="scan-log-list" class="space-y-gutter">
 </div>
-<div class="flex-grow flex flex-col justify-between min-h-[96px]">
-<div>
-<div class="flex justify-between items-start">
-<span class="font-label-caps text-label-caps text-on-surface-variant">24 OCT 2023 | 09:42</span>
-<div class="flex items-center gap-xs">
-<span class="w-2 h-2 rounded-full bg-primary-fixed"></span>
-<span class="font-label-caps text-label-caps text-primary-fixed">CLEAR</span>
-</div>
-</div>
-<h3 class="font-data-num text-data-num text-primary mt-base">ALPHA-7 SCAN</h3>
-</div>
-<button class="w-full flex items-center justify-center gap-xs py-base border border-outline font-label-caps text-label-caps text-primary hover:bg-primary-fixed hover:text-black transition-colors group-active:scale-[0.98]">
-                        VIEW DETAILS
-                        <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
-</button>
-</div>
-</div>
-<!-- Scan Item 2 -->
-<div class="group relative bg-surface-container-high border border-outline-variant p-sm flex gap-md items-start transition-all hover:border-primary-fixed/50">
-<div class="relative w-24 h-24 flex-shrink-0 bg-background border border-surface-variant overflow-hidden">
-<img class="w-full h-full object-cover" data-alt="Tactical overhead view of sports equipment on a dark training mat. High-contrast lighting with deep shadows and sharp edges. Subtle digital UI elements like crosshairs and coordinate markers are visible in the background, matching a performance monitoring dashboard aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4jdEMzKMzDb8Nw54sAJN6r3BSvs2YFyti5DfcxE18Qq9qBMFE6geuJNrjBsz9GVkHTdLpXqC5vvDBW2GUiLZv9MVO8rNp0G_qKySdIW5Ln39hn1sg51Qnwm16n-LBdm7PE563DxbhNU_6xUC5ojJNHmGHapcNkVq2bNlYZMEEC02AgISYzuU5TANRtjzO-oYuJUT1XwTMxR0rsuupT90JN4hgZcw4BD9WArxPeux8b6hIEjZOwraDmHGD7K5g0wDFqIZjhwsSzEE">
-<div class="absolute inset-0 scan-line-overlay"></div>
-<div class="viewfinder-corner v-tl"></div>
-<div class="viewfinder-corner v-tr"></div>
-<div class="viewfinder-corner v-bl"></div>
-<div class="viewfinder-corner v-br"></div>
-</div>
-<div class="flex-grow flex flex-col justify-between min-h-[96px]">
-<div>
-<div class="flex justify-between items-start">
-<span class="font-label-caps text-label-caps text-on-surface-variant">22 OCT 2023 | 18:15</span>
-<div class="flex items-center gap-xs">
-<span class="w-2 h-2 rounded-full bg-primary-fixed"></span>
-<span class="font-label-caps text-label-caps text-primary-fixed">CLEAR</span>
-</div>
-</div>
-<h3 class="font-data-num text-data-num text-primary mt-base">SIGMA-2 SCAN</h3>
-</div>
-<button class="w-full flex items-center justify-center gap-xs py-base border border-outline font-label-caps text-label-caps text-primary hover:bg-primary-fixed hover:text-black transition-colors group-active:scale-[0.98]">
-                        VIEW DETAILS
-                        <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
-</button>
-</div>
-</div>
-<!-- Scan Item 3 (Warning Example) -->
-<div class="group relative bg-surface-container-high border border-error-container/50 p-sm flex gap-md items-start transition-all hover:border-error">
-<div class="relative w-24 h-24 flex-shrink-0 bg-background border border-error-container overflow-hidden">
-<img class="w-full h-full object-cover" data-alt="Macro photography of a high-end athletic sensor glowing with a warm amber light in a dark, tactical environment. The image uses extremely shallow depth of field, focusing on the textured metallic surface of the device. Neon amber data overlays suggest a warning or attention-needed state." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIddNcJFwQCGVjSFI_UI9W4G7sR8xy-UHMt5SCUwxQoeCJ6mZa01KdjhxTHp33d5hFk0ytJO-oM8aoslpIUHvnjbEbEN90z8FAedKufe6EiJBEy-HHHQAgJ-ElgNwR_TOlS-w4VjGrL9wmaliGje18P53yS4C-nSGAzIZfq2C--QehATOK0KYSu6QUfy9erU7vd1i1kN21XqVCdKybmlRtD6oz0Fyi3s3_Xi1qxHJq6gmNfmUsCcJ2QpG0SLcneigWKLxO515lTys">
-<div class="absolute inset-0 bg-error/5 mix-blend-overlay"></div>
-<div class="viewfinder-corner v-tl !border-error"></div>
-<div class="viewfinder-corner v-tr !border-error"></div>
-<div class="viewfinder-corner v-bl !border-error"></div>
-<div class="viewfinder-corner v-br !border-error"></div>
-</div>
-<div class="flex-grow flex flex-col justify-between min-h-[96px]">
-<div>
-<div class="flex justify-between items-start">
-<span class="font-label-caps text-label-caps text-on-surface-variant">19 OCT 2023 | 07:30</span>
-<div class="flex items-center gap-xs">
-<span class="w-2 h-2 rounded-full bg-error"></span>
-<span class="font-label-caps text-label-caps text-error">WARNING</span>
-</div>
-</div>
-<h3 class="font-data-num text-data-num text-primary mt-base">DELTA-9 SCAN</h3>
-</div>
-<button class="w-full flex items-center justify-center gap-xs py-base border border-error-container font-label-caps text-label-caps text-error hover:bg-error hover:text-black transition-colors group-active:scale-[0.98]">
-                        VIEW DETAILS
-                        <span class="material-symbols-outlined text-[14px]">priority_high</span>
-</button>
-</div>
-</div>
-<!-- Scan Item 4 -->
-<div class="group relative bg-surface-container-high border border-outline-variant p-sm flex gap-md items-start transition-all hover:border-primary-fixed/50">
-<div class="relative w-24 h-24 flex-shrink-0 bg-background border border-surface-variant overflow-hidden">
-<img class="w-full h-full object-cover" data-alt="A futuristic biometric interface showing heart rate and data streams in vibrant green neon on a dark glass surface. The style is sharp, geometric, and professional, mimicking elite tactical hardware displays used for performance monitoring. High-contrast, dark-mode aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAL_NXbP3iWMFfyfCfZL5mJwTWPeDwUaRmo8SzGFV0enUEUJmcBA5EGdV4JSs0fDpgE1OILCRfHvxbBLKzSW32Q0pgF6_vY4x3JMJQz2TnREngYjDsxjAicDoQYgyaCyR-2q0SlUUacQrdAOj3VKtF2VWuQiHyolJ6RdBrLg-RlGANbTYuKS5epjkndOaHLkJcEV1_ZLh2raUuZHeJ__WIu03HRnDVgycTjBLnr1UyAcyRmRK8AX6xIqHNvjNhtr7OK6_AWpSfBOiY">
-<div class="absolute inset-0 scan-line-overlay"></div>
-<div class="viewfinder-corner v-tl"></div>
-<div class="viewfinder-corner v-tr"></div>
-<div class="viewfinder-corner v-bl"></div>
-<div class="viewfinder-corner v-br"></div>
-</div>
-<div class="flex-grow flex flex-col justify-between min-h-[96px]">
-<div>
-<div class="flex justify-between items-start">
-<span class="font-label-caps text-label-caps text-on-surface-variant">15 OCT 2023 | 21:02</span>
-<div class="flex items-center gap-xs">
-<span class="w-2 h-2 rounded-full bg-primary-fixed"></span>
-<span class="font-label-caps text-label-caps text-primary-fixed">CLEAR</span>
-</div>
-</div>
-<h3 class="font-data-num text-data-num text-primary mt-base">OMEGA-4 SCAN</h3>
-</div>
-<button class="w-full flex items-center justify-center gap-xs py-base border border-outline font-label-caps text-label-caps text-primary hover:bg-primary-fixed hover:text-black transition-colors group-active:scale-[0.98]">
-                        VIEW DETAILS
-                        <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
-</button>
-</div>
-</div>
+<!-- Empty state (shown when no scans logged yet) -->
+<div id="empty-state" class="hidden flex-col items-center justify-center text-center py-16 gap-sm">
+<span class="material-symbols-outlined text-outline" style="font-size: 48px;">history_toggle_off</span>
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase">No scans logged yet</p>
+<p class="text-xs text-outline max-w-[240px]">Scan results you save with "LOG TO HISTORY" will show up here.</p>
 </div>
 </main>
 <!-- BottomNavBar Shell -->
@@ -318,6 +202,61 @@
 </a>
 </nav>
 <script>
+<script>
+        // --- Render real scan history from localStorage ---
+        (function renderHistory() {
+            const listEl = document.getElementById('scan-log-list');
+            const emptyEl = document.getElementById('empty-state');
+            const countLabel = document.getElementById('scan-count-label');
+            const issuesLabel = document.getElementById('active-issues-label');
+
+            let history = [];
+            try {
+                history = JSON.parse(localStorage.getItem('ringcheck_history') || '[]');
+            } catch (e) {
+                history = [];
+            }
+
+            countLabel.textContent = `${history.length} SCAN${history.length === 1 ? '' : 'S'} COMPLETED`;
+            const flaggedCount = history.filter(h => h.ringworm).length;
+            issuesLabel.textContent = `${flaggedCount} ACTIVE ISSUE${flaggedCount === 1 ? '' : 'S'}`;
+
+            if (history.length === 0) {
+                emptyEl.classList.remove('hidden');
+                emptyEl.classList.add('flex');
+                return;
+            }
+
+            // Most recent first
+            history.slice().reverse().forEach((entry) => {
+                const date = new Date(entry.timestamp);
+                const dateStr = date.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
+                const timeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                const isClear = !entry.ringworm;
+
+                const item = document.createElement('div');
+                item.className = 'group relative bg-surface-container-high border border-outline-variant p-sm flex gap-md items-start transition-all hover:border-primary-fixed/50';
+                item.innerHTML = `
+                    <div class="relative w-24 h-24 flex-shrink-0 bg-background border border-surface-variant overflow-hidden">
+                        <img class="w-full h-full object-cover" src="${entry.thumbnail || ''}" alt="Scan thumbnail">
+                    </div>
+                    <div class="flex-grow flex flex-col justify-between min-h-[96px]">
+                        <div>
+                            <div class="flex justify-between items-start">
+                                <span class="font-label-caps text-label-caps text-on-surface-variant">${dateStr} | ${timeStr}</span>
+                                <div class="flex items-center gap-xs">
+                                    <span class="w-2 h-2 rounded-full ${isClear ? 'bg-primary-fixed' : 'bg-secondary-container'}"></span>
+                                    <span class="font-label-caps text-label-caps ${isClear ? 'text-primary-fixed' : 'text-secondary-container'}">${isClear ? 'CLEAR' : 'FLAGGED'}</span>
+                                </div>
+                            </div>
+                            <h3 class="font-data-num text-data-num text-primary mt-base">${Math.round((entry.confidence || 0) * 100)}% CONFIDENCE</h3>
+                        </div>
+                    </div>
+                `;
+                listEl.appendChild(item);
+            });
+        })();
+
         // Micro-interaction for buttons
         document.querySelectorAll('button').forEach(btn => {
             btn.addEventListener('click', function(e) {
