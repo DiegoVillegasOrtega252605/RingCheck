@@ -31,7 +31,7 @@ cloudinary.config(
     secure=True,
 )
 
-ALLOWED_LABELS = {"ringworm", "healthy", "unsure"}
+ALLOWED_LABELS = {"ringworm", "healthy", "benign_mark", "unsure"}
 
 
 def preprocess(image: Image.Image) -> np.ndarray:

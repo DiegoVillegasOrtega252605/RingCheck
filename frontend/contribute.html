@@ -41,7 +41,7 @@ tailwind.config = {
 <main class="px-margin-mobile py-lg max-w-md mx-auto">
 <div id="form-view">
 <h2 class="font-headline-lg-mobile text-2xl text-primary mb-2">Help improve RingCheck</h2>
-<p class="text-sm text-on-surface-variant mb-lg">RingCheck's model gets better with more real training photos. If you're comfortable sharing a photo of skin — either showing ringworm or healthy skin — it helps other athletes get a more accurate scan. Every submission is manually reviewed before it's ever used.</p>
+<p class="text-sm text-on-surface-variant mb-lg">RingCheck's model gets better with more real training photos. If you're comfortable sharing a photo — ringworm, healthy skin, or something harmless like a bruise or mat burn — it helps other athletes get a more accurate scan. Every submission is manually reviewed before it's ever used.</p>
 
 <label class="font-label-caps text-[11px] text-on-surface-variant uppercase block mb-2">1. Choose a photo</label>
 <div id="drop-zone" class="border border-dashed border-outline-variant bg-surface-container-low h-48 flex flex-col items-center justify-center gap-2 mb-lg cursor-pointer overflow-hidden relative">
@@ -52,9 +52,10 @@ tailwind.config = {
 </div>
 
 <label class="font-label-caps text-[11px] text-on-surface-variant uppercase block mb-2">2. What does it show?</label>
-<div class="grid grid-cols-3 gap-2 mb-lg">
+<div class="grid grid-cols-2 gap-2 mb-lg">
 <button class="label-btn bg-surface-container border border-outline-variant py-3 font-label-caps text-[11px] text-on-surface-variant" data-label="ringworm">RINGWORM</button>
 <button class="label-btn bg-surface-container border border-outline-variant py-3 font-label-caps text-[11px] text-on-surface-variant" data-label="healthy">HEALTHY SKIN</button>
+<button class="label-btn bg-surface-container border border-outline-variant py-3 font-label-caps text-[10px] text-on-surface-variant leading-tight" data-label="benign_mark">BRUISE / MAT BURN<br>(NOT AN INFECTION)</button>
 <button class="label-btn bg-surface-container border border-outline-variant py-3 font-label-caps text-[11px] text-on-surface-variant" data-label="unsure">NOT SURE</button>
 </div>
 
