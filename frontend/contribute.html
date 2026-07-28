@@ -1,0 +1,178 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>RingCheck | Contribute a Photo</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#131313">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Geist:wght@400;700&family=Space+Mono:wght@400;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<script id="tailwind-config">
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        background: "#131313", "surface-container": "#201f1f", "surface-container-low": "#1c1b1b",
+        "surface-container-high": "#2a2a2a", "surface-variant": "#353534", "on-surface": "#e5e2e1",
+        "on-surface-variant": "#c4c9ac", outline: "#8e9379", "outline-variant": "#444933",
+        primary: "#ffffff", "primary-container": "#c3f400", "on-primary-container": "#556d00",
+        "secondary-container": "#feb700", error: "#ffb4ab"
+      },
+      fontFamily: {
+        "headline-lg-mobile": ["Anton"], "body-md": ["Geist"], "label-caps": ["Space Mono"]
+      },
+      spacing: { base: "4px", xs: "8px", sm: "12px", md: "16px", lg: "24px", xl: "32px", "margin-mobile": "20px" }
+    }
+  }
+}
+</script>
+<style>
+.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400; }
+.glow-active { box-shadow: 0 0 12px rgba(195, 244, 0, 0.3); }
+</style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen">
+<header class="border-b border-surface-variant px-margin-mobile h-16 flex items-center gap-3">
+<img src="assets/anaconda-logo.png" class="w-9 h-9 rounded-full border border-primary-container/30">
+<h1 class="font-headline-lg-mobile text-xl tracking-widest text-primary-container">RINGCHECK</h1>
+</header>
+
+<main class="px-margin-mobile py-lg max-w-md mx-auto">
+<div id="form-view">
+<h2 class="font-headline-lg-mobile text-2xl text-primary mb-2">Help improve RingCheck</h2>
+<p class="text-sm text-on-surface-variant mb-lg">RingCheck's model gets better with more real training photos. If you're comfortable sharing a photo of skin — either showing ringworm or healthy skin — it helps other athletes get a more accurate scan. Every submission is manually reviewed before it's ever used.</p>
+
+<label class="font-label-caps text-[11px] text-on-surface-variant uppercase block mb-2">1. Choose a photo</label>
+<div id="drop-zone" class="border border-dashed border-outline-variant bg-surface-container-low h-48 flex flex-col items-center justify-center gap-2 mb-lg cursor-pointer overflow-hidden relative">
+<input type="file" accept="image/*" id="file-input" class="hidden">
+<span id="upload-icon" class="material-symbols-outlined text-primary-container/50 text-4xl">add_a_photo</span>
+<span id="upload-label" class="font-label-caps text-[11px] text-on-surface-variant">TAP TO SELECT OR TAKE A PHOTO</span>
+<img id="preview-img" class="hidden absolute inset-0 w-full h-full object-cover">
+</div>
+
+<label class="font-label-caps text-[11px] text-on-surface-variant uppercase block mb-2">2. What does it show?</label>
+<div class="grid grid-cols-3 gap-2 mb-lg">
+<button class="label-btn bg-surface-container border border-outline-variant py-3 font-label-caps text-[11px] text-on-surface-variant" data-label="ringworm">RINGWORM</button>
+<button class="label-btn bg-surface-container border border-outline-variant py-3 font-label-caps text-[11px] text-on-surface-variant" data-label="healthy">HEALTHY SKIN</button>
+<button class="label-btn bg-surface-container border border-outline-variant py-3 font-label-caps text-[11px] text-on-surface-variant" data-label="unsure">NOT SURE</button>
+</div>
+
+<label class="font-label-caps text-[11px] text-on-surface-variant uppercase block mb-2">3. Confirm</label>
+<label class="flex items-start gap-3 mb-3 cursor-pointer">
+<input type="checkbox" id="consent-check" class="mt-1 accent-[#c3f400]">
+<span class="text-xs text-on-surface-variant">I consent to RingCheck storing and reviewing this photo to help improve its skin-condition detection model. I understand this is not a medical diagnosis.</span>
+</label>
+<label class="flex items-start gap-3 mb-lg cursor-pointer">
+<input type="checkbox" id="age-check" class="mt-1 accent-[#c3f400]">
+<span class="text-xs text-on-surface-variant">I confirm I am 18 years of age or older.</span>
+</label>
+
+<div id="error-msg" class="hidden text-xs text-error mb-md"></div>
+
+<button id="submit-btn" disabled class="w-full h-14 bg-surface-variant text-on-surface-variant flex items-center justify-center gap-2 font-label-caps text-[12px] tracking-widest transition-all">
+SUBMIT PHOTO
+</button>
+</div>
+
+<div id="thankyou-view" class="hidden text-center py-24">
+<span class="material-symbols-outlined text-primary-container text-6xl mb-4" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<h2 class="font-headline-lg-mobile text-2xl text-primary mb-2">Thank you</h2>
+<p class="text-sm text-on-surface-variant">Your photo has been received and will be reviewed before it's used to improve RingCheck. Appreciate you helping the community.</p>
+</div>
+</main>
+
+<script>
+const API_BASE_URL = "https://ringcheck.onrender.com";
+
+let selectedFile = null;
+let selectedLabel = null;
+
+const dropZone = document.getElementById('drop-zone');
+const fileInput = document.getElementById('file-input');
+const previewImg = document.getElementById('preview-img');
+const uploadIcon = document.getElementById('upload-icon');
+const uploadLabel = document.getElementById('upload-label');
+const submitBtn = document.getElementById('submit-btn');
+const consentCheck = document.getElementById('consent-check');
+const ageCheck = document.getElementById('age-check');
+const errorMsg = document.getElementById('error-msg');
+
+dropZone.addEventListener('click', () => fileInput.click());
+
+fileInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    selectedFile = file;
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+        previewImg.src = evt.target.result;
+        previewImg.classList.remove('hidden');
+        uploadIcon.classList.add('hidden');
+        uploadLabel.classList.add('hidden');
+    };
+    reader.readAsDataURL(file);
+    validate();
+});
+
+document.querySelectorAll('.label-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.label-btn').forEach(b => {
+            b.classList.remove('bg-primary-container', 'text-on-primary-container', 'border-primary-container', 'glow-active');
+            b.classList.add('bg-surface-container', 'text-on-surface-variant', 'border-outline-variant');
+        });
+        btn.classList.add('bg-primary-container', 'text-on-primary-container', 'border-primary-container', 'glow-active');
+        btn.classList.remove('bg-surface-container', 'text-on-surface-variant', 'border-outline-variant');
+        selectedLabel = btn.dataset.label;
+        validate();
+    });
+});
+
+consentCheck.addEventListener('change', validate);
+ageCheck.addEventListener('change', validate);
+
+function validate() {
+    const ready = selectedFile && selectedLabel && consentCheck.checked && ageCheck.checked;
+    submitBtn.disabled = !ready;
+    if (ready) {
+        submitBtn.classList.remove('bg-surface-variant', 'text-on-surface-variant');
+        submitBtn.classList.add('bg-primary-container', 'text-on-primary-container', 'glow-active');
+    } else {
+        submitBtn.classList.add('bg-surface-variant', 'text-on-surface-variant');
+        submitBtn.classList.remove('bg-primary-container', 'text-on-primary-container', 'glow-active');
+    }
+}
+
+submitBtn.addEventListener('click', async () => {
+    if (submitBtn.disabled) return;
+    errorMsg.classList.add('hidden');
+    submitBtn.textContent = 'SUBMITTING...';
+    submitBtn.disabled = true;
+
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+    formData.append('label', selectedLabel);
+    formData.append('consent', 'true');
+    formData.append('is_adult', 'true');
+
+    try {
+        const res = await fetch(`${API_BASE_URL}/contribute`, { method: 'POST', body: formData });
+        const data = await res.json();
+        if (data.error) {
+            errorMsg.textContent = data.error;
+            errorMsg.classList.remove('hidden');
+            submitBtn.textContent = 'SUBMIT PHOTO';
+            validate();
+            return;
+        }
+        document.getElementById('form-view').classList.add('hidden');
+        document.getElementById('thankyou-view').classList.remove('hidden');
+    } catch (e) {
+        errorMsg.textContent = 'Something went wrong. Please try again in a moment.';
+        errorMsg.classList.remove('hidden');
+        submitBtn.textContent = 'SUBMIT PHOTO';
+        validate();
+    }
+});
+</script>
+</body></html>

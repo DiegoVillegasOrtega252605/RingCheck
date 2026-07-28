@@ -4,3 +4,4 @@ uvicorn
 onnxruntime
 pillow
 python-multipart
+cloudinary
